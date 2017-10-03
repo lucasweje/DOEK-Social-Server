@@ -14,7 +14,7 @@ public class UserEndpoint {
     @GET
     public Response getUsers(){
 
-        UserTable userTable.getInstance();
+        UserTable userTable = UserTable.getInstance();
         ArrayList<User> users = userTable.getUsers();
 
         return Response
