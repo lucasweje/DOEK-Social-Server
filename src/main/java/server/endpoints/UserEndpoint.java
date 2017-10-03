@@ -16,10 +16,13 @@ public class UserEndpoint {
 
     @GET
     public Response getUsers(){
+
+        ArrayList<User> users = userTable.getUsers();
+
         return Response
                 .status(200)
                 .type("application/json")
-                .entity("[]")
+                .entity(new Gson().toJson(users))
                 .build();
     }
 
@@ -29,20 +32,21 @@ public class UserEndpoint {
 
         //Lidt hjælp
         //
-        //UserTable userTable = UserTable.getInstance();
-        //User foundUser = userTable.findById(id);
-        //Husk at returnere som JSON
+        UserTable userTable = UserTable.getInstance();
+        User foundUser = userTable.findById(id);
 
         return Response
                 .status(200)
                 .type("application/json")
-                .entity("{}")
+                .entity(new Gson().toJson(foundUser))
                 .build();
     }
 
     @POST
     public Response createUser(String jsonUser) {
 
+        User newUser = new Gson().fromJson(jsonUser, User.class);
+        userTable.addUser(newUser);
 
         return Response
                 .status(200)
