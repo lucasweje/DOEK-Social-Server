@@ -11,12 +11,10 @@ import java.util.ArrayList;
 @Path("/users")
 public class UserEndpoint {
 
-    UserTable userTable = UserTable.getInstance();
-    ArrayList<User> users = userTable.getUsers();
-
     @GET
     public Response getUsers(){
 
+        UserTable userTable.getInstance();
         ArrayList<User> users = userTable.getUsers();
 
         return Response
