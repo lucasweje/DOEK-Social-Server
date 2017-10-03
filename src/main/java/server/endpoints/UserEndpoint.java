@@ -43,6 +43,7 @@ public class UserEndpoint {
     @POST
     public Response createUser(String jsonUser) {
 
+        UserTable userTable = UserTable.getInstance();
         User newUser = new Gson().fromJson(jsonUser, User.class);
         userTable.addUser(newUser);
 
