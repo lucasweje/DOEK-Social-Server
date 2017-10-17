@@ -85,7 +85,7 @@ public class DBmanager {
         System.out.println("Database has been deleted ... ");
         createDatabase();
         System.out.println("Database has been created ... ");
-        String sqlFilePath = getWorkingDir() + "/src/main/server/Utility/sql.sql";
+        String sqlFilePath = getWorkingDir() + "/src/main/java/server/utility/sql.sql";
         executeSql(sqlFilePath);
         System.out.println("SQL Script done!");
 
