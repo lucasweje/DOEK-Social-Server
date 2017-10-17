@@ -6,18 +6,28 @@ import java.sql.SQLException;
 
 public class DBmanager {
 
-    private static Connection connection;
+    public Connection getConnection() {
 
-    static {
-        try{
-            connection = DriverManager.getConnection("jdbc:mysql://"+System.getenv("DATABASE_HOST") + ":" + System.getenv("DATABASE_PORT") + "/" + System.getenv("DATABASE_NAME"), System.getenv("DATABASE_USER"), System.getenv("DATABASE_PASSWORD"));
-        } catch (SQLException sqlException){
+        Connection connection = null;
+
+        try {
+            try {
+                Class.forName("com.mysql.jdbc.Driver").newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/døk_social?useSSL=false&serverTimezone=GMT","root" , "Tvisling1012");
+        } catch (SQLException sqlException) {
             System.out.print(sqlException.getMessage());
             sqlException.printStackTrace();
         }
-    }
-
-    public static Connection getConnection() {
         return connection;
     }
 }
+
+
+//localhost: 3306 skal ændres tilbage når config filen er lavet.
