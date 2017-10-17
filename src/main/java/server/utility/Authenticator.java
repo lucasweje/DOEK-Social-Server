@@ -26,16 +26,17 @@ public class Authenticator {
 
 
     }
+    // med inspiration fra fillip.
     public static String randomSalt (String password){
 
         String hashWithSalt = performHashing(password);
-// vi bruger 10, da md5 bruger 16 bytes.
+// vi bruger 10, da md5 bruger 16 bytes. vi kunne også have brugt sha-252.
         int startIndex = (int) (10*Math.random());
 
-        return hashWithSalt.substring(startIndex,startIndex+8);
+        return hashWithSalt.substring(startIndex,startIndex+5);
 
     }
-
+//taget fra jespers project secure-dis.
     private static String performHashing(String str) {
         authenticator.update(str.getBytes());
         byte[] hash = authenticator.digest();

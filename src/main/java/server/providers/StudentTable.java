@@ -87,9 +87,9 @@ public class StudentTable extends DBmanager {
         //Returnerer den enkelte student med oplysninger.
         return student;
     }
-    public boolean addStudent (Student student) throws SQLException {
+    public boolean addStudent(Student student) throws SQLException {
 //generer salt password
-        student.setSalt(Authenticator.randomSalt(student.getPassword()));
+        student.setSalt (Authenticator.randomSalt(student.getPassword()));
 //generer hashed password med salt.
         student.setPassword(Authenticator.hashWithSalt(student.getPassword(),student.getSalt()));
 
@@ -102,10 +102,14 @@ public class StudentTable extends DBmanager {
             addStudentStatement.setString(3, student.getLastName());
             addStudentStatement.setString(4, student.getEmail());
             addStudentStatement.setString(5, student.getPassword());
-            addStudentStatement.setString(5, student.getSalt());
+            addStudentStatement.setString(6, student.getSalt());
 
 
-            addStudentStatement.execute();
+            int rowsUpdated = addStudentStatement.executeUpdate();
+
+            if(rowsUpdated != 1) {
+                throw new SQLException("ERROR - NOT 1 ROW CREATED");
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
