@@ -50,7 +50,7 @@ public class EventTable extends DBmanager {
 
         try {
             PreparedStatement joinEvent = getConnection().prepareStatement
-                    ("INSERT INTO student_has_event (events_idEvent, students_idStudent) VALUE (?, ?)");
+                    ("INSERT INTO student_has_event (events_idEvent, students_idStudent1) VALUE (?, ?)");
             // OBS skal være en string men der er ikke ændret i model.Event endnu
             joinEvent.setString(1, eventId);
             joinEvent.setString(2, studentId);
