@@ -1,5 +1,6 @@
 package server.providers;
 
+import com.sun.java.accessibility.util.EventID;
 import server.models.Event;
 
 import java.sql.Connection;
@@ -73,6 +74,25 @@ public class EventTable extends DBmanager {
     return true;
     }
 
+public boolean deleteEvent (Event event) {
+    try {
 
+            PreparedStatement deleteEventStatement = connection.prepareStatement("UPDATE Events SET Deleted = 1 WHERE EventId = ?");
+
+                deleteEventStatement.setString(1, event);
+                deleteEventStatement.executeUpdate();
+
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+
+            }
+                return true;
+
+
+            }
+
+
+}
 
 }
