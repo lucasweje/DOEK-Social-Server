@@ -1,4 +1,6 @@
-package server.api;
+package server.endpoints;
+
+import server.utility.Authenticator;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -9,6 +11,10 @@ public class RootEndpoint {
 
     @GET
     public Response defaultGetMethod(){
-        return Response.status(200).type("application/json").entity("{\"default\":\"true\"}").build();
+
+        String salt = Authenticator.randomSalt("Filip");
+        String hashString = Authenticator.hashWithSalt("Filip", salt);
+
+        return Response.status(200).type("text/plain").entity(hashString).build();
     }
 }

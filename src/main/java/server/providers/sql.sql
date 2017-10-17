@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS `stfu`.`students` (
   `firstName` VARCHAR(100) NOT NULL,
   `lastName` VARCHAR(100) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
+  `salt` VARCHAR(45) NOT NULL,
   `email` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`idStudent`),
   UNIQUE INDEX `idStudent_UNIQUE` (`idStudent` ASC))

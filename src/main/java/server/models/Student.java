@@ -1,15 +1,34 @@
 package server.models;
+import server.providers.StudentTable;
+import server.utility.Authenticator;
+
+import server.utility.Authenticator;
 
 public class Student {
 
-    private String firstName, lastName, email, password, idStudent;
+    private String firstName, lastName, email, password, idStudent,salt;
 
-    public Student(String idStudent, String firstName, String lastName, String email) {
+    public Student(String idStudent, String firstName, String lastName, String email,String password, String salt) {
         this.idStudent = idStudent;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.salt = salt;
+    }
+
+    public Student(String firstName, String lastName, String password, String email){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+        this.email = email;
+    }
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
     public Student() {
 
