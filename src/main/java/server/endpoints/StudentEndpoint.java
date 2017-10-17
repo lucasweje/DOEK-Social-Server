@@ -62,15 +62,16 @@ public class StudentEndpoint {
         return Response
                 .status(200)
                 .type("application/json")
-                .entity(new Gson().toJson(foundStudent)) //".toJson(foundStudent) skal indsættes når config filen kører.
+                .entity(new Gson().toJson(foundStudent))
                 .build();
     }
 
-     /*@POST
+    @POST
     public Response createStudent(String jsonStudent) {
 
         //String jsonStudent gemmer alle students.
 
+        StudentTable studentTable = new StudentTable();
         Student newStudent = new Gson().fromJson(jsonStudent, Student.class);
         StudentTable.createStudent(newStudent);
 
