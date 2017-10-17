@@ -50,7 +50,68 @@ public class StudentTable extends DBmanager {
         return studentList;
     }
 
-    // Henter en specifik bruger via idStudent attributten.
+    public boolean addStudent(Student student) throws Exception {
+
+
+        PreparedStatement addStudentStatement = connection.prepareStatement("INSERT INTO Students (idStudent, firstName, lastName, email, password) VALUES (?, ?, ?, ?, ?)");
+
+        try {
+            addStudentStatement.setString(1, student.getIdStudent());
+            addStudentStatement.setString(2, student.getFirstName());
+            addStudentStatement.setString(3, student.getLastName());
+            addStudentStatement.setString(4, student.getEmail());
+            addStudentStatement.setString(5, student.getPassword());
+
+            addStudentStatement.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    public Student getAttendingStudents(String idStudent, String idEvent) throws IllegalAccessException {
+        Student student = null;
+        ResultSet resultSet = null;
+
+        //henter studenten med det valgte id.
+        try {
+            PreparedStatement getAttendingStudents = getConnection().prepareStatement
+                    ("SELECT she.*, e.*, s. " +
+                            "FROM student_has_event she " +
+                            "INNER JOIN events e " +
+                            "ON she.Event_idEvent = e.idEvent " +
+                            "INNER JOIN student s " +
+                            "ON she.Student_idStudent = s.idStudent " +
+                            "WHERE e.idEvent = ?;");
+
+            getAttendingStudents.setString(1, idStudent);
+            resultSet = getAttendingStudents.executeQuery();
+
+            while (resultSet.next()) {
+                try {
+                    //Opretter ny instans af den valgte student. (Måden man henter oplysninger om den valgte student).
+                    student = new Student(
+                            resultSet.getString("idStudent"),
+                            resultSet.getString("firstName"),
+                            resultSet.getString("lastName"),
+                            resultSet.getString("email")
+                    );
+
+                } catch (Exception e) {
+
+                }
+            }
+        } catch (SQLException sqlException) {
+            System.out.println(sqlException.getMessage());
+        }
+
+        //Returnerer den enkelte student med oplysninger.
+        return student;
+    }
+
+    // Skal ikke bruges, gemmes just in case.
+/*// Henter en specifik bruger via idStudent attributten.
     public Student getStudentById(String idStudent) throws IllegalAccessException {
         Student student = null;
         ResultSet resultSet = null;
@@ -81,27 +142,5 @@ public class StudentTable extends DBmanager {
 
         //Returnerer den enkelte student med oplysninger.
         return student;
-    }
-
-    public boolean addStudent(Student student) throws Exception {
-
-
-        PreparedStatement addStudentStatement = connection.prepareStatement("INSERT INTO Students (idStudent, firstName, lastName, email, password) VALUES (?, ?, ?, ?, ?)");
-
-        try {
-            addStudentStatement.setString(1, student.getIdStudent());
-            addStudentStatement.setString(2, student.getFirstName());
-            addStudentStatement.setString(3, student.getLastName());
-            addStudentStatement.setString(4, student.getEmail());
-            addStudentStatement.setString(5, student.getPassword());
-
-            addStudentStatement.execute();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return true;
-    }
-
-
+    }*/
 }

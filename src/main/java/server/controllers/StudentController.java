@@ -7,6 +7,15 @@ import java.util.ArrayList;
 
 public class StudentController {
     Gson gson;
+
+
+
+    public ArrayList<AttendingStudents> getAttendingStudents(String idStudent, String idEvent) {
+        ArrayList<AttendingStudents> attendingStudents = db.getAttendingStudents();
+        db.close();
+        return attendingStudents;
+    }
+
 /*    DBmanager db = new DBmanager();
 
     public StudentController() {
@@ -28,6 +37,8 @@ public class StudentController {
         db.close();
         return students;
     }*/
+
+
 
 
     public boolean addStudent(Student student) throws Exception {
