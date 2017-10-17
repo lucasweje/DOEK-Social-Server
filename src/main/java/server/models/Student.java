@@ -2,11 +2,13 @@ package server.models;
 import server.providers.StudentTable;
 import server.utility.Authenticator;
 
+import server.utility.Authenticator;
+
 public class Student {
 
     private String firstName, lastName, email, password, idStudent,salt;
 
-    public Student(String idStudent, String firstName, String lastName, String email,String salt,String password) {
+    public Student(String idStudent, String firstName, String lastName, String email,String password, String salt) {
         this.idStudent = idStudent;
         this.firstName = firstName;
         this.lastName = lastName;

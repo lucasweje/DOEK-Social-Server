@@ -1,7 +1,6 @@
 package server.providers;
 
 import server.models.Student;
-import server.providers.DBmanager;
 import server.utility.Authenticator;
 
 import java.sql.Connection;
@@ -93,7 +92,6 @@ public class StudentTable extends DBmanager {
 //generer hashed password med salt.
         student.setPassword(Authenticator.hashWithSalt(student.getPassword(),student.getSalt()));
 
-
         PreparedStatement addStudentStatement = connection.prepareStatement("INSERT INTO Students (idStudent, firstName, lastName, email, password, salt) VALUES (?, ?, ?, ?,?, ?)");
 
         try {
@@ -103,7 +101,6 @@ public class StudentTable extends DBmanager {
             addStudentStatement.setString(4, student.getEmail());
             addStudentStatement.setString(5, student.getPassword());
             addStudentStatement.setString(6, student.getSalt());
-
 
             int rowsUpdated = addStudentStatement.executeUpdate();
 
