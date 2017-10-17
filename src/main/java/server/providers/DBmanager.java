@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+
 public class DBmanager {
 
     public Connection getConnection() {
@@ -29,6 +30,7 @@ public class DBmanager {
                             + Config.getDbName() + "?useSSL=false&serverTimezone=GMT",
                     Config.getDbUser(),
                     Config.getDbPassword());
+
         } catch (SQLException sqlException) {
             System.out.print(sqlException.getMessage());
             sqlException.printStackTrace();
