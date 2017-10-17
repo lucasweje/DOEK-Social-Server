@@ -11,7 +11,9 @@ import java.util.ArrayList;
 
 public class StudentTable extends DBmanager {
 
+
     //Nulstiller connection. Maskineriet brokker sig hvis connection ikke er sat fra starten af.
+    Connection connection = null;
 
     //Metode til at hente alle students.
     public ArrayList getStudents() throws IllegalAccessException {
@@ -81,17 +83,19 @@ public class StudentTable extends DBmanager {
         return student;
     }
 
-    public boolean createStudent(Student student) throws Exception {
+    public boolean addStudent(Student student) throws Exception {
 
-        PreparedStatement createStudentStatement = getConnection().prepareStatement("INSERT INTO Students (idStudent, firstName, lastName, email) VALUES (?, ?, ?, ?)");
+
+        PreparedStatement addStudentStatement = connection.prepareStatement("INSERT INTO Students (idStudent, firstName, lastName, email, password) VALUES (?, ?, ?, ? ?)");
 
         try {
-            createStudentStatement.setString(1, student.getIdStudent());
-            createStudentStatement.setString(2, student.getFirstName());
-            createStudentStatement.setString(3, student.getLastName());
-            createStudentStatement.setString(4, student.getEmail());
+            addStudentStatement.setString(1, student.getIdStudent());
+            addStudentStatement.setString(2, student.getFirstName());
+            addStudentStatement.setString(3, student.getLastName());
+            addStudentStatement.setString(4, student.getEmail());
+            addStudentStatement.setString(5, student.getPassword());
 
-            createStudentStatement.execute();
+            addStudentStatement.execute();
 
         } catch (SQLException e) {
             e.printStackTrace();

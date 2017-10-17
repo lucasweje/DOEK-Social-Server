@@ -66,20 +66,27 @@ public class StudentEndpoint {
                 .build();
     }
 
-     /*@POST
-    public Response createStudent(String jsonStudent) {
 
-        //String jsonStudent gemmer alle students.
+    StudentController controller = new StudentController();
 
-        Student newStudent = new Gson().fromJson(jsonStudent, Student.class);
-        StudentTable.createStudent(newStudent);
+    @POST
+    @Produces("Application/json")
+    public Response create(String data) throws Exception {
 
-        //Returnerer Gson til Json.
-        return Response
-                .status(200)
-                .type("application/json")
-                .entity("{\"studentCreated\":\"true\"}")
-                .build();
+        Gson gson = new Gson();
+        Student student = gson.fromJson(data, Student.class);
+
+        if (controller.addStudent(student)) {
+            return Response
+                    .status(200)
+                    .entity("{message\":\"Success! Student created\"}")
+                    .build();
+        }
+        else return Response.status(400).entity("{\"message\":\"failed\"}").build();
     }
-     */
+
+    @GET
+    public Response getAll(){
+        return Response.status(200).entity("Foo").build();
+    }
 }
