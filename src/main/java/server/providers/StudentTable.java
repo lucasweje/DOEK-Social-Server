@@ -1,6 +1,7 @@
 package server.providers;
 
 import server.models.Student;
+import server.utility.Authenticator;
 import server.utility.DBmanager;
 
 import java.sql.Connection;
@@ -32,7 +33,9 @@ public class StudentTable extends DBmanager {
                             resultSet.getString("idStudent"),
                             resultSet.getString("firstName"),
                             resultSet.getString("lastName"),
-                            resultSet.getString("email")
+                            resultSet.getString("email"),
+                            resultSet.getString("password"),
+                            resultSet.getString("salt")
                     );
                     studentList.add(students);
 
@@ -51,6 +54,7 @@ public class StudentTable extends DBmanager {
         Student student = null;
         ResultSet resultSet = null;
 
+
         try {
             PreparedStatement getStudent = connection.prepareStatement("SELECT * FROM Students WHERE idStudent=?");
             getStudent.setString(1, idStudent);
@@ -62,7 +66,9 @@ public class StudentTable extends DBmanager {
                             resultSet.getString("idStudent"),
                             resultSet.getString("firstName"),
                             resultSet.getString("lastName"),
-                            resultSet.getString("email")
+                            resultSet.getString("email"),
+                            resultSet.getString("password"),
+                            resultSet.getString("salt")
                     );
 
                 } catch (Exception e) {
@@ -75,15 +81,22 @@ public class StudentTable extends DBmanager {
         return student;
     }
 
-    public boolean addStudent (Student student) throws Exception {
+    public boolean addStudent (Student student) throws SQLException {
+//generer salt password
+        student.setSalt(Authenticator.randomSalt(student.getPassword()));
+//generer hashed password med salt.
+        student.setPassword(Authenticator.hashWithSalt(student.getPassword(),student.getSalt()));
 
-        PreparedStatement addStudentStatement = connection.prepareStatement("INSERT INTO Students (idStudent, firstName, lastName, email) VALUES (?, ?, ?, ?)");
+
+        PreparedStatement addStudentStatement = connection.prepareStatement("INSERT INTO Students (idStudent, firstName, lastName, email,salt) VALUES (?, ?, ?, ?,?)");
 
         try {
             addStudentStatement.setString(1, student.getIdStudent());
             addStudentStatement.setString(2, student.getFirstName());
             addStudentStatement.setString(3, student.getLastName());
             addStudentStatement.setString(4, student.getEmail());
+            addStudentStatement.setString(5, student.getSalt());
+
 
             addStudentStatement.execute();
 
