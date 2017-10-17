@@ -15,20 +15,19 @@ public class EventTable extends DBmanager {
 
         try {
             PreparedStatement getAllEventsStatement = getConnection().prepareStatement
-                    ("SELECT * FROM event");
+                    ("SELECT * FROM events");
 
             resultSet = getAllEventsStatement.executeQuery();
 
             while (resultSet.next()) {
                 Event event = new Event(
                         resultSet.getInt("idEvent"),
-                        resultSet.getInt("Price"),
+                        resultSet.getInt("price"),
                         resultSet.getInt("idStudent"),
-                        resultSet.getString("EventName"),
-                        resultSet.getString("Location"),
-                        resultSet.getString("Description"),
-                        resultSet.getString("Pictures"),
-                        resultSet.getTimestamp("Date"));
+                        resultSet.getString("eventName"),
+                        resultSet.getString("location"),
+                        resultSet.getString("description"),
+                        resultSet.getTimestamp("date"));
 
 
                         allEvents.add(event);

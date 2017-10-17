@@ -1,5 +1,8 @@
 package server.providers;
 
+import server.config.Config;
+
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -20,7 +23,13 @@ public class DBmanager {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/døk_social?useSSL=false&serverTimezone=GMT","root" , "Tvisling1012");
+            connection = DriverManager.getConnection(
+                    "jdbc:mysql://"
+                            + Config.getDbUrl() + ":"
+                            + Config.getDbPort() + "/"
+                            + Config.getDbName() + "?useSSL=false&serverTimezone=GMT",
+                    Config.getDbUser(),
+                    Config.getDbPassword());
         } catch (SQLException sqlException) {
             System.out.print(sqlException.getMessage());
             sqlException.printStackTrace();
@@ -30,4 +39,3 @@ public class DBmanager {
 }
 
 
-//localhost: 3306 skal ændres tilbage når config filen er lavet.
