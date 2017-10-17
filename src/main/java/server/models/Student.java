@@ -2,7 +2,7 @@ package server.models;
 
 public class Student {
 
-    private String firstName, lastName, email, password, idStudent;;
+    private String firstName, lastName, email, password, idStudent;
 
     public Student(String idStudent, String firstName, String lastName, String email) {
         this.idStudent = idStudent;
@@ -23,9 +23,7 @@ public class Student {
         this.idStudent = idStudent;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
+    public String getFirstName() { return firstName; }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
