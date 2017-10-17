@@ -11,6 +11,9 @@ public class Student {
         this.email = email;
         this.password = password;
     }
+    public Student() {
+
+    }
 
     public String getIdStudent() {
         return idStudent;
