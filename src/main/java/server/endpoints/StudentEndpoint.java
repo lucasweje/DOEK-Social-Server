@@ -84,9 +84,9 @@ public class StudentEndpoint {
         }
         else return Response.status(400).entity("{\"message\":\"failed\"}").build();
     }
-
-    @GET
+/*
+   @GET
     public Response getAll(){
         return Response.status(200).entity("Foo").build();
-    }
+    }*/
 }

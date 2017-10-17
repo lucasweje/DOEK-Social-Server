@@ -86,7 +86,7 @@ public class StudentTable extends DBmanager {
     public boolean addStudent(Student student) throws Exception {
 
 
-        PreparedStatement addStudentStatement = connection.prepareStatement("INSERT INTO Students (idStudent, firstName, lastName, email, password) VALUES (?, ?, ?, ? ?)");
+        PreparedStatement addStudentStatement = connection.prepareStatement("INSERT INTO Students (idStudent, firstName, lastName, email, password) VALUES (?, ?, ?, ?, ?)");
 
         try {
             addStudentStatement.setString(1, student.getIdStudent());
