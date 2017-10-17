@@ -1,17 +1,23 @@
 package server.resources;
 
+import server.config.Config;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import java.io.IOException;
 
-public class ServletContextClass implements ServletContextListener
-{
-
-    public void contextInitialized(ServletContextEvent arg0) {
-
+public class ServletContextClass implements ServletContextListener {
+    @Override
+    public void contextInitialized(ServletContextEvent servletContextEvent) {
+        try {
+            new Config().initConfig();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
+    @Override
+    public void contextDestroyed(ServletContextEvent servletContextEvent) {
 
-    public void contextDestroyed(ServletContextEvent arg0) {
     }
-
 }

@@ -7,7 +7,7 @@ import java.io.*;
 
 public final class Config {
     private static String dbUrl;
-    private static String dbPort;
+    private static Integer dbPort;
     private static String dbName;
     private static String dbUser;
     private static String dbPassword;
@@ -16,11 +16,10 @@ public final class Config {
 
         JsonObject json = new JsonObject();
 
-
         //Filen hentes i Inputstream
         //config.java åbnes for at kunne læses
         //Bufferedreader læser streamen igennem
-        InputStream input = this.getClass().getResourceAsStream("/config.json");
+        InputStream input = this.getClass().getClassLoader().getResourceAsStream("/config.json");
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 
         //Stringbuffer bruges til at samle hele filen i en streng
@@ -35,12 +34,11 @@ public final class Config {
 
         json = (JsonObject) parser.parse(stringBuffer.toString());
 
-        setDbUrl(json.get("dbUrl").toString());
-        setDbPort(json.get("dbPort").toString());
-        setDbName(json.get("dbName").toString());
-        setDbUser(json.get("dbUser").toString());
-        setDbPassword(json.get("dbPassword").toString());
-
+        setDbUrl(json.get("dbUrl").toString().replace("\"", ""));
+        setDbPort(Integer.parseInt(json.get("dbPort").toString().replace("\"", "")));
+        setDbName(json.get("dbName").toString().replace("\"", ""));
+        setDbUser(json.get("dbUser").toString().replace("\"", ""));
+        setDbPassword(json.get("dbPassword").toString().replace("\"", ""));
     }
 
     public static String getDbUrl() {
@@ -51,11 +49,11 @@ public final class Config {
         Config.dbUrl = dbUrl;
     }
 
-    public static String getDbPort() {
+    public static Integer getDbPort() {
         return dbPort;
     }
 
-    public static void setDbPort(String dbPort) {
+    public static void setDbPort(Integer dbPort) {
         Config.dbPort = dbPort;
     }
 

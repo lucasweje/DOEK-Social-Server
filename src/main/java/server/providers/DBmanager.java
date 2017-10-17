@@ -11,14 +11,6 @@ public class DBmanager {
 
     public Connection getConnection() {
 
-        Config config = new Config();
-
-        try {
-            config.initConfig();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         Connection connection = null;
 
         try {
@@ -31,7 +23,13 @@ public class DBmanager {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
-            connection = DriverManager.getConnection("jdbc:mysql://" + Config.getDbUrl() + ":" + Config.getDbPort() + "/" + Config.getDbName(), Config.getDbUser(), Config.getDbPassword());
+            connection = DriverManager.getConnection(
+                    "jdbc:mysql://"
+                            + Config.getDbUrl() + ":"
+                            + Config.getDbPort() + "/"
+                            + Config.getDbName() + "?useSSL=false&serverTimezone=GMT",
+                    Config.getDbUser(),
+                    Config.getDbPassword());
         } catch (SQLException sqlException) {
             System.out.print(sqlException.getMessage());
             sqlException.printStackTrace();
