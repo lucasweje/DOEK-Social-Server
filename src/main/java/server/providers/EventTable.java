@@ -7,15 +7,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class EventTable {
+public class EventTable extends DBmanager {
     public ArrayList<Event> getAllEvents() {
         ArrayList<Event> allEvents = new ArrayList<>();
 
         ResultSet resultSet = null;
 
         try {
-            PreparedStatement getAllEventsStatement = DBmanager.getConnection().prepareStatement
-                    ("SELECT * FROM events");
+            PreparedStatement getAllEventsStatement = getConnection().prepareStatement
+                    ("SELECT * FROM event");
 
             resultSet = getAllEventsStatement.executeQuery();
 
