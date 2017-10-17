@@ -1,11 +1,15 @@
 package server.controllers;
 
 import com.google.gson.Gson;
+import server.models.Event;
+import server.providers.DBmanager;
 
 
 import java.awt.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import server.providers.EventTable;
+
 
 public class EventController {
 
@@ -23,7 +27,6 @@ public class EventController {
     }
 
 
-    //Skal den hedde getEvent eller getEvents?
 
     public Event getEvent(int id) throws Exception {
         DBConnnector db = new DBConnector();
@@ -32,6 +35,9 @@ public class EventController {
         return event;
 
     }
+
+
+}
 
     //Hvilke parametre skal updateEvent indeholde?
     public Boolean updateEvent(int id, String xxx, String xxx) throws Exception {
@@ -49,7 +55,18 @@ public class EventController {
         boolean addEvent = db.addEvent(event);
         db.close();
         return addEvent;
+*/
 
+    /*public Event getAllEvents(int id) throws Exception {
+        DBmanager db = new DBmanager();
+        Event allEvents = db.getAllEvents(id);
+        return allEvents;
     }*/
+
+    public ArrayList<Event> getAllEvents() throws Exception {
+        EventTable allEvents = new EventTable();
+        return allEvents.getAllEvents();
+
+    }
 }
 
