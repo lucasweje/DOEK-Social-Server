@@ -62,10 +62,9 @@ public class StudentEndpoint {
         return Response
                 .status(200)
                 .type("application/json")
-                .entity(new Gson().toJson(foundStudent)) //".toJson(foundStudent) skal indsættes når config filen kører.
+                .entity(new Gson().toJson(foundStudent))
                 .build();
     }
-
 
     StudentController controller = new StudentController();
 
