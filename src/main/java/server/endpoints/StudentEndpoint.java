@@ -14,7 +14,6 @@ import java.util.ArrayList;
 public class StudentEndpoint {
 
     //Opretter arraylist med students.
-    StudentTable studentTable = new StudentTable();
 
     @GET
     public Response getStudents() {
