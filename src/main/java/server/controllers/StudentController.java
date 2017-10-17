@@ -1,6 +1,7 @@
 package server.controllers;
 
 import com.google.gson.Gson;
+import server.models.Event;
 import server.models.Student;
 
 import java.util.ArrayList;

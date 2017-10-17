@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+
 public class DBmanager {
 
     public Connection getConnection() {
@@ -20,7 +21,7 @@ public class DBmanager {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/døk_social?useSSL=false&serverTimezone=GMT","root" , "Tvisling1012");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/døk_social?useSSL=false&serverTimezone=GMT","root" , "");
         } catch (SQLException sqlException) {
             System.out.print(sqlException.getMessage());
             sqlException.printStackTrace();
