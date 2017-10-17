@@ -2,10 +2,9 @@ package server.models;
 
 public class Student {
 
-    private int idStudent;
-    private String firstName, lastName, email, password;
+    private String firstName, lastName, email, password, idStudent;;
 
-    public Student(int idStudent, String firstName, String lastName, String email) {
+    public Student(String idStudent, String firstName, String lastName, String email) {
         this.idStudent = idStudent;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -13,11 +12,11 @@ public class Student {
         this.password = password;
     }
 
-    public int getIdStudent() {
+    public String getIdStudent() {
         return idStudent;
     }
 
-    public void setIdStudent(int idStudent) {
+    public void setIdStudent(String idStudent) {
         this.idStudent = idStudent;
     }
 
