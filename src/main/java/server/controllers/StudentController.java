@@ -22,6 +22,7 @@ public class StudentController {
         return students;
     }
 
+/*
     public Student getStudents(int id) {
         DBmanager db = new DBmanager();
         Student student = db.getStudents(id);
