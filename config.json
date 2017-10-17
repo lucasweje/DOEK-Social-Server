@@ -1,8 +1,0 @@
-{
-  "dbUrl": "localhost",
-  "dbPort": "8080",
-  "dbName": "STFU",
-  "dbUser": "root",
-  "dbPassword": ""
-
-}
