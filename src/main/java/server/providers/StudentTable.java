@@ -2,6 +2,7 @@ package server.providers;
 
 import server.models.Student;
 import server.providers.DBmanager;
+import server.utility.Authenticator;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -34,7 +35,9 @@ public class StudentTable extends DBmanager {
                             resultSet.getString("idStudent"),
                             resultSet.getString("firstName"),
                             resultSet.getString("lastName"),
-                            resultSet.getString("email")
+                            resultSet.getString("email"),
+                            resultSet.getString("password"),
+                            resultSet.getString("salt")
                     );
                     studentList.add(students);
 
@@ -68,7 +71,9 @@ public class StudentTable extends DBmanager {
                             resultSet.getString("idStudent"),
                             resultSet.getString("firstName"),
                             resultSet.getString("lastName"),
-                            resultSet.getString("email")
+                            resultSet.getString("email"),
+                            resultSet.getString("password"),
+                            resultSet.getString("salt")
                     );
 
                 } catch (Exception e) {
@@ -82,11 +87,14 @@ public class StudentTable extends DBmanager {
         //Returnerer den enkelte student med oplysninger.
         return student;
     }
+    public boolean addStudent (Student student) throws SQLException {
+//generer salt password
+        student.setSalt(Authenticator.randomSalt(student.getPassword()));
+//generer hashed password med salt.
+        student.setPassword(Authenticator.hashWithSalt(student.getPassword(),student.getSalt()));
 
-    public boolean addStudent(Student student) throws Exception {
 
-
-        PreparedStatement addStudentStatement = connection.prepareStatement("INSERT INTO Students (idStudent, firstName, lastName, email, password) VALUES (?, ?, ?, ?, ?)");
+        PreparedStatement addStudentStatement = connection.prepareStatement("INSERT INTO Students (idStudent, firstName, lastName, email, password, salt) VALUES (?, ?, ?, ?,?, ?)");
 
         try {
             addStudentStatement.setString(1, student.getIdStudent());
@@ -94,6 +102,8 @@ public class StudentTable extends DBmanager {
             addStudentStatement.setString(3, student.getLastName());
             addStudentStatement.setString(4, student.getEmail());
             addStudentStatement.setString(5, student.getPassword());
+            addStudentStatement.setString(5, student.getSalt());
+
 
             addStudentStatement.execute();
 

@@ -1,15 +1,26 @@
 package server.models;
 
+import server.utility.Authenticator;
+
 public class Student {
 
-    private String firstName, lastName, email, password, idStudent;
+    private String firstName, lastName, email, password, idStudent,salt;
 
-    public Student(String idStudent, String firstName, String lastName, String email) {
+    public Student(String idStudent, String firstName, String lastName, String email,String salt,String Password) {
         this.idStudent = idStudent;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.salt = salt;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
     public Student() {
 
@@ -50,6 +61,7 @@ public class Student {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        Authenticator authenticator = new Authenticator();
+        this.password = authenticator.hashWithSalt(password);
     }
 }
