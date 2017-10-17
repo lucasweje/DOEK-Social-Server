@@ -26,7 +26,7 @@ public class StudentEndpoint {
         if (controller.addStudent(student)) {
             return Response
                     .status(200)
-                    .entity("{message\":\"Succes! Student added\"}")
+                    .entity("{message\":\"Success! Student created\"}")
                     .build();
         }
         else return Response.status(400).entity("{\"message\":\"failed\"}").build();
