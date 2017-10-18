@@ -29,7 +29,7 @@ import java.util.ArrayList;
         @GET
         public Response getEvents() throws Exception {
 
-            //kald en metode der henter alle brugere fra databasen (gemmer dem i en ArrayList??)
+            //kald en metode der henter alle events fra databasen (gemmer dem i en ArrayList??)
             ArrayList<Event> events = eventController.getAllEvents();
             if (events != null) {
                 return Response
@@ -69,6 +69,14 @@ import java.util.ArrayList;
 
 
         }
+
+        //Skal bruges til at opdatere events (her bruges PUT)
+        /*
+        @PUT
+        @Path("/events")
+        public Response updateEvent(String eventJson) throws Exception {
+
+        }*/
 }
 
 
