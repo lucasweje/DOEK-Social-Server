@@ -41,7 +41,7 @@ public class RegisterEndpoint {
         try {
             studentTable.addStudent(student);
         } catch (SQLException e) {
-            return Response.status(501).type("text/plain").entity("The user already exits").build();
+            return Response.status(404).type("text/plain").entity("This user already exists, please log-in.").build();
         }
 
         return Response.status(200).entity("{message\":\"Success! Student created\"}").build();

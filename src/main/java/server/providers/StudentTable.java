@@ -3,10 +3,8 @@ package server.providers;
 import server.models.Student;
 import server.utility.Authenticator;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.ws.rs.core.Response;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class StudentTable extends DBmanager {
@@ -90,7 +88,7 @@ public class StudentTable extends DBmanager {
     public boolean addStudent(Student student) throws SQLException {
         long unixTime = System.currentTimeMillis() / 1000L;
 //generer salt password
-        student.setSalt(student.getEmail()+unixTime);
+        student.setSalt(student.getEmail() + unixTime);
 //generer hashed password med salt.
         student.setPassword(Authenticator.hashWithSalt(student.getPassword(), student.getSalt()));
         student.setCreatedTime(unixTime);
@@ -103,16 +101,20 @@ public class StudentTable extends DBmanager {
             addStudentStatement.setString(3, student.getEmail());
             addStudentStatement.setString(4, student.getPassword());
             addStudentStatement.setLong(5, student.getCreatedTime());
-
-            int rowsUpdated = addStudentStatement.executeUpdate();
-
-            if (rowsUpdated != 1) {
-                throw new SQLException("ERROR - NOT 1 ROW CREATED");
+            try {
+                int rowsUpdated = addStudentStatement.executeUpdate();
+                if (rowsUpdated != 1) {
+                    throw new SQLException("More or less than 1 row was affected");
+                }
+            } catch (SQLIntegrityConstraintViolationException integrity) {
+                integrity.printStackTrace();
+                throw new SQLException("the user already exists");
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new SQLException("SQL Error");
         }
+
         return true;
     }
 
@@ -127,7 +129,7 @@ public class StudentTable extends DBmanager {
             getStudentEmailStatement.setString(1, email);
             resultSet = getStudentEmailStatement.executeQuery();
 
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 student = new Student(
                         resultSet.getString("email"),
                         resultSet.getString("password"),
@@ -135,7 +137,7 @@ public class StudentTable extends DBmanager {
                 );
             }
 
-            if(student == null) {
+            if (student == null) {
                 throw new IllegalArgumentException();
             }
             resultSet.close();
