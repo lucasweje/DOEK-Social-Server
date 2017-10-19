@@ -24,9 +24,6 @@ public class EventTable extends DBmanager {
             PreparedStatement getAllEventsStatement = getConnection().prepareStatement
                     ("SELECT * FROM dsevent");
 
-        PreparedStatement getAllEventsStatement = getConnection().prepareStatement
-                ("SELECT * FROM events");
-
             while (resultSet.next()) {
                 Event event = new Event(
                         resultSet.getString("idEvent"),
@@ -38,55 +35,19 @@ public class EventTable extends DBmanager {
                         resultSet.getString("description"),
                         resultSet.getTimestamp("date"));
 
-
-        while (resultSet.next()) {
-            Event event = new Event(
-                    resultSet.getInt("idEvent"),
-                    resultSet.getInt("price"),
-                    resultSet.getInt("idStudent"),
-                    resultSet.getString("eventName"),
-                    resultSet.getString("location"),
-                    resultSet.getString("description"),
-                    resultSet.getTimestamp("date"));
-
-
-            allEvents.add(event);
-        }
-
-        resultSet.close();
-
-        getAllEventsStatement.close();
-
-
-        return allEvents;
-    }
-
-    public boolean isStudentAlreadyAttending(String eventId, String studentId) {
-
-        ResultSet resultSet = null;
-        ArrayList<StudentHasEvent> attendingStudents = new ArrayList<>();
-        //Henter alt fra student_has_event for at kunne tjekke om en student har joinet det samme event flere gange
-        PreparedStatement alreadyAttending = null;
-
-        try {
-            alreadyAttending = getConnection().prepareStatement
-                    ("SELECT * FROM student_has_event WHERE events_idEvent = ? AND students_idStudent1 = ?");
-            alreadyAttending.setString(1, eventId);
-            alreadyAttending.setString(2, studentId);
-
-
-            resultSet = alreadyAttending.executeQuery();
-
-            if (resultSet.next()) {
-                return true;
+                allEvents.add(event);
             }
 
+            resultSet.close();
+
+            getAllEventsStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
 
-    }
+            return allEvents;
+        }
+
 
     public ArrayList getAttendingStudents(String idEvent) throws IllegalAccessException {
         Student student = null;
@@ -156,7 +117,7 @@ public class EventTable extends DBmanager {
         }
         return true;
     }
-
+/*
     public boolean createEvent (Event event) {
 
         try {
@@ -179,8 +140,8 @@ public class EventTable extends DBmanager {
             e.printStackTrace();
         }
     return true;
-    }
-
+    }*/
+/*
 public boolean deleteEvent (Event event) {
     try {
 
@@ -198,8 +159,8 @@ public boolean deleteEvent (Event event) {
 
 
             }
+            }*/
 
 
 }
 
-}

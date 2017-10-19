@@ -64,29 +64,27 @@ public class EventController {
     }
 
 */
+    /*
     public boolean createEvent(Event data) throws SQLException {
         EventTable db = new EventTable();
         boolean createEvent = db.createEvent(data);
         return createEvent;
-    }
+    }*/
 
-    /*public Event getAllEvents(int id) throws Exception {
-        DBmanager db = new DBmanager();
-        Event allEvents = db.getAllEvents(id);
-        return allEvents;
-    }
+
 
     public ArrayList<Event> getAllEvents() throws SQLException {
         EventTable allEvents = new EventTable();
         return allEvents.getAllEvents();
 
-    }*/
+    }
 
+    /*
     public boolean deleteEvent(Event event) throws Exception {
         EventTable db = new EventTable();
         boolean deleteEvent = db.deleteEvent(event);
         return deleteEvent;
-    }
+    }*/
 
     public boolean joinEvent(String idEvent, String idStudent) throws ResponseException {
         EventTable joinEvent = new EventTable();

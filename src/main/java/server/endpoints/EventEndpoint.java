@@ -61,7 +61,6 @@ public class EventEndpoint {
 
         }
 
-    }
 
     @GET
     public Response getEvents() {
@@ -85,6 +84,7 @@ public class EventEndpoint {
                     .entity(new Gson().toJson(message))
                     .build();
         }
+    }
 
         @GET
         @Path("{idEventStudents}/students")
