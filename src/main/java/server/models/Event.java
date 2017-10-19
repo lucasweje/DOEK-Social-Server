@@ -5,17 +5,17 @@ import java.sql.Timestamp;
 public class Event {
 
     private int price;
-    private String eventName, location, description, pictures, idEvent, studentId;
+
+    private String eventName, location, description, idEvent, idStudent;
     private Timestamp date;
 
-    public Event(String idEvent, int price, String studentId, String eventName, String location, String description, String pictures, Timestamp date) {
+    public Event(String idEvent, int price, String idStudent, String eventName, String location, String description, Timestamp date) {
         this.idEvent = idEvent;
         this.price = price;
-        this.studentId = studentId;
+        this.idStudent = idStudent;
         this.eventName = eventName;
         this.location = location;
         this.description = description;
-        this.pictures = pictures;
         this.date = date;
     }
 
@@ -36,12 +36,12 @@ public class Event {
         this.price = price;
     }
 
-    public String getStudentId() {
-        return studentId;
+    public String getidStudent() {
+        return idStudent;
     }
 
-    public void setStudentId() {
-        this.studentId = studentId;
+    public void setIdStudent() {
+        this.idStudent = idStudent;
     }
 
     public String getEventName() {
@@ -68,13 +68,6 @@ public class Event {
         this.description = description;
     }
 
-    public String getPictures() {
-        return pictures;
-    }
-
-    public void setPictures(String pictures) {
-        this.pictures = pictures;
-    }
 
     public Timestamp getDate() {
         return date;
