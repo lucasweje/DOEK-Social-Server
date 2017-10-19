@@ -23,6 +23,13 @@ public class Student {
         this.password = password;
         this.email = email;
     }
+
+    //Used for login - maybe
+    public Student(String firstName, String password) {
+        this.firstName = firstName;
+        this.password = password;
+    }
+
     public String getSalt() {
         return salt;
     }
