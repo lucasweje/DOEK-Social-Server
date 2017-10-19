@@ -1,7 +1,9 @@
 package server.providers;
 
+import server.exceptions.ResponseException;
 import server.models.Event;
 import server.models.Student;
+import server.models.StudentHasEvent;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,7 +12,7 @@ import java.util.ArrayList;
 
 public class EventTable extends DBmanager {
 
-    public ArrayList<Event> getAllEvents() {
+    public ArrayList<Event> getAllEvents() throws SQLException {
         ArrayList<Event> allEvents = new ArrayList<>();
 
         ResultSet resultSet = null;
@@ -19,7 +21,8 @@ public class EventTable extends DBmanager {
             PreparedStatement getAllEventsStatement = getConnection().prepareStatement
                     ("SELECT * FROM dsevent");
 
-            resultSet = getAllEventsStatement.executeQuery();
+        PreparedStatement getAllEventsStatement = getConnection().prepareStatement
+                ("SELECT * FROM events");
 
             while (resultSet.next()) {
                 Event event = new Event(
@@ -32,18 +35,53 @@ public class EventTable extends DBmanager {
                         resultSet.getTimestamp("date"));
 
 
-                        allEvents.add(event);
+        while (resultSet.next()) {
+            Event event = new Event(
+                    resultSet.getInt("idEvent"),
+                    resultSet.getInt("price"),
+                    resultSet.getInt("idStudent"),
+                    resultSet.getString("eventName"),
+                    resultSet.getString("location"),
+                    resultSet.getString("description"),
+                    resultSet.getTimestamp("date"));
+
+
+            allEvents.add(event);
+        }
+
+        resultSet.close();
+
+        getAllEventsStatement.close();
+
+
+        return allEvents;
+    }
+
+    public boolean isStudentAlreadyAttending(String eventId, String studentId) {
+
+        ResultSet resultSet = null;
+        ArrayList<StudentHasEvent> attendingStudents = new ArrayList<>();
+        //Henter alt fra student_has_event for at kunne tjekke om en student har joinet det samme event flere gange
+        PreparedStatement alreadyAttending = null;
+
+        try {
+            alreadyAttending = getConnection().prepareStatement
+                    ("SELECT * FROM student_has_event WHERE events_idEvent = ? AND students_idStudent1 = ?");
+            alreadyAttending.setString(1, eventId);
+            alreadyAttending.setString(2, studentId);
+
+
+            resultSet = alreadyAttending.executeQuery();
+
+            if (resultSet.next()) {
+                return true;
             }
-
-            resultSet.close();
-
-            getAllEventsStatement.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return false;
 
-        return allEvents;
     }
 
     public ArrayList getAttendingStudents(String idEvent) throws IllegalAccessException {
@@ -90,7 +128,12 @@ public class EventTable extends DBmanager {
 
     public boolean joinEvent (String eventId, String studentId) throws IllegalArgumentException {
 
+
         try {
+            //kalder metoden der tjekker om studenten allerede har tilmeldt sig det pågældende event
+
+
+            //Statement der sætter studentens id og eventets id sammen i en tabel
             PreparedStatement joinEvent = getConnection().prepareStatement
                     ("INSERT INTO student_has_dsevent (dsevent_idEvent, students_idStudent) VALUE (?, ?)");
 
@@ -100,8 +143,8 @@ public class EventTable extends DBmanager {
 
             int rowsAffected = joinEvent.executeUpdate();
 
-            //Måske skal det være ' == 1 ' i stedet for ' != 0 '
-            if (rowsAffected != 1){
+
+            if (rowsAffected != 1) {
                 return false;
             }
         } catch (SQLException e) {

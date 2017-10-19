@@ -2,6 +2,7 @@ package server.controllers;
 
 import com.google.gson.Gson;
 import com.sun.java.accessibility.util.EventID;
+import server.exceptions.ResponseException;
 import server.models.Event;
 import server.models.Student;
 import server.providers.DBmanager;
@@ -76,13 +77,13 @@ public class EventController {
         return allEvents;
     }*/
 
-    public ArrayList<Event> getAllEvents() throws Exception {
+    public ArrayList<Event> getAllEvents() throws SQLException {
         EventTable allEvents = new EventTable();
         return allEvents.getAllEvents();
 
     }
 
-    public boolean joinEvent(String idEvent, String idStudent) {
+    public boolean joinEvent(String idEvent, String idStudent) throws ResponseException {
         EventTable joinEvent = new EventTable();
         return joinEvent.joinEvent(idEvent, idStudent);
 

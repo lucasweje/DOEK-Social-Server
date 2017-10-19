@@ -12,8 +12,9 @@ public class RootEndpoint {
     @GET
     public Response defaultGetMethod(){
 
-        String salt = Authenticator.randomSalt("Filip");
-        String hashString = Authenticator.hashWithSalt("Filip", salt);
+        //udkommenteret så hashwithsalt er statisk når vi tester login mv
+        //String salt = Authenticator.randomSalt("salt");
+        String hashString = Authenticator.hashWithSalt("1234", "salt");
 
         return Response.status(200).type("text/plain").entity(hashString).build();
     }
