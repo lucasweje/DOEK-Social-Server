@@ -5,7 +5,7 @@ import server.utility.Authenticator;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
-
+// denne metode er blevet brugt til test af hashing.
 @Path("/")
 public class RootEndpoint {
 

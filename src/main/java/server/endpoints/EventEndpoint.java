@@ -14,7 +14,9 @@ import server.providers.EventTable;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 @Path("/events")
@@ -24,33 +26,58 @@ public class EventEndpoint {
     EventController eventController = new EventController();
 
     //  EventTable eventTable = new EventTable();
-/*
     //Har udkommenteret mange linjer kode for at det ikke fejler
 
-    //eventTable skal skiftes til rigtigt variable navn
-//    EventTable eventTable = EventTable.getInstance();
-//    ArrayList<Event> events = evenTable.getEvents();
 
-    EventController eventcontroller = new EventController();
+    //Skal bruges til at opdatere events (her bruges PUT)
 
-    @POST
-    @Produces("Application/json")
-    public Response createEvent(String data) throws SQLException {
+    @PUT
+    @Path("{idEvent}/updateEvents")
+    public Response updateEvent(@PathParam("idEvent")String eventId, String data) throws Exception {
 
         Gson gson = new Gson();
         Event event = gson.fromJson(data, Event.class);
+        event.setIdEvent(Integer.parseInt(eventId));
+
+        //Event decrypt = Crypter.encryptDecryptXOR(event);
+
+        if (eventController.updateEvent(event)) {
+            return Response
+                    .status(200)
+                    .entity("{\"Message\":\"Success! Event updated\"}")
+                    .build();
+
+        } else
+            return Response
+                    .status(400)
+                    .entity("{\"Message\":\"Failed. No such event!\"}")
+                    .build();
+
+    }
+
+    @POST
+    public Response createEvent(String eventData) throws SQLException {
+
+        // OBS mangler token, som finder id på 'currentStudent'
+
+        Event event = new Gson().fromJson(eventData, Event.class);
 
         EventController eventController = new EventController();
         if (eventController.createEvent(event)) {
             return Response
                     .status(200)
+                    .type("application/json")
                     .entity("{message\":\"Success! Event created\"}")
                     .build();
         } else {
-            return Response.status(400).entity("{\"message\":\"failed\"}").build();
+            return Response
+                    .status(400)
+                    .type("application/json")
+                    .entity("{\"message\":\"failed\"}")
+                    .build();
         }
     }
-*/
+
     @DELETE
     @Path("{idEvent}/studentEvents")
     public Response deleteEvent(String data) throws Exception {
@@ -70,8 +97,6 @@ public class EventEndpoint {
         }
     }
 
-}
-/*
 
     @GET
     public Response getEvents() {
@@ -102,7 +127,7 @@ public class EventEndpoint {
         public Response getAttendingStudents(@PathParam("idEventStudents")String idEvent) {
 
             EventTable eventTable = new EventTable();
-            ArrayList foundAttendingStudents = null;
+            ArrayList<Student> foundAttendingStudents = null;
 
             if (idEvent.isEmpty()) {
                 return Response
@@ -161,10 +186,4 @@ public class EventEndpoint {
 
 
     }
-        //Skal bruges til at opdatere events (her bruges PUT)
-
-        @PUT
-        @Path("/events")
-        public Response updateEvent(String eventJson) throws Exception {
-
-        }*/
+}
