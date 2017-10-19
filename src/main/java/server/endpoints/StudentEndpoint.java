@@ -13,6 +13,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import server.utility.Crypter;
 
 @Path("/students")
 public class StudentEndpoint {
@@ -27,12 +28,16 @@ public class StudentEndpoint {
     @GET
     public Response getStudents() {
 
+        String json = new Gson().toJson(new String[]{"student1", "student2"});
+        String crypted = Crypter.encryptDecrypt(json);
+
         //Returnerer Gson til Json.
         return Response
                 .status(200)
                 .type("application/json")
-                .entity(new Gson().toJson(new String[]{"student1", "student2"})) //skal ændres til connection med databasen når config filen er lavet.
+                .entity(crypted) //skal ændres til connection med databasen når config filen er lavet.
                 .build();
+
         //debugger kan stoppe program og eksekvere det og se hvad der sker.
     }
 /*

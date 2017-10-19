@@ -1,9 +1,16 @@
 package server.models;
 
+import server.utility.Authenticator;
+
 public class Token {
 
     private String token;
     private Student student;
+
+    public Token(Student student){
+        setToken(Authenticator.hashWithSalt(student.getEmail(), student.getSalt()));
+
+    }
 
     public void setStudent (Student student) {
         this.student = student;
@@ -16,4 +23,5 @@ public class Token {
     public String getToken(){
         return token;
     }
+
 }

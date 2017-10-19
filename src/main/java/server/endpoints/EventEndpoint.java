@@ -19,7 +19,6 @@ import java.util.ArrayList;
 public class EventEndpoint {
 
 
-    EventController eventController = new EventController();
     EventTable eventTable = new EventTable();
 
     //Har udkommenteret mange linjer kode for at det ikke fejler
@@ -51,10 +50,11 @@ public class EventEndpoint {
     @DELETE
     public Response deleteEvent (String data) throws Exception {
 
+        EventController eventController = new EventController();
         Gson gson = new Gson();
         Event event = gson.fromJson(data, Event.class);
 
-        if (eventcontroller.deleteEvent(event)) {
+        if (eventController.deleteEvent(event)) {
             return Response.status(200).entity("{\"message\":\"Success! Event deleted\"}").build();
 
         } else return Response.status(400).entity("{\"message\":\"failed\"}").build();
@@ -64,6 +64,9 @@ public class EventEndpoint {
 
     @GET
     public Response getEvents() {
+
+        EventController eventController = new EventController();
+
 
         //kald en metode der henter alle brugere fra databasen (gemmer dem i en ArrayList??)
         try {

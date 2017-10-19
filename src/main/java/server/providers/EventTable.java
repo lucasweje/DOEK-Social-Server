@@ -45,8 +45,8 @@ public class EventTable extends DBmanager {
             e.printStackTrace();
         }
 
-            return allEvents;
-        }
+        return allEvents;
+    }
 
 
     public ArrayList getAttendingStudents(String idEvent) throws IllegalAccessException {
@@ -91,7 +91,7 @@ public class EventTable extends DBmanager {
         return attendingStudents;
     }
 
-    public boolean joinEvent (String eventId, String studentId) throws IllegalArgumentException {
+    public boolean joinEvent(String eventId, String studentId) throws IllegalArgumentException {
 
 
         try {
@@ -117,50 +117,46 @@ public class EventTable extends DBmanager {
         }
         return true;
     }
-/*
-    public boolean createEvent (Event event) {
+
+    public boolean createEvent(Event event) {
 
         try {
-            PreparedStatement createEventStatement = connection.prepareStatement("INSERT INTO Events (idEvent, EventName, idStudent, Location, Price, Date, Description, Pictures) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement createEventStatement = getConnection().prepareStatement("INSERT INTO Events (idEvent, EventName, idStudent, Location, Price, Date, Description, Pictures) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
             createEventStatement.setString(1, event.getIdEvent());
             createEventStatement.setString(2, event.getEventName());
-            createEventStatement.setString(3, event.getStudentId());
+            createEventStatement.setString(3, event.getidStudent());
             createEventStatement.setString(4, event.getLocation());
             createEventStatement.setInt(5, event.getPrice());
             createEventStatement.setTimestamp(6, event.getDate());
             createEventStatement.setString(7, event.getDescription());
-            createEventStatement.setString(8, event.getPictures());
 
             createEventStatement.execute();
 
-        }
-
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-    return true;
-    }*/
-/*
-public boolean deleteEvent (Event event) {
-    try {
+        return true;
+    }
 
-            PreparedStatement deleteEventStatement = connection.prepareStatement("UPDATE Events SET Deleted = 1 WHERE EventId = ?");
+    public boolean deleteEvent(Event event) {
+        try {
 
-                deleteEventStatement.setString(1, event);
-                deleteEventStatement.executeUpdate();
+            PreparedStatement deleteEventStatement = getConnection().prepareStatement("UPDATE Events SET Deleted = 1 WHERE EventId = ?");
 
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-
-            }
-                return true;
+            deleteEventStatement.setString(1, event.getIdEvent());
+            deleteEventStatement.executeUpdate();
 
 
-            }
-            }*/
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return true;
 
 
+    }
 }
+
+
 
