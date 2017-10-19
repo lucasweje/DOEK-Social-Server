@@ -6,12 +6,12 @@ public class Student {
     private String lastName;
     private String email;
     private String password;
-    private String idStudent;
+    private int idStudent;
     private String salt;
     private long createdTime;
 
     //has all student info.
-    public Student(String idStudent, String firstName, String lastName, String email, String password, long createdTime) {
+    public Student(int idStudent, String firstName, String lastName, String email, String password, long createdTime) {
         this.idStudent = idStudent;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -40,8 +40,8 @@ public class Student {
         this.password = password;
     }
 
-    public Student(String idStudent) {
-        this.idStudent = idStudent;
+    public Student() {
+
     }
 
     public String getSalt() {
@@ -52,12 +52,11 @@ public class Student {
         this.salt = salt;
     }
 
-
-    public String getIdStudent() {
+    public int getIdStudent() {
         return idStudent;
     }
 
-    public void setIdStudent(String idStudent) {
+    public void setIdStudent(int idStudent) {
         this.idStudent = idStudent;
     }
 
