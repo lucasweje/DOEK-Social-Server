@@ -142,6 +142,7 @@ public class EventTable extends DBmanager {
         return true;
         }
 
+        /** */
     public boolean deleteEvent(Event event) {
 
         PreparedStatement deleteEventStatement = null;
