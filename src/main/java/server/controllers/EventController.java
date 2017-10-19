@@ -42,6 +42,7 @@ public class EventController {
     }
 
 
+
 }
 
     //Hvilke parametre skal updateEvent indeholde?
@@ -77,6 +78,13 @@ public class EventController {
     public boolean joinEvent(String idEvent, String idStudent) {
         EventTable joinEvent = new EventTable();
         return joinEvent.joinEvent(idEvent, idStudent);
+
+    }
+// Både idStudent og idEvent
+    public boolean updateEvent(Event event) throws Exception {
+        EventTable db = new EventTable();
+        boolean updateEvent = db.updateEvent(event);
+        return updateEvent;
 
     }
 }

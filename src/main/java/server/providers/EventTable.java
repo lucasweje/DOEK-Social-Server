@@ -1,5 +1,6 @@
 package server.providers;
 
+import com.google.gson.Gson;
 import server.models.Event;
 import server.models.Student;
 
@@ -66,4 +67,36 @@ public class EventTable extends DBmanager {
         }
         return true;
     }
+
+    // Anvendes til at ændre et event. Modtager et idEvent og data om eventet. Dette opdates i DBmanager.
+    // Skal der også anvendes et StudentID til, at genkende hvorvidt eventet tilhører den enkelte???
+
+    public boolean updateEvent(Event event) throws Exception {
+
+        PreparedStatement updateEventStatement = null;
+
+        try {
+            updateEventStatement = getConnection().prepareStatement
+                    ("UPDATE Events " +
+                            "SET EventName = ?, Location = ?, Price = ?, eventDate = ?, Description = ? " +
+                            "WHERE idEvent = ?, idStudent = ?");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            updateEventStatement.setString(1, event.getEventName());
+            updateEventStatement.setString(2, event.getLocation());
+            updateEventStatement.setInt(3, event.getPrice());
+            updateEventStatement.setTimestamp(4, event.getDate());
+            updateEventStatement.setString(5, event.getDescription());
+
+            updateEventStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+
+    }
+
 }

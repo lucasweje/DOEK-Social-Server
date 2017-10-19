@@ -14,69 +14,86 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 
-    @Path("/events")
-    public class EventEndpoint {
+@Path("/events")
+public class EventEndpoint {
 
-        EventController eventController = new EventController();
-        EventTable eventTable = new EventTable();
+    EventController eventController = new EventController();
+    EventTable eventTable = new EventTable();
 
-        //Har udkommenteret mange linjer kode for at det ikke fejler
+    //Har udkommenteret mange linjer kode for at det ikke fejler
 
-        //eventTable skal skiftes til rigtigt variable navn
+    //eventTable skal skiftes til rigtigt variable navn
 //    EventTable eventTable = EventTable.getInstance();
 //    ArrayList<Event> events = evenTable.getEvents();
 
-        @GET
-        public Response getEvents() throws Exception {
+    @GET
+    public Response getEvents() throws Exception {
 
-            //kald en metode der henter alle events fra databasen (gemmer dem i en ArrayList??)
-            ArrayList<Event> events = eventController.getAllEvents();
-            if (events != null) {
-                return Response
-                        .status(200)
-                        .type("application/json")
-                        .entity(new Gson().toJson(events))
-                        .build();
-            } else {
-                return Response
-                        .status(400)
-                        .type("application/json")
-                        .entity("{\"getEvents\":\"failed\"}")
-                        .build();
-            }
+        //kald en metode der henter alle events fra databasen (gemmer dem i en ArrayList??)
+        ArrayList<Event> events = eventController.getAllEvents();
+        if (events != null) {
+            return Response
+                    .status(200)
+                    .type("application/json")
+                    .entity(new Gson().toJson(events))
+                    .build();
+        } else {
+            return Response
+                    .status(400)
+                    .type("application/json")
+                    .entity("{\"getEvents\":\"failed\"}")
+                    .build();
+        }
+    }
+
+    @POST
+    @Path("/join")
+    public Response joinEvent(String eventJson) throws Exception {
+
+        EventController eventController = new EventController();
+        StudentHasEvent studentHasEvent = new Gson().fromJson(eventJson, StudentHasEvent.class);
+
+        if (eventController.joinEvent(studentHasEvent.getEvent_idEvent(), studentHasEvent.getStudent_idStudent())) {
+            return Response
+                    .status(200)
+                    .type("application/json")
+                    .entity("ok")
+                    .build();
+        } else {
+            return Response
+                    .status(404)
+                    .type("application/json")
+                    .entity("not found")
+                    .build();
         }
 
-        @POST
-        @Path("/join")
-        public Response joinEvent(String eventJson) throws Exception {
 
-            EventController eventController = new EventController();
-            StudentHasEvent studentHasEvent = new Gson().fromJson(eventJson, StudentHasEvent.class);
+    }
 
-            if(eventController.joinEvent(studentHasEvent.getEvent_idEvent(), studentHasEvent.getStudent_idStudent())){
-                return Response
-                        .status(200)
-                        .type("application/json")
-                        .entity("ok")
-                        .build();
-            } else {
-                return Response
-                        .status(404)
-                        .type("application/json")
-                        .entity("not found")
-                        .build();
-            }
+    //Skal bruges til at opdatere events (her bruges PUT)
 
+    @PUT
+    @Path("{idEvent}/updateEvents")
+    public Response updateEvent(String data) throws Exception {
 
-        }
+        Gson gson = new Gson();
+        Event event = gson.fromJson(data, Event.class);
 
-        //Skal bruges til at opdatere events (her bruges PUT)
-        /*
-        @PUT
-        @Path("/events")
-        public Response updateEvent(String eventJson) throws Exception {
+        //Event decrypt = Crypter.encryptDecryptXOR(event);
 
-        }*/
+        if (eventController.updateEvent(event)) {
+            return Response
+                    .status(200)
+                    .entity("{\"Message\":\"Success! Event updated\"}")
+                    .build();
+
+        } else
+            return Response
+                    .status(400)
+                    .entity("{\"Message\":\"Failed. No such event!\"}")
+                    .build();
+
+    }
+
 }
-
 
