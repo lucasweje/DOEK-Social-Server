@@ -2,22 +2,22 @@ package server.controllers;
 
 import com.google.gson.Gson;
 import server.models.Student;
+import server.providers.DBmanager;
+import server.providers.StudentTable;
 
 import java.util.ArrayList;
 
 public class StudentController {
     Gson gson;
 
+    StudentTable studentTable = new StudentTable();
 
-
-    public ArrayList<AttendingStudents> getAttendingStudents(String idStudent, String idEvent) {
-        ArrayList<AttendingStudents> attendingStudents = db.getAttendingStudents();
-        db.close();
+    public ArrayList getAttendingStudents(String idStudent, String idEvent) throws IllegalAccessException {
+        ArrayList attendingStudents = studentTable.getAttendingStudents(idStudent, idEvent);
         return attendingStudents;
     }
 
-/*    DBmanager db = new DBmanager();
-
+/*
     public StudentController() {
         this.gson = new Gson();
 
@@ -26,7 +26,6 @@ public class StudentController {
     public ArrayList<Student> getStudents() {
         DBmanager db = new DBmanager();
         ArrayList<Student> students = db.getStudents();
-        db.close();
         return students;
     }
 
@@ -34,7 +33,6 @@ public class StudentController {
     public Student getStudents(int id) {
         DBmanager db = new DBmanager();
         Student student = db.getStudents(id);
-        db.close();
         return students;
     }*/
 

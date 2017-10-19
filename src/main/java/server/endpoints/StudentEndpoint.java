@@ -15,7 +15,7 @@ public class StudentEndpoint {
 
     //Opretter arraylist med students.
 
-    @GET
+ /*   @GET
     public Response getStudents() {
 
         //Returnerer Gson til Json.
@@ -44,11 +44,12 @@ public class StudentEndpoint {
         }
         else return Response.status(400).entity("{\"message\":\"failed\"}").build();
     }
-
+*/
+    @GET
     public Response getAttendingStudents(String idStudent, String idEvent) {
 
         StudentTable studentTable = new StudentTable();
-        Student foundAttendingStudents = null;
+        ArrayList foundAttendingStudents = null;
 
         if (idStudent.isEmpty()) {
             return Response

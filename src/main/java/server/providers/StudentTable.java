@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class StudentTable extends DBmanager {
 
 
+/*
     //Nulstiller connection. Maskineriet brokker sig hvis connection ikke er sat fra starten af.
     Connection connection = null;
 
@@ -69,12 +70,14 @@ public class StudentTable extends DBmanager {
         }
         return true;
     }
+*/
 
-    public Student getAttendingStudents(String idStudent, String idEvent) throws IllegalAccessException {
+    public ArrayList getAttendingStudents(String idStudent, String idEvent) throws IllegalAccessException {
         Student student = null;
         ResultSet resultSet = null;
+        ArrayList attendingStudents = new ArrayList();
 
-        //henter studenten med det valgte id.
+        //henter alle studenter der deltager på det valgte event.
         try {
             PreparedStatement getAttendingStudents = getConnection().prepareStatement
                     ("SELECT she.*, e.*, s. " +
@@ -90,24 +93,25 @@ public class StudentTable extends DBmanager {
 
             while (resultSet.next()) {
                 try {
-                    //Opretter ny instans af den valgte student. (Måden man henter oplysninger om den valgte student).
+                    //Opretter ny instans af de studenter der er i ArrayListen. (Måden man henter oplysninger).
                     student = new Student(
                             resultSet.getString("idStudent"),
                             resultSet.getString("firstName"),
                             resultSet.getString("lastName"),
                             resultSet.getString("email")
                     );
+                    attendingStudents.add(student);
 
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
             }
         } catch (SQLException sqlException) {
             System.out.println(sqlException.getMessage());
         }
 
-        //Returnerer den enkelte student med oplysninger.
-        return student;
+        //Returnerer attendingStudents med oplysninger.
+        return attendingStudents;
     }
 
     // Skal ikke bruges, gemmes just in case.
