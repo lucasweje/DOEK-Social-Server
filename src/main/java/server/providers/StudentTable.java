@@ -166,7 +166,8 @@ public class StudentTable extends DBmanager {
         student.setPassword(Authenticator.hashWithSalt(student.getPassword(), student.getSalt()));
         student.setCreatedTime(unixTime);
 
-        PreparedStatement addStudentStatement = getConnection().prepareStatement("INSERT INTO students (firstName, lastName, email, password, createdTime) VALUES (?, ?, ?, ?, ?)");
+        PreparedStatement addStudentStatement = getConnection().prepareStatement
+                ("INSERT INTO students (firstName, lastName, email, password, createdTime) VALUES (?, ?, ?, ?, ?)");
 
         try {
             addStudentStatement.setString(1, student.getFirstName());
