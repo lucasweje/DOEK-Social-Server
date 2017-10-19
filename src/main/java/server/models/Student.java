@@ -40,6 +40,10 @@ public class Student {
         this.password = password;
     }
 
+    public Student(String idStudent) {
+        this.idStudent = idStudent;
+    }
+
     public String getSalt() {
         return salt;
     }

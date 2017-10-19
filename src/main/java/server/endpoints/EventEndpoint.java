@@ -12,7 +12,9 @@ import server.models.StudentHasEvent;
 import server.providers.EventTable;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 @Path("/events")
@@ -31,23 +33,28 @@ public class EventEndpoint {
     EventController eventcontroller = new EventController();
 
     @POST
-    @Produces("Application/json")
-    public Response createEvent(String data) throws SQLException {
+    public Response createEvent(String eventData) throws SQLException {
 
-        Gson gson = new Gson();
-        Event event = gson.fromJson(data, Event.class);
+        // OBS mangler token, som finder id på 'currentStudent'
+
+        Event event = new Gson().fromJson(eventData, Event.class);
 
         EventController eventController = new EventController();
         if (eventController.createEvent(event)) {
             return Response
                     .status(200)
+                    .type("application/json")
                     .entity("{message\":\"Success! Event created\"}")
                     .build();
         } else {
-            return Response.status(400).entity("{\"message\":\"failed\"}").build();
+            return Response
+                    .status(400)
+                    .type("application/json")
+                    .entity("{\"message\":\"failed\"}")
+                    .build();
         }
     }
-
+/*
     @DELETE
     public Response deleteEvent (String data) throws Exception {
 
@@ -60,7 +67,7 @@ public class EventEndpoint {
         } else return Response.status(400).entity("{\"message\":\"failed\"}").build();
 
         }
-
+*/
 
     @GET
     public Response getEvents() {
