@@ -46,8 +46,8 @@ public class EventEndpoint {
         } else {
             return Response.status(400).entity("{\"message\":\"failed\"}").build();
         }
-    }
-
+    }*/
+/*
     @DELETE
     public Response deleteEvent (String data) throws Exception {
 

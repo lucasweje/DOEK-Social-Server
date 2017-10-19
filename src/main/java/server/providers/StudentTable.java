@@ -237,13 +237,28 @@ public class StudentTable extends DBmanager {
         }
         return true;
     }
+
     public Student getStudentFromToken(String token) throws SQLException {
         ResultSet resultSet = null;
         Student studentFromToken = null;
 
         try {
 
-            PreparedStatement getStudentFromToken = getConnection().prepareStatement(SELECT )
+            PreparedStatement getStudentFromToken = getConnection().prepareStatement("SELECT idStudent, firstName, lastName FROM `students` s INNER JOIN tokens t ON t.students_idStudent = s.idStudents WHERE t.token =?");
+
+            getStudentFromToken.setString(1, token);
+            resultSet = getStudentFromToken.executeQuery();
+
+            while (resultSet.next()) {
+                studentFromToken = new Student();
+
+                studentFromToken.setIdStudent(resultSet.getString("idStudent"));
+                studentFromToken.setFirstName(resultSet.getString("firstName"));
+                studentFromToken.setLastName(resultSet.getString("lastName"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return studentFromToken;
     }
 }

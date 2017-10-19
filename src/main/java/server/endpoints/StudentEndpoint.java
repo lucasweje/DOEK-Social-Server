@@ -8,6 +8,7 @@ import server.models.Student;
 import server.providers.StudentTable;
 import server.resources.Log;
 import server.utility.Authenticator;
+import server.utility.CurrentStudentContext;
 import sun.applet.Main;
 
 import javax.ws.rs.*;
@@ -169,10 +170,9 @@ public class StudentEndpoint {
     @GET
     @Path("/profile")
     public Response get(@HeaderParam("authorization") String token) throws SQLException {
-        Student student = mainController.getStudentFromTokens(token);
-        student.getEmail();
+        CurrentStudentContext student = mainController.getStudentFromTokens(token);
 
-        if (student != null) {
+        if (student.getCurrentStudent() != null) {
             return Response
                     .status(200)
                     .type("application/json")
