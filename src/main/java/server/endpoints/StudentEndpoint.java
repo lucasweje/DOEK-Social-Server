@@ -6,6 +6,7 @@ import server.controllers.MainController;
 import server.controllers.StudentController;
 import server.models.Student;
 import server.providers.StudentTable;
+import server.resources.Log;
 import server.utility.Authenticator;
 
 import javax.ws.rs.*;
@@ -24,6 +25,7 @@ public class StudentEndpoint {
 
     @GET
     public Response getStudents() {
+
 
         //Returnerer Gson til Json.
         return Response
