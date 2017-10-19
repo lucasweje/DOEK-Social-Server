@@ -214,4 +214,36 @@ public class StudentTable extends DBmanager {
         }
         return student;
     }
+
+    public void addToken(String token, String idStudent) throws SQLException {
+        PreparedStatement addTokenStatement;
+        try {
+            addTokenStatement = getConnection().prepareStatement("INSERT INTO tokens (token, idStudent) VALUES (?,?)");
+            addTokenStatement.setString(1, token);
+            addTokenStatement.setString(2, idStudent);
+            addTokenStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean deleteToken(String idStudent) throws SQLException {
+        PreparedStatement deleteTokenStatement = getConnection().prepareStatement("DELETE FROM tokens WHERE idStudent = ?");
+        try {
+            deleteTokenStatement.setString(1, idStudent);
+            deleteTokenStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+    public Student getStudentFromToken(String token) throws SQLException {
+        ResultSet resultSet = null;
+        Student studentFromToken = null;
+
+        try {
+
+            PreparedStatement getStudentFromToken = getConnection().prepareStatement(SELECT )
+        }
+    }
 }
