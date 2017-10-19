@@ -10,6 +10,8 @@ public class Student {
     private String salt;
     private long createdTime;
 
+    public Student(){}
+
     //has all student info.
     public Student(String idStudent, String firstName, String lastName, String email, String password, long createdTime) {
         this.idStudent = idStudent;

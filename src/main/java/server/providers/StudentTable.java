@@ -103,7 +103,7 @@ public class StudentTable extends DBmanager {
                             resultSet.getString("description"),
                             resultSet.getTimestamp("date"));
 
-                            attendingEvents.add(event);
+                    attendingEvents.add(event);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -193,17 +193,16 @@ public class StudentTable extends DBmanager {
         ResultSet resultSet = null;
 
         try {
-            PreparedStatement getStudentEmailStatement = connection.prepareStatement("SELECT * FROM students WHERE email = ?");
+            PreparedStatement getStudentEmailStatement = getConnection().prepareStatement("SELECT * FROM students WHERE email = ?");
 
             getStudentEmailStatement.setString(1, email);
             resultSet = getStudentEmailStatement.executeQuery();
 
             while (resultSet.next()) {
-                student = new Student(
-                        resultSet.getString("email"),
-                        resultSet.getString("password"),
-                        resultSet.getString("createdTime")
-                );
+                student = new Student();
+                student.setEmail(resultSet.getString("email"));
+                student.setPassword(resultSet.getString("password"));
+                student.setCreatedTime(resultSet.getLong("createdTime"));
             }
 
             if (student == null) {
