@@ -200,6 +200,7 @@ public class StudentTable extends DBmanager {
 
             while (resultSet.next()) {
                 student = new Student();
+                student.setIdStudent(resultSet.getInt("idStudent"));
                 student.setEmail(resultSet.getString("email"));
                 student.setPassword(resultSet.getString("password"));
                 student.setCreatedTime(resultSet.getLong("createdTime"));
@@ -215,12 +216,12 @@ public class StudentTable extends DBmanager {
         return student;
     }
 
-    public void addToken(String token, String idStudent) throws SQLException {
+    public void addToken(String token, int idStudent) throws SQLException {
         PreparedStatement addTokenStatement;
         try {
-            addTokenStatement = getConnection().prepareStatement("INSERT INTO tokens (token, idStudent) VALUES (?,?)");
+            addTokenStatement = getConnection().prepareStatement("INSERT INTO tokens (token, students_IdStudent) VALUES (?,?)");
             addTokenStatement.setString(1, token);
-            addTokenStatement.setString(2, idStudent);
+            addTokenStatement.setInt(2, idStudent);
             addTokenStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -244,7 +245,7 @@ public class StudentTable extends DBmanager {
 
         try {
 
-            PreparedStatement getStudentFromToken = getConnection().prepareStatement("SELECT idStudent, firstName, lastName FROM `students` s INNER JOIN tokens t ON t.students_idStudent = s.idStudents WHERE t.token =?");
+            PreparedStatement getStudentFromToken = getConnection().prepareStatement("SELECT idStudent, firstName, lastName FROM students s INNER JOIN tokens t ON t.students_idStudent = s.idStudent WHERE t.token =?");
 
             getStudentFromToken.setString(1, token);
             resultSet = getStudentFromToken.executeQuery();
@@ -252,7 +253,7 @@ public class StudentTable extends DBmanager {
             while (resultSet.next()) {
                 studentFromToken = new Student();
 
-                studentFromToken.setIdStudent(resultSet.getString("idStudent"));
+                studentFromToken.setIdStudent(resultSet.getInt("idStudent"));
                 studentFromToken.setFirstName(resultSet.getString("firstName"));
                 studentFromToken.setLastName(resultSet.getString("lastName"));
             }

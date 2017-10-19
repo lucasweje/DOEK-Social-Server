@@ -169,7 +169,7 @@ public class StudentEndpoint {
 
     @GET
     @Path("/profile")
-    public Response get(@HeaderParam("authorization") String token) throws SQLException {
+    public Response get(@HeaderParam("Authorization") String token) throws SQLException {
         CurrentStudentContext student = mainController.getStudentFromTokens(token);
 
         if (student.getCurrentStudent() != null) {
