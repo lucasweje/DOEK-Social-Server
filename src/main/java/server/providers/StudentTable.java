@@ -31,10 +31,10 @@ public class StudentTable extends DBmanager {
                 try {
                     //Opretter ny instans af alle studenter. (Måden man henter oplysninger om alle studenter).
                     Student students = new Student();
-                            students.setIdStudent(resultSet.getInt("idStudent"));
-                            students.setFirstName(resultSet.getString("firstName"));
-                            students.setLastName(resultSet.getString("lastName"));
-                            students.setEmail(resultSet.getString("email"));
+                    students.setIdStudent(resultSet.getInt("idStudent"));
+                    students.setFirstName(resultSet.getString("firstName"));
+                    students.setLastName(resultSet.getString("lastName"));
+                    students.setEmail(resultSet.getString("email"));
                     studentList.add(students);
 
                 } catch (Exception e) {
@@ -219,7 +219,7 @@ public class StudentTable extends DBmanager {
     // Sletter en token i databasen til et bestemt idStudent
 
     public boolean deleteToken(String token) throws SQLException {
-        PreparedStatement deleteTokenStatement = connection.prepareStatement(" DELETE FROM Tokens WHERE token=?");
+        PreparedStatement deleteTokenStatement = connection.prepareStatement(" DELETE FROM Tokens WHERE token= ?");
 
         try {
             deleteTokenStatement.setString(1, token);
@@ -238,36 +238,36 @@ public class StudentTable extends DBmanager {
             addTokenStatement = getConnection().prepareStatement("INSERT INTO tokens (token, students_IdStudent) VALUES (?,?)");
             addTokenStatement.setString(1, token);
             addTokenStatement.setInt(2, idStudent);
-                    addTokenStatement.executeUpdate();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-
-
-        public Student getStudentFromToken (String token) throws SQLException {
-            ResultSet resultSet = null;
-            Student studentFromToken = null;
-
-            try {
-
-                PreparedStatement getStudentFromToken = getConnection().prepareStatement("SELECT idStudent, firstName, lastName FROM students s INNER JOIN tokens t ON t.students_idStudent = s.idStudent WHERE t.token =?");
-
-
-                getStudentFromToken.setString(1, token);
-                resultSet = getStudentFromToken.executeQuery();
-
-                while (resultSet.next()) {
-                    studentFromToken = new Student();
-
-                    studentFromToken.setIdStudent(resultSet.getInt("idStudent"));
-                    studentFromToken.setFirstName(resultSet.getString("firstName"));
-                    studentFromToken.setLastName(resultSet.getString("lastName"));
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return studentFromToken;
+            addTokenStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+    }
+
+
+    public Student getStudentFromToken(String token) throws SQLException {
+        ResultSet resultSet = null;
+        Student studentFromToken = null;
+
+        try {
+
+            PreparedStatement getStudentFromToken = getConnection().prepareStatement("SELECT idStudent, firstName, lastName FROM students s INNER JOIN tokens t ON t.students_idStudent = s.idStudent WHERE t.token =?");
+
+
+            getStudentFromToken.setString(1, token);
+            resultSet = getStudentFromToken.executeQuery();
+
+            while (resultSet.next()) {
+                studentFromToken = new Student();
+
+                studentFromToken.setIdStudent(resultSet.getInt("idStudent"));
+                studentFromToken.setFirstName(resultSet.getString("firstName"));
+                studentFromToken.setLastName(resultSet.getString("lastName"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return studentFromToken;
+    }
 
 }
