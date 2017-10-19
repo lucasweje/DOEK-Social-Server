@@ -85,6 +85,13 @@ public class EventEndpoint {
 
 
     }
+        //Skal bruges til at opdatere events (her bruges PUT)
+        /*
+        @PUT
+        @Path("/events")
+        public Response updateEvent(String eventJson) throws Exception {
+
+        }*/
 }
 
 

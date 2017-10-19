@@ -1,12 +1,10 @@
 package server.providers;
 
 import server.models.Student;
-import server.providers.DBmanager;
+import server.utility.Authenticator;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.ws.rs.core.Response;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class StudentTable extends DBmanager {
@@ -34,7 +32,9 @@ public class StudentTable extends DBmanager {
                             resultSet.getString("idStudent"),
                             resultSet.getString("firstName"),
                             resultSet.getString("lastName"),
-                            resultSet.getString("email")
+                            resultSet.getString("email"),
+                            resultSet.getString("password"),
+                            resultSet.getLong("createdTime")
                     );
                     studentList.add(students);
 
@@ -68,7 +68,9 @@ public class StudentTable extends DBmanager {
                             resultSet.getString("idStudent"),
                             resultSet.getString("firstName"),
                             resultSet.getString("lastName"),
-                            resultSet.getString("email")
+                            resultSet.getString("email"),
+                            resultSet.getString("password"),
+                            resultSet.getLong("createdTime")
                     );
 
                 } catch (Exception e) {
@@ -83,25 +85,66 @@ public class StudentTable extends DBmanager {
         return student;
     }
 
-    public boolean addStudent(Student student) throws Exception {
+    public boolean addStudent(Student student) throws SQLException {
+        long unixTime = System.currentTimeMillis() / 1000L;
+//generer salt password
+        student.setSalt(student.getEmail() + unixTime);
+//generer hashed password med salt.
+        student.setPassword(Authenticator.hashWithSalt(student.getPassword(), student.getSalt()));
+        student.setCreatedTime(unixTime);
 
-
-        PreparedStatement addStudentStatement = connection.prepareStatement("INSERT INTO Students (idStudent, firstName, lastName, email, password) VALUES (?, ?, ?, ?, ?)");
+        PreparedStatement addStudentStatement = getConnection().prepareStatement("INSERT INTO students (firstName, lastName, email, password, createdTime) VALUES (?, ?, ?, ?, ?)");
 
         try {
-            addStudentStatement.setString(1, student.getIdStudent());
-            addStudentStatement.setString(2, student.getFirstName());
-            addStudentStatement.setString(3, student.getLastName());
-            addStudentStatement.setString(4, student.getEmail());
-            addStudentStatement.setString(5, student.getPassword());
-
-            addStudentStatement.execute();
-
+            addStudentStatement.setString(1, student.getFirstName());
+            addStudentStatement.setString(2, student.getLastName());
+            addStudentStatement.setString(3, student.getEmail());
+            addStudentStatement.setString(4, student.getPassword());
+            addStudentStatement.setLong(5, student.getCreatedTime());
+            try {
+                int rowsUpdated = addStudentStatement.executeUpdate();
+                if (rowsUpdated != 1) {
+                    throw new SQLException("More or less than 1 row was affected");
+                }
+            } catch (SQLIntegrityConstraintViolationException integrity) {
+                integrity.printStackTrace();
+                throw new SQLException("the user already exists");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new SQLException("SQL Error");
         }
+
         return true;
     }
 
+    public Student getStudentByEmail(String email) {
+        Student student = null;
+
+        ResultSet resultSet = null;
+
+        try {
+            PreparedStatement getStudentEmailStatement = connection.prepareStatement("SELECT * FROM students WHERE email = ?");
+
+            getStudentEmailStatement.setString(1, email);
+            resultSet = getStudentEmailStatement.executeQuery();
+
+            while (resultSet.next()) {
+                student = new Student(
+                        resultSet.getString("email"),
+                        resultSet.getString("password"),
+                        resultSet.getString("createdTime")
+                );
+            }
+
+            if (student == null) {
+                throw new IllegalArgumentException();
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return student;
+    }
 
 }
