@@ -103,7 +103,7 @@ public class StudentTable extends DBmanager {
                             resultSet.getString("description"),
                             resultSet.getTimestamp("date"));
 
-                            attendingEvents.add(event);
+                    attendingEvents.add(event);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -310,5 +310,4 @@ public class StudentTable extends DBmanager {
         }
         return studentFromToken;
     }*/
-
 }
