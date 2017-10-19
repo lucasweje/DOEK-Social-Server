@@ -4,6 +4,7 @@ package server.endpoints;
 import com.google.gson.Gson;
 import server.controllers.MainController;
 import server.controllers.StudentController;
+import server.controllers.TokenController;
 import server.models.Student;
 import server.providers.StudentTable;
 import server.utility.Authenticator;
@@ -18,7 +19,8 @@ public class StudentEndpoint {
 
     StudentTable studentTable = new StudentTable();
     StudentController controller = new StudentController();
-  
+    MainController mainController = new MainController();
+    TokenController tokenController = new TokenController();
 
     //Opretter arraylist med students.
 

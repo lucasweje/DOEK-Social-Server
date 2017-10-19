@@ -1,16 +1,16 @@
 package server.providers;
 
-
 import server.exceptions.ResponseException;
 import server.models.Event;
 import server.models.Student;
 import server.models.StudentHasEvent;
 
-import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 
 public class EventTable extends DBmanager {
 

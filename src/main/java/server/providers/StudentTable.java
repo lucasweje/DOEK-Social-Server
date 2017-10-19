@@ -151,6 +151,7 @@ public class StudentTable extends DBmanager {
 
         //Returnerer den enkelte student med oplysninger.
         return student;
+<<<<<<< HEAD
     }*/
 
 
@@ -215,4 +216,99 @@ public class StudentTable extends DBmanager {
         }
         return student;
     }
+    /*
+    //Metoden mottar en email og et passord og vertifiserer brukeren som logger inn
+    public Student authorize(String email, String password) throws SQLException {
+
+        ResultSet resultSet = null;
+        Student studentFound = null;
+
+        try {
+            PreparedStatement authorize = connection.prepareStatement("SELECT * FROM Students WHERE email = ? AND Password = ? AND Deleted = 0");
+            authorize.setString(1, email);
+            // Skal spille sammen med hashing, ellers stemmer det ikke overens med oplysningene fra databasen
+            authorize.setString(2, Authenticator.randomSalt(password));
+
+            resultSet = authorize.executeQuery();
+
+            // I tilfælde af at der findes en bruger med dette login, så gemmes oplysningerne i student-objektet.
+            while (resultSet.next()) {
+                try {
+                    studentFound = new Student();
+                    studentFound.setIdStudent(resultSet.getString("idStudent"));
+                    studentFound.setFirstName(resultSet.getString("firstName"));
+                    studentFound.setLastName(resultSet.getString("lastName"));
+                    studentFound.setPassword(resultSet.getString("password"));
+                    studentFound.setSalt(resultSet.getString("salt"));
+                    studentFound.setEmail(resultSet.getString("email"));
+
+                } catch (SQLException e) {
+
+                }
+            }
+        } catch (SQLException sqlException) {
+            System.out.println(sqlException.getMessage());
+
+        }
+        return studentFound;
+
+    }*/
+
+    // Indsætter en token i DB til et bestemt idStudent
+    public void addToken(String token, String idStudent) throws SQLException {
+
+        PreparedStatement addTokenStatement;
+        try {
+            //HUSK AT TILFØJE EN TABEL DER HEDDER TOKENS I DATABASEN
+            addTokenStatement = connection.prepareStatement("INSERT INTO Tokens (token, idStudent) VALUES (?,?)");
+            addTokenStatement.setString(1, token);
+            addTokenStatement.setString(2, idStudent);
+            addTokenStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+    }
+
+    // Sletter en token i databasen til et bestemt idStudent
+
+    public boolean deleteToken(String token) throws SQLException {
+        PreparedStatement deleteTokenStatement = connection.prepareStatement(" DELETE FROM Tokens WHERE token=?");
+
+        try {
+            deleteTokenStatement.setString(1, token);
+            deleteTokenStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+/*
+    public Student getStudentFromToken(String token) throws SQLException {
+        ResultSet resultset = null;
+        Student studentFromToken = null;
+
+        try {
+            PreparedStatement getStudentsFromToken = connection.prepareStatement("SELECT Tokens.idStudent from Tokens INNER JOIN Students on Tokens.idStudent=Students.idStudent WHERE Tokens.token = ?");
+            getStudentsFromToken.setString(1, token);
+            resultset = getStudentsFromToken.executeQuery();
+
+            while (resultset.next()) {
+                 studentFromToken = new Student();
+
+                studentFromToken.setIdStudent(resultset.getString("idStudent"));
+                /// HVAD GØR VI::    studentFromToken.
+
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+
+
+        }
+        return studentFromToken;
+    }*/
+
 }

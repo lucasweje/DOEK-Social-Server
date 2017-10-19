@@ -1,6 +1,7 @@
 package server.providers;
 
 import server.config.Config;
+import server.models.Student;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -36,6 +37,16 @@ public class DBmanager {
         }
         return connection;
     }
+
+    // lukke forbindelsen til databasen
+    public  void close(){
+        try {
+            this.getConnection().close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
 
