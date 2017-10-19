@@ -1,14 +1,11 @@
 package server.endpoints;
 
 import javax.ws.rs.Path;
-
-
 import com.google.gson.Gson;
 import server.controllers.EventController;
 import server.models.Event;
+import server.models.StudentHasEvent;
 import server.providers.EventTable;
-import server.providers.StudentTable;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -17,6 +14,7 @@ import java.util.ArrayList;
     public class EventEndpoint {
 
         EventController eventController = new EventController();
+        EventTable eventTable = new EventTable();
 
         //Har udkommenteret mange linjer kode for at det ikke fejler
 
@@ -27,7 +25,7 @@ import java.util.ArrayList;
         @GET
         public Response getEvents() throws Exception {
 
-            //kald en metode der henter alle brugere fra databasen (gemmer dem i en ArrayList??)
+            //kald en metode der henter alle events fra databasen (gemmer dem i en ArrayList??)
             ArrayList<Event> events = eventController.getAllEvents();
             if (events != null) {
                 return Response
@@ -77,4 +75,36 @@ import java.util.ArrayList;
                         .build();
             }
         }
-    }
+
+        @POST
+        @Path("/join")
+        public Response joinEvent(String eventJson) throws Exception {
+
+            EventController eventController = new EventController();
+            StudentHasEvent studentHasEvent = new Gson().fromJson(eventJson, StudentHasEvent.class);
+
+            if(eventController.joinEvent(studentHasEvent.getEvent_idEvent(), studentHasEvent.getStudent_idStudent())){
+                return Response
+                        .status(200)
+                        .type("application/json")
+                        .entity("ok")
+                        .build();
+            } else {
+                return Response
+                        .status(404)
+                        .type("application/json")
+                        .entity("not found")
+                        .build();
+            }
+
+
+        }
+
+        //Skal bruges til at opdatere events (her bruges PUT)
+        /*
+        @PUT
+        @Path("/events")
+        public Response updateEvent(String eventJson) throws Exception {
+
+        }*/
+}

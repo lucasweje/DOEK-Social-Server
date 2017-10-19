@@ -1,13 +1,16 @@
 package server.controllers;
 
 import com.google.gson.Gson;
+import com.sun.java.accessibility.util.EventID;
 import server.models.Event;
+import server.models.Student;
 import server.providers.DBmanager;
 
 
 import java.awt.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import server.providers.EventTable;
 
 
@@ -15,6 +18,8 @@ public class EventController {
 
 
     //Udkommenteret indtil det virker således at DBManager mv kan testes
+
+
     //Controller klasse for event. Laver kald til databasen.
     //API forbindes med database.
 
@@ -74,6 +79,12 @@ public class EventController {
     public ArrayList<Event> getAllEvents() throws Exception {
         EventTable allEvents = new EventTable();
         return allEvents.getAllEvents();
+
+    }
+
+    public boolean joinEvent(String idEvent, String idStudent) {
+        EventTable joinEvent = new EventTable();
+        return joinEvent.joinEvent(idEvent, idStudent);
 
     }
 }
