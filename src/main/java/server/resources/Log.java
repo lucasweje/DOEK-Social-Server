@@ -1,40 +1,33 @@
 package server.resources;
 
 
-import java.io.*;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.logging.*;
-import java.util.Date;
-
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Log {
 
-    public String Timestamp () {
+    private Logger log;
 
-        String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+    public void writeLog(String className, Object eventObject, String eventDescription, Integer logLevel) {
+        log = LoggerFactory.getLogger(className);
 
-        return timeStamp;
-    }
-
-
-    public Log() throws FileNotFoundException, UnsupportedEncodingException {
-
-        Writer writer = null;
-
-        try {
-            writer = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream("myLog.txt"), "UTF-8"));
-            writer.write(Timestamp() + "Fejl");
-        } catch (IOException e) {
-            //report
-        }finally {
-            try {writer.close();} catch (Exception e){}
+        switch (logLevel) {
+            case 2:
+                log.debug(eventDescription, eventObject);
+                break;
+            case 1:
+                log.error(eventDescription, eventObject);
+                break;
+            case 0:
+                log.info(eventDescription, eventObject);
+                break;
+            default:
+                log.info(eventDescription, eventObject);
+                break;
 
         }
 
     }
-
-
 }
+
+
