@@ -22,13 +22,37 @@ public class EventEndpoint {
     EventController eventController = new EventController();
     EventTable eventTable = new EventTable();
 
-    //Har udkommenteret mange linjer kode for at det ikke fejler
 
-    //eventTable skal skiftes til rigtigt variable navn
-//    EventTable eventTable = EventTable.getInstance();
-//    ArrayList<Event> events = evenTable.getEvents();
 
-    EventController eventcontroller = new EventController();
+    //Skal bruges til at opdatere events (her bruges PUT)
+
+    @PUT
+    @Path("{idEvent}/updateEvents")
+    public Response updateEvent(@PathParam("idEvent")String eventId, String data) throws Exception {
+
+        Gson gson = new Gson();
+        Event event = gson.fromJson(data, Event.class);
+        event.setIdEvent(Integer.parseInt(eventId));
+
+        //Event decrypt = Crypter.encryptDecryptXOR(event);
+
+        if (eventController.updateEvent(event)) {
+            return Response
+                    .status(200)
+                    .entity("{\"Message\":\"Success! Event updated\"}")
+                    .build();
+
+        } else
+            return Response
+                    .status(400)
+                    .entity("{\"Message\":\"Failed. No such event!\"}")
+                    .build();
+
+    }
+
+
+
+
 /*
     @POST
     @Produces("Application/json")
@@ -91,7 +115,7 @@ public class EventEndpoint {
         public Response getAttendingStudents(@PathParam("idEventStudents")String idEvent) {
 
             EventTable eventTable = new EventTable();
-            ArrayList foundAttendingStudents = null;
+            ArrayList<Student> foundAttendingStudents = null;
 
             if (idEvent.isEmpty()) {
                 return Response
@@ -150,11 +174,6 @@ public class EventEndpoint {
 
 
     }
-        //Skal bruges til at opdatere events (her bruges PUT)
-        /*
-        @PUT
-        @Path("/events")
-        public Response updateEvent(String eventJson) throws Exception {
 
-        }*/
 }
+

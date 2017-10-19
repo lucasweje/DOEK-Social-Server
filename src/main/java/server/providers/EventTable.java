@@ -1,7 +1,11 @@
 package server.providers;
 
 
+import com.google.gson.Gson;
+
+
 import server.exceptions.ResponseException;
+
 import server.models.Event;
 import server.models.Student;
 import server.models.StudentHasEvent;
@@ -21,19 +25,18 @@ public class EventTable extends DBmanager {
         ResultSet resultSet = null;
 
         try {
-            PreparedStatement getAllEventsStatement = getConnection().prepareStatement
-                    ("SELECT * FROM dsevent");
+            PreparedStatement getAllEventsStatement = getConnection().prepareStatement("SELECT * FROM dsevent");
 
+            resultSet = getAllEventsStatement.executeQuery();
             while (resultSet.next()) {
                 Event event = new Event(
-                        resultSet.getString("idEvent"),
-
+                        resultSet.getInt("idEvent"),
                         resultSet.getInt("price"),
-                        resultSet.getString("idStudent"),
+                        resultSet.getInt("idStudent"),
                         resultSet.getString("eventName"),
                         resultSet.getString("location"),
                         resultSet.getString("description"),
-                        resultSet.getTimestamp("date"));
+                        resultSet.getDate("date"));
 
                 allEvents.add(event);
             }
@@ -117,6 +120,39 @@ public class EventTable extends DBmanager {
         }
         return true;
     }
+
+    // Anvendes til at ændre et event. Modtager et idEvent og data om eventet. Dette opdates i DBmanager.
+    // Skal der også anvendes et StudentID til, at genkende hvorvidt eventet tilhører den enkelte???
+
+    public boolean updateEvent(Event event) throws Exception {
+
+        PreparedStatement updateEventStatement = null;
+
+        try {
+            updateEventStatement = getConnection().prepareStatement
+                    ("UPDATE dsevent " +
+                            "SET eventName = ?, location = ?, price = ?, date = ?, description = ? " +
+                            "WHERE idEvent = ?");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            updateEventStatement.setString(1, event.getEventName());
+            updateEventStatement.setString(2, event.getLocation());
+            updateEventStatement.setInt(3, event.getPrice());
+            updateEventStatement.setDate(4, event.getEventDate());
+            updateEventStatement.setString(5, event.getDescription());
+            updateEventStatement.setInt(6, event.getIdEvent());
+
+            updateEventStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+
+    }
+
 /*
     public boolean createEvent (Event event) {
 
