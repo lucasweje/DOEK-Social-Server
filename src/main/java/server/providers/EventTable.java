@@ -1,7 +1,11 @@
 package server.providers;
 
 
+import com.google.gson.Gson;
+
+
 import server.exceptions.ResponseException;
+
 import server.models.Event;
 import server.models.Student;
 import server.models.StudentHasEvent;
@@ -21,19 +25,18 @@ public class EventTable extends DBmanager {
         ResultSet resultSet = null;
 
         try {
-            PreparedStatement getAllEventsStatement = getConnection().prepareStatement
-                    ("SELECT * FROM dsevent");
+            PreparedStatement getAllEventsStatement = getConnection().prepareStatement("SELECT * FROM dsevent");
 
+            resultSet = getAllEventsStatement.executeQuery();
             while (resultSet.next()) {
                 Event event = new Event(
-                        resultSet.getString("idEvent"),
-
+                        resultSet.getInt("idEvent"),
                         resultSet.getInt("price"),
-                        resultSet.getString("idStudent"),
+                        resultSet.getInt("idStudent"),
                         resultSet.getString("eventName"),
                         resultSet.getString("location"),
                         resultSet.getString("description"),
-                        resultSet.getTimestamp("date"));
+                        resultSet.getDate("date"));
 
                 allEvents.add(event);
             }
@@ -117,30 +120,69 @@ public class EventTable extends DBmanager {
         }
         return true;
     }
+
+    // Anvendes til at ændre et event. Modtager et idEvent og data om eventet. Dette opdates i DBmanager.
+    // Skal der også anvendes et StudentID til, at genkende hvorvidt eventet tilhører den enkelte???
+
+    public boolean updateEvent(Event event) throws Exception {
+
+        PreparedStatement updateEventStatement = null;
+
+        try {
+            updateEventStatement = getConnection().prepareStatement
+                    ("UPDATE dsevent " +
+                            "SET eventName = ?, location = ?, price = ?, date = ?, description = ? " +
+                            "WHERE idEvent = ?");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            updateEventStatement.setString(1, event.getEventName());
+            updateEventStatement.setString(2, event.getLocation());
+            updateEventStatement.setInt(3, event.getPrice());
+            updateEventStatement.setDate(4, event.getEventDate());
+            updateEventStatement.setString(5, event.getDescription());
+            updateEventStatement.setInt(6, event.getIdEvent());
+
+            updateEventStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+
+    }
+
 /*
+>>>>>>> master
     public boolean createEvent (Event event) {
 
         try {
-            PreparedStatement createEventStatement = connection.prepareStatement("INSERT INTO Events (idEvent, EventName, idStudent, Location, Price, Date, Description, Pictures) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement createEventStatement = getConnection().prepareStatement("INSERT INTO dsevent (" +
+                    "eventName, idStudent, location, price, description, eventDate) VALUES (" +
+                    "?, ?, ?, ?, ?, ?)");
 
-            createEventStatement.setString(1, event.getIdEvent());
-            createEventStatement.setString(2, event.getEventName());
-            createEventStatement.setString(3, event.getStudentId());
-            createEventStatement.setString(4, event.getLocation());
-            createEventStatement.setInt(5, event.getPrice());
+
+            createEventStatement.setString(1, event.getEventName());
+            createEventStatement.setString(2, event.getidStudent());
+            createEventStatement.setString(3, event.getLocation());
+            createEventStatement.setInt(4, event.getPrice());
+            createEventStatement.setString(5, event.getDescription());
             createEventStatement.setTimestamp(6, event.getDate());
-            createEventStatement.setString(7, event.getDescription());
-            createEventStatement.setString(8, event.getPictures());
 
-            createEventStatement.execute();
+
+            int rowsAffected = createEventStatement.executeUpdate();
+
+            if(rowsAffected != 1){
+                return false;
+            }
 
         }
-
         catch (SQLException e) {
             e.printStackTrace();
         }
-    return true;
-    }*/
+        return true;
+    }
 /*
 public boolean deleteEvent (Event event) {
     try {

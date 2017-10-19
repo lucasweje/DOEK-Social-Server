@@ -8,7 +8,17 @@ import server.providers.StudentTable;
 
 import java.util.ArrayList;
 
+/**
+ * Created by STFU on 19/10/2017
+ */
+
 public class StudentController {
+
+    /**
+     * StudentController klassen forbinder vores endpoints med vores providers,
+     * som sender SQL statements videre til databasen
+     */
+
 
     StudentTable studentTable = new StudentTable();
 
@@ -37,6 +47,7 @@ public class StudentController {
         }*/
 
 //Denne metode bruges til at verificere en student, når brugeren skal oprette sig i døk social.
+
     public Student verifyStudentCreation(String firstName, String lastName, String password, String email) throws IllegalArgumentException {
         Student verifiedStudent = new Student(firstName, lastName, password, email);
 

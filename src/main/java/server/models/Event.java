@@ -1,30 +1,31 @@
 package server.models;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 public class Event {
 
-    private int price;
+    private int idEvent, price, idStudent;
+    private String eventName, location, description;
+    private Date eventDate;
 
-    private String eventName, location, description, idEvent, idStudent;
-    private Timestamp date;
+    public Event(int idEvent, int price, int idStudent, String eventName, String location, String description, Date eventDate) {
 
-    public Event(String idEvent, int price, String idStudent, String eventName, String location, String description, Timestamp date) {
         this.idEvent = idEvent;
         this.price = price;
         this.idStudent = idStudent;
         this.eventName = eventName;
         this.location = location;
         this.description = description;
-        this.date = date;
+        this.eventDate = eventDate;
     }
 
 
-    public String getIdEvent() {
+    public int getIdEvent() {
         return idEvent;
     }
 
-    public void setIdEvent(String idEvent) {
+    public void setIdEvent(int idEvent) {
         this.idEvent = idEvent;
     }
 
@@ -36,7 +37,7 @@ public class Event {
         this.price = price;
     }
 
-    public String getidStudent() {
+    public int getidStudent() {
         return idStudent;
     }
 
@@ -69,11 +70,11 @@ public class Event {
     }
 
 
-    public Timestamp getDate() {
-        return date;
+    public Date getEventDate() {
+        return eventDate;
     }
 
-    public void setDate(Timestamp date) {
-        this.date = date;
+    public void setEventDate(Date eventDate) {
+        this.eventDate = eventDate;
     }
 }
