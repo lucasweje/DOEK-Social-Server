@@ -2,6 +2,7 @@ package server.endpoints;
 
 import javax.ws.rs.Path;
 import com.google.gson.Gson;
+import com.sun.org.apache.regexp.internal.RE;
 import server.controllers.EventController;
 import server.exceptions.ErrorMessage;
 import server.exceptions.ResponseException;
@@ -45,6 +46,21 @@ public class EventEndpoint {
         } else {
             return Response.status(400).entity("{\"message\":\"failed\"}").build();
         }
+    }
+
+    @DELETE
+    public Response deleteEvent (String data) throws Exception {
+
+        Gson gson = new Gson();
+        Event event = gson.fromJson(data, Event.class);
+
+        if (eventcontroller.deleteEvent(event)) {
+            return Response.status(200).entity("{\"message\":\"Success! Event deleted\"}").build();
+
+        } else return Response.status(400).entity("{\"message\":\"failed\"}").build();
+
+        }
+
     }
 
     @GET

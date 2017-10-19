@@ -30,7 +30,6 @@ public class DBmanager {
                             + Config.getDbName() + "?useSSL=false&serverTimezone=GMT",
                     Config.getDbUser(),
                     Config.getDbPassword());
-
         } catch (SQLException sqlException) {
             System.out.print(sqlException.getMessage());
             sqlException.printStackTrace();

@@ -1,5 +1,6 @@
 package server.providers;
 
+
 import server.exceptions.ResponseException;
 import server.models.Event;
 import server.models.Student;
@@ -180,6 +181,25 @@ public class EventTable extends DBmanager {
     return true;
     }
 
+public boolean deleteEvent (Event event) {
+    try {
 
+            PreparedStatement deleteEventStatement = connection.prepareStatement("UPDATE Events SET Deleted = 1 WHERE EventId = ?");
+
+                deleteEventStatement.setString(1, event);
+                deleteEventStatement.executeUpdate();
+
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+
+            }
+                return true;
+
+
+            }
+
+
+}
 
 }
