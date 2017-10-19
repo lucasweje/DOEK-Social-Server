@@ -38,27 +38,23 @@ public class StudentController {
         //nedenunder tjekkes der for diverse krav.
         // nedenunder viser at der skal være et "@".
         if (!email.contains("@")) {
-            System.out.print("@ required");
-            System.out.println(email);
             throw new IllegalArgumentException("Email did not contain @");
             // Dette gør at serveren kræver at der ikke indgår tal i navn.
         } else if (firstName.length() < 2 || firstName.matches(".*\\d.*")) {
-            System.out.print("Name can't cointain numbers and must be more than 2 characters");
-            throw new IllegalArgumentException("at least 2 characters, and can't contain numbers");
-        }else if (lastName.length() < 2 || lastName.matches(".*\\d.*")) {
-            System.out.print("Last name can't cointain numbers and must be more than 2 characters");
-            throw new IllegalArgumentException("at least 2 characters, and can't contain numbers");
+            throw new IllegalArgumentException("firstName must contain at least 2 characters, and can't contain numbers");
+        } else if (lastName.length() < 2 || lastName.matches(".*\\d.*")) {
+            throw new IllegalArgumentException("lastName must contain at least 2 characters, and can't contain numbers");
 
-        // her tjekkes om det indtastede indeholder mindst et bogstaver samt mindst et tal.
-        }else if (!password.matches(".*[a-zA-Z].*") && !password.matches(".*\\d.*")){
-            System.out.print("Password must contain at least on character and number");
+            // her tjekkes om det indtastede indeholder mindst et bogstaver samt mindst et tal.
+        } else if (!password.matches(".*[a-zA-Z].*") || !password.matches(".*\\d.*")) {
+            throw new IllegalArgumentException("password must contain atleast one char and one number");
         }
         //hvis alle tjeks godkendes så bliver studenten returneret
         return verifiedStudent;
 
 
-
     }
+}
 
 /*
     public boolean addStudent(Student student) throws Exception {
@@ -73,6 +69,3 @@ public class StudentController {
         /*String hashedPassword = Digester.hashWithSalt(student.getPassword());
         student.setPassword(hashedPassword);
         return DBmanager.addStudent(student);*/
-
-    }
-
