@@ -1,5 +1,6 @@
 package server.providers;
 
+import server.models.Event;
 import server.models.Student;
 import server.utility.Authenticator;
 
@@ -9,9 +10,9 @@ import java.util.ArrayList;
 
 public class StudentTable extends DBmanager {
 
-
-    //Nulstiller connection. Maskineriet brokker sig hvis connection ikke er sat fra starten af.
     Connection connection = null;
+/*
+    //Nulstiller connection. Maskineriet brokker sig hvis connection ikke er sat fra starten af.
 
     //Metode til at hente alle students.
     public ArrayList getStudents() throws IllegalAccessException {
@@ -50,7 +51,74 @@ public class StudentTable extends DBmanager {
         return studentList;
     }
 
-    // Henter en specifik bruger via idStudent attributten.
+    public boolean addStudent(Student student) throws Exception {
+
+
+        PreparedStatement addStudentStatement = connection.prepareStatement("INSERT INTO Students (idStudent, firstName, lastName, email, password) VALUES (?, ?, ?, ?, ?)");
+
+        try {
+            addStudentStatement.setString(1, student.getIdStudent());
+            addStudentStatement.setString(2, student.getFirstName());
+            addStudentStatement.setString(3, student.getLastName());
+            addStudentStatement.setString(4, student.getEmail());
+            addStudentStatement.setString(5, student.getPassword());
+
+            addStudentStatement.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+*/
+
+    public ArrayList getAttendingEvents(String idStudent) throws IllegalAccessException {
+        Event event = null;
+        ResultSet resultSet = null;
+        ArrayList attendingEvents = new ArrayList();
+
+        //henter alle studenter der deltager på det valgte event.
+        try {
+            PreparedStatement getAttendingEvents = getConnection().prepareStatement
+                    ("SELECT she.*, s.*, e.* " +
+                            "FROM students_has_dsevent she " +
+                            "INNER JOIN students s " +
+                            "ON she.students_idStudent = s.idStudent " +
+                            "INNER JOIN dsevent e " +
+                            "ON she.dsevent_idEvent = e.idEvent " +
+                            "WHERE e.idEvent = ?");
+
+            getAttendingEvents.setString(1, idStudent);
+            resultSet = getAttendingEvents.executeQuery();
+
+            while (resultSet.next()) {
+                try {
+                    //Opretter ny instans af de studenter der er i ArrayListen. (Måden man henter oplysninger).
+                    event = new Event(
+                            resultSet.getString("idEvent"),
+                            resultSet.getInt("price"),
+                            resultSet.getString("idStudent"),
+                            resultSet.getString("eventName"),
+                            resultSet.getString("location"),
+                            resultSet.getString("description"),
+                            resultSet.getTimestamp("date"));
+
+                            attendingEvents.add(event);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (SQLException sqlException) {
+            System.out.println(sqlException.getMessage());
+        }
+
+        //Returnerer attendingStudents med oplysninger.
+        return attendingEvents;
+    }
+
+    // Skal ikke bruges, gemmes just in case.
+/*// Henter en specifik bruger via idStudent attributten.
     public Student getStudentById(String idStudent) throws IllegalAccessException {
         Student student = null;
         ResultSet resultSet = null;
@@ -83,7 +151,8 @@ public class StudentTable extends DBmanager {
 
         //Returnerer den enkelte student med oplysninger.
         return student;
-    }
+    }*/
+
 
     public boolean addStudent(Student student) throws SQLException {
         long unixTime = System.currentTimeMillis() / 1000L;
@@ -146,5 +215,4 @@ public class StudentTable extends DBmanager {
         }
         return student;
     }
-
 }
