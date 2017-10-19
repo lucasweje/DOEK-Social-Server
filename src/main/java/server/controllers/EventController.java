@@ -1,7 +1,10 @@
 package server.controllers;
 
 import com.google.gson.Gson;
+import com.sun.java.accessibility.util.EventID;
+import server.exceptions.ResponseException;
 import server.models.Event;
+import server.models.Student;
 import server.providers.DBmanager;
 import server.endpoints.EventEndpoint;
 
@@ -9,6 +12,7 @@ import server.endpoints.EventEndpoint;
 import java.awt.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import server.providers.EventTable;
 
 
@@ -16,6 +20,8 @@ public class EventController {
 /*
 
     //Udkommenteret indtil det virker således at DBManager mv kan testes
+
+
     //Controller klasse for event. Laver kald til databasen.
     //API forbindes med database.
 
@@ -26,9 +32,17 @@ public class EventController {
         db.close();
         return events;
     }
+*/
 
 
+   EventTable eventTable = new EventTable();
 
+    public ArrayList getAttendingStudents(String idEvent) throws IllegalAccessException {
+        ArrayList attendingStudents = eventTable.getAttendingStudents(idEvent);
+        return attendingStudents;
+    }
+
+    /*
     public Event getEvent(int id) throws Exception {
         DBConnnector db = new DBConnector();
         Event event = db.getEvent(id);
@@ -62,7 +76,7 @@ public class EventController {
         return allEvents;
     }
 
-    public ArrayList<Event> getAllEvents() throws Exception {
+    public ArrayList<Event> getAllEvents() throws SQLException {
         EventTable allEvents = new EventTable();
         return allEvents.getAllEvents();
 
@@ -72,8 +86,11 @@ public class EventController {
         EventTable db = new EventTable();
         boolean deleteEvent = db.deleteEvent(event);
         return deleteEvent;
+    }
 
-
+    public boolean joinEvent(String idEvent, String idStudent) throws ResponseException {
+        EventTable joinEvent = new EventTable();
+        return joinEvent.joinEvent(idEvent, idStudent);
     }
 }
 
