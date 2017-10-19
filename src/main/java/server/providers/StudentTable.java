@@ -84,9 +84,9 @@ public class StudentTable extends DBmanager {
             PreparedStatement getAttendingEvents = getConnection().prepareStatement
                     ("SELECT she.*, s.*, e.*" +
                             "FROM student_has_event she" +
-                            "INNER JOIN student s" +
+                            "INNER JOIN students s" +
                             "ON she.Student_idStudent = s.idStudent" +
-                            "INNER JOIN events e" +
+                            "INNER JOIN dsevent e" +
                             "ON she.Event_idEvent = e.idEvent" +
                             "WHERE s.idStudent = ?;");
 
