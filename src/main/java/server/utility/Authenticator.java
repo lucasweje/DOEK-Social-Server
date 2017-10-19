@@ -26,7 +26,7 @@ public class Authenticator {
 
 
     }
-    // med inspiration fra fillip.
+/*
     public static String randomSalt (String password){
 
         String hashWithSalt = performHashing(password);
@@ -35,7 +35,7 @@ public class Authenticator {
 
         return hashWithSalt.substring(startIndex,startIndex+5);
 
-    }
+    }*/
 //taget fra jespers project secure-dis.
     private static String performHashing(String str) {
         authenticator.update(str.getBytes());
