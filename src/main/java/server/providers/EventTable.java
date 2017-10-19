@@ -54,13 +54,13 @@ public class EventTable extends DBmanager {
         //henter alle studenter der deltager på det valgte event.
         try {
             PreparedStatement getAttendingStudents = getConnection().prepareStatement
-                    ("SELECT she.*, e.*, s.*" +
-                            "FROM student_has_dsevent she" +
-                            "INNER JOIN dsevent e" +
-                            "ON she.Event_idEvent = e.idEvent" +
-                            "INNER JOIN students s" +
-                            "ON she.Student_idStudent = s.idStudent" +
-                            "WHERE e.idEvent = ?;");
+                    ("SELECT she.*, e.*, s.* " +
+                            "FROM students_has_dsevent she " +
+                            "INNER JOIN dsevent e " +
+                            "ON she.dsevent_idEvent = e.idEvent " +
+                            "INNER JOIN students s " +
+                            "ON she.students_idStudent = s.idStudent " +
+                            "WHERE e.idEvent = ?");
 
             getAttendingStudents.setString(1, idEvent);
             resultSet = getAttendingStudents.executeQuery();
