@@ -1,5 +1,6 @@
 package server.providers;
 
+import server.models.Event;
 import server.models.Student;
 import server.utility.Authenticator;
 
@@ -73,36 +74,38 @@ public class StudentTable extends DBmanager {
     }
 */
 
-/*
-    public ArrayList getAttendingStudents(String idEvent) throws IllegalAccessException {
-        Student student = null;
+    public ArrayList getAttendingEvents(String idStudent) throws IllegalAccessException {
+        Event event = null;
         ResultSet resultSet = null;
-        ArrayList attendingStudents = new ArrayList();
+        ArrayList attendingEvents = new ArrayList();
 
         //henter alle studenter der deltager på det valgte event.
         try {
-            PreparedStatement getAttendingStudents = getConnection().prepareStatement
-                    ("SELECT she.*, e.*, s. " +
-                            "FROM student_has_event she " +
-                            "INNER JOIN events e " +
-                            "ON she.Event_idEvent = e.idEvent " +
-                            "INNER JOIN student s " +
-                            "ON she.Student_idStudent = s.idStudent " +
-                            "WHERE e.idEvent = ?;");
+            PreparedStatement getAttendingEvents = getConnection().prepareStatement
+                    ("SELECT she.*, s.*, e.*" +
+                            "FROM student_has_event she" +
+                            "INNER JOIN student s" +
+                            "ON she.Student_idStudent = s.idStudent" +
+                            "INNER JOIN events e" +
+                            "ON she.Event_idEvent = e.idEvent" +
+                            "WHERE s.idStudent = ?;");
 
-            getAttendingStudents.setString(1, idEvent);
-            resultSet = getAttendingStudents.executeQuery();
+            getAttendingEvents.setString(1, idStudent);
+            resultSet = getAttendingEvents.executeQuery();
 
             while (resultSet.next()) {
                 try {
                     //Opretter ny instans af de studenter der er i ArrayListen. (Måden man henter oplysninger).
-                    student = new Student(
+                    event = new Event(
+                            resultSet.getString("idEvent"),
+                            resultSet.getInt("price"),
                             resultSet.getString("idStudent"),
-                            resultSet.getString("firstName"),
-                            resultSet.getString("lastName"),
-                            resultSet.getString("email")
-                    );
-                    attendingStudents.add(student);
+                            resultSet.getString("eventName"),
+                            resultSet.getString("location"),
+                            resultSet.getString("description"),
+                            resultSet.getTimestamp("date"));
+
+                            attendingEvents.add(event);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -113,9 +116,8 @@ public class StudentTable extends DBmanager {
         }
 
         //Returnerer attendingStudents med oplysninger.
-        return attendingStudents;
+        return attendingEvents;
     }
-*/
 
     // Skal ikke bruges, gemmes just in case.
 /*// Henter en specifik bruger via idStudent attributten.

@@ -51,21 +51,21 @@ public class StudentEndpoint {
 */
 
  //Skal laves om til feature 10.
-/* @GET
- @Path("{idEventStudents}/students")
- public Response getAttendingStudents(@PathParam("idEventStudents")String idEvent) {
+@GET
+ @Path("{idStudentEvents}/events")
+ public Response getAttendingEvents(@PathParam("idStudentEvents")String idStudent) {
 
      StudentTable studentTable = new StudentTable();
-     ArrayList foundAttendingStudents = null;
+     ArrayList foundAttendingEvents = null;
 
-     if (idEvent.isEmpty()) {
+     if (idStudent.isEmpty()) {
          return Response
                  .status(400)
                  .entity("{\"Missing Student ID\":\"true\"}")
                  .build();
      }else{
          try {
-             foundAttendingStudents = studentTable.getAttendingStudents(idEvent);
+             foundAttendingEvents = studentTable.getAttendingEvents(idStudent);
          } catch (IllegalAccessException e) {
              e.printStackTrace();
          }
@@ -80,11 +80,10 @@ public class StudentEndpoint {
          return Response
                  .status(200)
                  .type("application/json")
-                 .entity(new Gson().toJson(foundAttendingStudents))
+                 .entity(new Gson().toJson(foundAttendingEvents))
                  .build();
      }
  }
-}*/
 /*
    @GET
     public Response getAll(){

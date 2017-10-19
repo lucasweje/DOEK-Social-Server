@@ -10,15 +10,12 @@ import java.util.ArrayList;
 
 public class StudentController {
 
-/*
-//skal ændres til feature 10.
     StudentTable studentTable = new StudentTable();
 
-    public ArrayList getAttendingStudents(String idEvent) throws IllegalAccessException {
-        ArrayList attendingStudents = studentTable.getAttendingStudents(idEvent);
-        return attendingStudents;
+    public ArrayList getAttendingEvents(String idStudent) throws IllegalAccessException {
+        ArrayList attendingEvents = studentTable.getAttendingEvents(idStudent);
+        return attendingEvents;
     }
-*/
 
 /*
     public StudentController() {

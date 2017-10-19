@@ -23,9 +23,9 @@ public class EventTable extends DBmanager {
 
             while (resultSet.next()) {
                 Event event = new Event(
-                        resultSet.getInt("idEvent"),
+                        resultSet.getString("idEvent"),
                         resultSet.getInt("price"),
-                        resultSet.getInt("idStudent"),
+                        resultSet.getString("idStudent"),
                         resultSet.getString("eventName"),
                         resultSet.getString("location"),
                         resultSet.getString("description"),
