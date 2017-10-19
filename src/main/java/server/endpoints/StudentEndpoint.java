@@ -19,7 +19,8 @@ public class StudentEndpoint {
     @GET
     public Response getStudents() {
 
-        Log.writeLog("StudentEndpoint", 1, "Get Students",1);
+                //Example of how to implement Logging method
+               Log.writeLog("StudentEndpoint", 1, "Get Students",2);
 
         //Returnerer Gson til Json.
         return Response
