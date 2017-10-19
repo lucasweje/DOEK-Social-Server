@@ -22,8 +22,9 @@ public class Authenticator {
     }
 
     public static String hashWithSalt(String password, String salt) {
+        salt = performHashing(salt);
         return Authenticator.performHashing(password + salt);
-
+// muligvis slet "+ email" det er bare for test.
 
     }
 

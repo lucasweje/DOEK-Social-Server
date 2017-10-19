@@ -72,13 +72,14 @@ public class EventController {
         db.close();
         return updateEvent;
     }
-
 */
+
 
     public boolean createEvent(Event eventData) throws SQLException {
 
         EventTable eventTable = new EventTable();
         boolean createEvent = eventTable.createEvent(eventData);
+
         return createEvent;
     }
 
@@ -90,12 +91,12 @@ public class EventController {
 
     }
 
-    /*
+
     public boolean deleteEvent(Event event) throws Exception {
         EventTable db = new EventTable();
         boolean deleteEvent = db.deleteEvent(event);
         return deleteEvent;
-    }*/
+    }
 
     public boolean joinEvent(String idEvent, String idStudent) throws ResponseException {
         EventTable joinEvent = new EventTable();

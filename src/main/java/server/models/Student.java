@@ -9,6 +9,8 @@ public class Student {
     private int idStudent;
     private String salt;
     private long createdTime;
+    private Token token;
+
 
     //has all student info.
     public Student(int idStudent, String firstName, String lastName, String email, String password, long createdTime) {
@@ -52,9 +54,18 @@ public class Student {
         this.salt = salt;
     }
 
-    public int getIdStudent() {
-        return idStudent;
+
+    public Token getToken(){
+        return token;
     }
+    public void setToken(Token token){
+        this.token = token;
+    }
+
+        public int getIdStudent() {
+
+            return idStudent;
+        }
 
     public void setIdStudent(int idStudent) {
         this.idStudent = idStudent;

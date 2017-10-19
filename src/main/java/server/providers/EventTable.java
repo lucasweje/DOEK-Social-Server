@@ -10,11 +10,12 @@ import server.models.Event;
 import server.models.Student;
 import server.models.StudentHasEvent;
 
-import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 
 public class EventTable extends DBmanager {
 
@@ -48,8 +49,8 @@ public class EventTable extends DBmanager {
             e.printStackTrace();
         }
 
-            return allEvents;
-        }
+        return allEvents;
+    }
 
 
     public ArrayList getAttendingStudents(String idEvent) throws IllegalAccessException {
@@ -94,7 +95,7 @@ public class EventTable extends DBmanager {
         return attendingStudents;
     }
 
-    public boolean joinEvent (String eventId, String studentId) throws IllegalArgumentException {
+    public boolean joinEvent(String eventId, String studentId) throws IllegalArgumentException {
 
 
         try {
@@ -121,8 +122,8 @@ public class EventTable extends DBmanager {
         return true;
     }
 
-    // Anvendes til at ændre et event. Modtager et idEvent og data om eventet. Dette opdates i DBmanager.
-    // Skal der også anvendes et StudentID til, at genkende hvorvidt eventet tilhører den enkelte???
+
+
 
     public boolean updateEvent(Event event) throws Exception {
 
@@ -153,9 +154,8 @@ public class EventTable extends DBmanager {
 
     }
 
-/*
->>>>>>> master
-    public boolean createEvent (Event event) {
+
+    public boolean createEvent(Event event) {
 
         try {
             PreparedStatement createEventStatement = getConnection().prepareStatement("INSERT INTO dsevent (" +
@@ -164,32 +164,31 @@ public class EventTable extends DBmanager {
 
 
             createEventStatement.setString(1, event.getEventName());
-            createEventStatement.setString(2, event.getidStudent());
+            createEventStatement.setInt(2, event.getidStudent());
             createEventStatement.setString(3, event.getLocation());
             createEventStatement.setInt(4, event.getPrice());
             createEventStatement.setString(5, event.getDescription());
-            createEventStatement.setTimestamp(6, event.getDate());
-
-
+            createEventStatement.setDate(6, event.getEventDate());
             int rowsAffected = createEventStatement.executeUpdate();
 
-            if(rowsAffected != 1){
+            if (rowsAffected != 1) {
                 return false;
             }
+        } catch (SQLException e) {
 
-        }
-        catch (SQLException e) {
             e.printStackTrace();
         }
         return true;
     }
-/*
-public boolean deleteEvent (Event event) {
-    try {
 
-            PreparedStatement deleteEventStatement = connection.prepareStatement("UPDATE Events SET Deleted = 1 WHERE EventId = ?");
 
-                deleteEventStatement.setString(1, event);
+
+        public boolean deleteEvent (Event event){
+            try {
+
+                PreparedStatement deleteEventStatement = getConnection().prepareStatement("UPDATE Events SET Deleted = 1 WHERE EventId = ?");
+
+                deleteEventStatement.setInt(1, event.getIdEvent());
                 deleteEventStatement.executeUpdate();
 
 
@@ -197,12 +196,9 @@ public boolean deleteEvent (Event event) {
                 e.printStackTrace();
 
             }
-                return true;
+            return true;
 
 
-            }
-            }*/
-
-
-}
+        }
+    }
 
