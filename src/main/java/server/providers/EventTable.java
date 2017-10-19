@@ -16,7 +16,6 @@ public class EventTable extends DBmanager {
 
     Connection connection = null;
 
-    /*
         public ArrayList<Event> getAllEvents() throws SQLException {
             ArrayList<Event> allEvents = new ArrayList<>();
 
@@ -119,7 +118,7 @@ public class EventTable extends DBmanager {
             }
             return true;
         }
-    /*
+
         public boolean createEvent (Event event) {
 
             try {
@@ -127,12 +126,11 @@ public class EventTable extends DBmanager {
 
                 createEventStatement.setString(1, event.getIdEvent());
                 createEventStatement.setString(2, event.getEventName());
-                createEventStatement.setString(3, event.getStudentId());
+                createEventStatement.setString(3, event.getidStudent());
                 createEventStatement.setString(4, event.getLocation());
                 createEventStatement.setInt(5, event.getPrice());
                 createEventStatement.setTimestamp(6, event.getDate());
                 createEventStatement.setString(7, event.getDescription());
-                createEventStatement.setString(8, event.getPictures());
 
                 createEventStatement.execute();
 
@@ -143,18 +141,33 @@ public class EventTable extends DBmanager {
             }
         return true;
         }
-    */
+
     public boolean deleteEvent(Event event) {
 
+        PreparedStatement deleteEventStatement = null;
         try {
-            PreparedStatement deleteEventStatement = connection.prepareStatement
+            deleteEventStatement = getConnection().prepareStatement
                     ("UPDATE dsevent " +
                             "SET isDeleted = 1 " +
                             "WHERE idEvent = ?;");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        try {
+                deleteEventStatement.setString(1,event.getIdEvent());
+                try {
+                    int rowsUpdated = deleteEventStatement.executeUpdate();
+                    if(rowsUpdated != 1) {
+                        throw new SQLException("More or less than 1 row was affected");
+                    }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+       return true;
     }
+
 }
 

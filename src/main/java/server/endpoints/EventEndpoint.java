@@ -1,6 +1,7 @@
 package server.endpoints;
 
 import javax.ws.rs.Path;
+
 import com.google.gson.Gson;
 import com.sun.org.apache.regexp.internal.RE;
 import server.controllers.EventController;
@@ -10,6 +11,7 @@ import server.models.Event;
 import server.models.Student;
 import server.models.StudentHasEvent;
 import server.providers.EventTable;
+
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.sql.SQLException;
@@ -20,7 +22,8 @@ public class EventEndpoint {
 
 
     EventController eventController = new EventController();
-  //  EventTable eventTable = new EventTable();
+
+    //  EventTable eventTable = new EventTable();
 /*
     //Har udkommenteret mange linjer kode for at det ikke fejler
 
@@ -50,17 +53,24 @@ public class EventEndpoint {
 */
     @DELETE
     @Path("{idEvent}/studentEvents")
-    public Response deleteEvent (String data) throws Exception {
+    public Response deleteEvent(String data) throws Exception {
 
         Gson gson = new Gson();
         Event event = gson.fromJson(data, Event.class);
 
         if (eventController.deleteEvent(event)) {
-            return Response.status(200).entity("{\"message\":\"Success! Event deleted\"}").build();
+            return Response.status(200)
+                    .entity("{\"message\":\"Success! Event deleted\"}")
+                    .build();
 
-        } else return Response.status(400).entity("{\"message\":\"failed\"}").build();
-
+        } else {
+            return Response.status(400)
+                    .entity("{\"message\":\"failed\"}")
+                    .build();
         }
+    }
+
+}
 /*
 
     @GET
@@ -158,4 +168,3 @@ public class EventEndpoint {
         public Response updateEvent(String eventJson) throws Exception {
 
         }*/
-}
