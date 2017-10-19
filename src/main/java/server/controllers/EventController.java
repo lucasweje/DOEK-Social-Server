@@ -15,8 +15,17 @@ import java.util.ArrayList;
 
 import server.providers.EventTable;
 
+/**
+ * Created by STFU on 19/10/2017
+ */
+
 
 public class EventController {
+
+    /**
+     * EventController klassen forbinder vores endpoints med vores providers,
+     * som sender SQL statements til databasen
+     */
 /*
 
     //Udkommenteret indtil det virker således at DBManager mv kan testes
