@@ -29,7 +29,7 @@ public class EventEndpoint {
 //    ArrayList<Event> events = evenTable.getEvents();
 
     EventController eventcontroller = new EventController();
-
+/*
     @POST
     @Produces("Application/json")
     public Response createEvent(String data) throws SQLException {
@@ -46,8 +46,8 @@ public class EventEndpoint {
         } else {
             return Response.status(400).entity("{\"message\":\"failed\"}").build();
         }
-    }
-
+    }*/
+/*
     @DELETE
     public Response deleteEvent (String data) throws Exception {
 
@@ -60,7 +60,7 @@ public class EventEndpoint {
         } else return Response.status(400).entity("{\"message\":\"failed\"}").build();
 
         }
-
+*/
 
     @GET
     public Response getEvents() {
