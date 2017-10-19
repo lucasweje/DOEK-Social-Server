@@ -6,6 +6,7 @@ import server.controllers.EventController;
 import server.exceptions.ErrorMessage;
 import server.exceptions.ResponseException;
 import server.models.Event;
+import server.models.Student;
 import server.models.StudentHasEvent;
 import server.providers.EventTable;
 import javax.ws.rs.*;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 @Path("/events")
 public class EventEndpoint {
 
+
     EventController eventController = new EventController();
     EventTable eventTable = new EventTable();
 
@@ -24,6 +26,26 @@ public class EventEndpoint {
     //eventTable skal skiftes til rigtigt variable navn
 //    EventTable eventTable = EventTable.getInstance();
 //    ArrayList<Event> events = evenTable.getEvents();
+
+    EventController eventcontroller = new EventController();
+
+    @POST
+    @Produces("Application/json")
+    public Response createEvent(String data) throws SQLException {
+
+        Gson gson = new Gson();
+        Event event = gson.fromJson(data, Event.class);
+
+        EventController eventController = new EventController();
+        if (eventController.createEvent(event)) {
+            return Response
+                    .status(200)
+                    .entity("{message\":\"Success! Event created\"}")
+                    .build();
+        } else {
+            return Response.status(400).entity("{\"message\":\"failed\"}").build();
+        }
+    }
 
     @GET
     public Response getEvents() {

@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 public class Event {
 
     private int price;
+
     private String eventName, location, description, idEvent, idStudent;
     private Timestamp date;
 
@@ -31,7 +32,7 @@ public class Event {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 

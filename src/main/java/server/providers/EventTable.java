@@ -5,12 +5,14 @@ import server.models.Event;
 import server.models.Student;
 import server.models.StudentHasEvent;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class EventTable extends DBmanager {
+
 
     public ArrayList<Event> getAllEvents() throws SQLException {
         ArrayList<Event> allEvents = new ArrayList<>();
@@ -27,6 +29,7 @@ public class EventTable extends DBmanager {
             while (resultSet.next()) {
                 Event event = new Event(
                         resultSet.getString("idEvent"),
+
                         resultSet.getInt("price"),
                         resultSet.getString("idStudent"),
                         resultSet.getString("eventName"),
@@ -152,4 +155,31 @@ public class EventTable extends DBmanager {
         }
         return true;
     }
+
+    public boolean createEvent (Event event) {
+
+        try {
+            PreparedStatement createEventStatement = connection.prepareStatement("INSERT INTO Events (idEvent, EventName, idStudent, Location, Price, Date, Description, Pictures) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+
+            createEventStatement.setString(1, event.getIdEvent());
+            createEventStatement.setString(2, event.getEventName());
+            createEventStatement.setString(3, event.getStudentId());
+            createEventStatement.setString(4, event.getLocation());
+            createEventStatement.setInt(5, event.getPrice());
+            createEventStatement.setTimestamp(6, event.getDate());
+            createEventStatement.setString(7, event.getDescription());
+            createEventStatement.setString(8, event.getPictures());
+
+            createEventStatement.execute();
+
+        }
+
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    return true;
+    }
+
+
+
 }

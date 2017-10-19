@@ -6,6 +6,7 @@ import server.exceptions.ResponseException;
 import server.models.Event;
 import server.models.Student;
 import server.providers.DBmanager;
+import server.endpoints.EventEndpoint;
 
 
 import java.awt.*;
@@ -16,7 +17,7 @@ import server.providers.EventTable;
 
 
 public class EventController {
-
+/*
 
     //Udkommenteret indtil det virker således at DBManager mv kan testes
 
@@ -25,7 +26,7 @@ public class EventController {
     //API forbindes med database.
 
     //Hedder vores database connector "DBConnector"?
-/*    public ArrayList<Event> getEvent() throws Exception {
+    public ArrayList<Event> getEvent() throws Exception {
         DBConnector db = new DBConnector();
         ArrayList<Event> events = db.getEvents();
         db.close();
@@ -62,25 +63,24 @@ public class EventController {
         return updateEvent;
     }
 
-
-    public boolean addEvent(String data) throws SQLException {
-        DBmanager db = new DBmanager();
-        Event event = new Gson().fromJson(data.Event.class);
-        boolean addEvent = db.addEvent(event);
-        db.close();
-        return addEvent;
 */
+    public boolean createEvent(Event data) throws SQLException {
+        EventTable db = new EventTable ();
+        boolean createEvent = db.createEvent(data);
+        return createEvent;
+    }
 
     /*public Event getAllEvents(int id) throws Exception {
         DBmanager db = new DBmanager();
         Event allEvents = db.getAllEvents(id);
         return allEvents;
-    }*/
+    }
 
     public ArrayList<Event> getAllEvents() throws SQLException {
         EventTable allEvents = new EventTable();
         return allEvents.getAllEvents();
 
+    }*/
     }
 
     public boolean joinEvent(String idEvent, String idStudent) throws ResponseException {
