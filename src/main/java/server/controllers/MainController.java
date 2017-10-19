@@ -4,12 +4,10 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import server.models.Student;
 import server.providers.StudentTable;
+import server.utility.CurrentStudentContext;
 
 import java.io.UnsupportedEncodingException;
-import java.security.AlgorithmConstraints;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
@@ -39,11 +37,12 @@ public class MainController {
         }
     }
 
-    public Student getStudentFromTokens(String token) throws SQLException {
+    public CurrentStudentContext getStudentFromTokens(String token) throws SQLException {
         Student student = studentTable.getStudentFromToken(token);
-        return student;
+        CurrentStudentContext context = new CurrentStudentContext();
+        context.setCurrentStudent(student);
+        return context;
     }
-
 
     /* MANGLER AT TESTES
     public boolean logout(Student currentUser) throws IllegalArgumentException {
