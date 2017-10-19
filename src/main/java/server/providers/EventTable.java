@@ -17,7 +17,7 @@ public class EventTable extends DBmanager {
 
         try {
             PreparedStatement getAllEventsStatement = getConnection().prepareStatement
-                    ("SELECT * FROM events");
+                    ("SELECT * FROM dsevent");
 
             resultSet = getAllEventsStatement.executeQuery();
 
@@ -55,12 +55,12 @@ public class EventTable extends DBmanager {
         try {
             PreparedStatement getAttendingStudents = getConnection().prepareStatement
                     ("SELECT she.*, e.*, s.*" +
-                            "FROM student_has_event she" +
+                            "FROM student_has_dsevent she" +
                             "INNER JOIN dsevent e" +
                             "ON she.Event_idEvent = e.idEvent" +
                             "INNER JOIN students s" +
                             "ON she.Student_idStudent = s.idStudent" +
-                            "WHERE e.idEvent = 1;");
+                            "WHERE e.idEvent = ?;");
 
             getAttendingStudents.setString(1, idEvent);
             resultSet = getAttendingStudents.executeQuery();
@@ -92,7 +92,8 @@ public class EventTable extends DBmanager {
 
         try {
             PreparedStatement joinEvent = getConnection().prepareStatement
-                    ("INSERT INTO student_has_event (dsevents_idEvent, students_idStudent1) VALUE (?, ?)");
+                    ("INSERT INTO student_has_dsevent (dsevent_idEvent, students_idStudent) VALUE (?, ?)");
+
             // OBS skal være en string men der er ikke ændret i model.Event endnu
             joinEvent.setString(1, eventId);
             joinEvent.setString(2, studentId);
