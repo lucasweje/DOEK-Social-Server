@@ -1,6 +1,7 @@
 package server.providers;
 
 import server.models.Event;
+import server.models.Student;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -44,4 +45,47 @@ public class EventTable extends DBmanager {
 
         return allEvents;
     }
+
+    public ArrayList getAttendingStudents(String idEvent) throws IllegalAccessException {
+        Student student = null;
+        ResultSet resultSet = null;
+        ArrayList attendingStudents = new ArrayList();
+
+        //henter alle studenter der deltager på det valgte event.
+        try {
+            PreparedStatement getAttendingStudents = getConnection().prepareStatement
+                    ("SELECT she.*, e.*, s. " +
+                            "FROM student_has_event she " +
+                            "INNER JOIN events e " +
+                            "ON she.Event_idEvent = e.idEvent " +
+                            "INNER JOIN student s " +
+                            "ON she.Student_idStudent = s.idStudent " +
+                            "WHERE e.idEvent = ?;");
+
+            getAttendingStudents.setString(1, idEvent);
+            resultSet = getAttendingStudents.executeQuery();
+
+            while (resultSet.next()) {
+                try {
+                    //Opretter ny instans af de studenter der er i ArrayListen. (Måden man henter oplysninger).
+                    student = new Student(
+                            resultSet.getString("idStudent"),
+                            resultSet.getString("firstName"),
+                            resultSet.getString("lastName"),
+                            resultSet.getString("email")
+                    );
+                    attendingStudents.add(student);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (SQLException sqlException) {
+            System.out.println(sqlException.getMessage());
+        }
+
+        //Returnerer attendingStudents med oplysninger.
+        return attendingStudents;
+    }
+
 }

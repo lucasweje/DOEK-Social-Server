@@ -15,7 +15,7 @@ public class StudentEndpoint {
 
     //Opretter arraylist med students.
 
- /*   @GET
+    @GET
     public Response getStudents() {
 
         //Returnerer Gson til Json.
@@ -41,44 +41,45 @@ public class StudentEndpoint {
                     .status(200)
                     .entity("{message\":\"Success! Student created\"}")
                     .build();
-        }
-        else return Response.status(400).entity("{\"message\":\"failed\"}").build();
-    }
-*/
-    @GET
-    public Response getAttendingStudents(String idStudent, String idEvent) {
-
-        StudentTable studentTable = new StudentTable();
-        ArrayList foundAttendingStudents = null;
-
-        if (idStudent.isEmpty()) {
-            return Response
-                    .status(400)
-                    .entity("{\"Missing Student ID\":\"true\"}")
-                    .build();
-        }else{
-            try {
-                foundAttendingStudents = studentTable.getAttendingStudents(idStudent, idEvent);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-
-            // If student not found:
-            if (!true) {
-                return Response
-                        .status(400)
-                        .entity("{\"Student not found\":\"true\"}")
-                        .build();
-            }
-            return Response
-                    .status(200)
-                    .type("application/json")
-                    .entity(new Gson().toJson(foundAttendingStudents))
-                    .build();
-        }
+        } else return Response.status(400).entity("{\"message\":\"failed\"}").build();
     }
 }
 
+ //Skal laves om til feature 10.
+/* @GET
+ @Path("{idEventStudents}/students")
+ public Response getAttendingStudents(@PathParam("idEventStudents")String idEvent) {
+
+     StudentTable studentTable = new StudentTable();
+     ArrayList foundAttendingStudents = null;
+
+     if (idEvent.isEmpty()) {
+         return Response
+                 .status(400)
+                 .entity("{\"Missing Student ID\":\"true\"}")
+                 .build();
+     }else{
+         try {
+             foundAttendingStudents = studentTable.getAttendingStudents(idEvent);
+         } catch (IllegalAccessException e) {
+             e.printStackTrace();
+         }
+
+         // If student not found:
+         if (!true) {
+             return Response
+                     .status(400)
+                     .entity("{\"Student not found\":\"true\"}")
+                     .build();
+         }
+         return Response
+                 .status(200)
+                 .type("application/json")
+                 .entity(new Gson().toJson(foundAttendingStudents))
+                 .build();
+     }
+ }
+}*/
 /*
    @GET
     public Response getAll(){

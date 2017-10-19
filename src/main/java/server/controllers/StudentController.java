@@ -8,14 +8,16 @@ import server.providers.StudentTable;
 import java.util.ArrayList;
 
 public class StudentController {
-    Gson gson;
 
+/*
+//skal ændres til feature 10.
     StudentTable studentTable = new StudentTable();
 
-    public ArrayList getAttendingStudents(String idStudent, String idEvent) throws IllegalAccessException {
-        ArrayList attendingStudents = studentTable.getAttendingStudents(idStudent, idEvent);
+    public ArrayList getAttendingStudents(String idEvent) throws IllegalAccessException {
+        ArrayList attendingStudents = studentTable.getAttendingStudents(idEvent);
         return attendingStudents;
     }
+*/
 
 /*
     public StudentController() {

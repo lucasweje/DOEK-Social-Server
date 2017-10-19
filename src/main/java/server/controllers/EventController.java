@@ -25,9 +25,17 @@ public class EventController {
         db.close();
         return events;
     }
+*/
 
 
+   EventTable eventTable = new EventTable();
 
+    public ArrayList getAttendingStudents(String idEvent) throws IllegalAccessException {
+        ArrayList attendingStudents = eventTable.getAttendingStudents(idEvent);
+        return attendingStudents;
+    }
+
+    /*
     public Event getEvent(int id) throws Exception {
         DBConnnector db = new DBConnector();
         Event event = db.getEvent(id);

@@ -72,7 +72,8 @@ public class StudentTable extends DBmanager {
     }
 */
 
-    public ArrayList getAttendingStudents(String idStudent, String idEvent) throws IllegalAccessException {
+/*
+    public ArrayList getAttendingStudents(String idEvent) throws IllegalAccessException {
         Student student = null;
         ResultSet resultSet = null;
         ArrayList attendingStudents = new ArrayList();
@@ -88,7 +89,7 @@ public class StudentTable extends DBmanager {
                             "ON she.Student_idStudent = s.idStudent " +
                             "WHERE e.idEvent = ?;");
 
-            getAttendingStudents.setString(1, idStudent);
+            getAttendingStudents.setString(1, idEvent);
             resultSet = getAttendingStudents.executeQuery();
 
             while (resultSet.next()) {
@@ -113,6 +114,7 @@ public class StudentTable extends DBmanager {
         //Returnerer attendingStudents med oplysninger.
         return attendingStudents;
     }
+*/
 
     // Skal ikke bruges, gemmes just in case.
 /*// Henter en specifik bruger via idStudent attributten.
