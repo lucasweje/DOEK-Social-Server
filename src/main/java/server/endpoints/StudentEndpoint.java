@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import server.controllers.StudentController;
 import server.models.Student;
 import server.providers.StudentTable;
+import server.resources.Log;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -17,6 +18,8 @@ public class StudentEndpoint {
 
     @GET
     public Response getStudents() {
+
+        Log.writeLog("Class name", 123, "Description",2);
 
         //Returnerer Gson til Json.
         return Response

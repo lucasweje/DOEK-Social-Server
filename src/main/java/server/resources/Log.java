@@ -6,10 +6,9 @@ import org.slf4j.LoggerFactory;
 
 public class Log {
 
-    private Logger log;
 
-    public void writeLog(String className, Object eventObject, String eventDescription, Integer logLevel) {
-        log = LoggerFactory.getLogger(className);
+    public static void  writeLog(String className, Object eventObject, String eventDescription, Integer logLevel) {
+        Logger log = LoggerFactory.getLogger(className);
 
         switch (logLevel) {
             case 2:
