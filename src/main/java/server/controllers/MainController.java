@@ -1,50 +1,47 @@
 package server.controllers;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import server.models.Student;
+import server.providers.StudentTable;
+import server.utility.CurrentStudentContext;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
 public class MainController {
 
     private static Connection connection = null;
+    StudentTable studentTable = new StudentTable();
 
-    public Student authorizeStudent(String firstName, String password) throws IllegalArgumentException {
-        ResultSet resultSet = null;
-        Student student = null;
-
+    public String setToken(Student student) {
+        String token = null;
         try {
-            PreparedStatement authorizeStudent = connection.prepareStatement("SELECT * FROM students where FirstName = ? AND Password = ?");
+            Algorithm algorithm = Algorithm.HMAC512("indsaetstring");
+            long timeValue = (System.currentTimeMillis() * 1000) + 2000125124L;
+            Date expDate = new Date(timeValue);
 
-            authorizeStudent.setString(1, firstName);
-            authorizeStudent.setString(2, password);
-
-            resultSet = authorizeStudent.executeQuery();
-
-            while (resultSet.next()) {
-                student = new Student();
-                student.setIdStudent(resultSet.getString("idStudent"));
-                student.setFirstName(resultSet.getString("FirstName"));
-                student.setLastName(resultSet.getString("LastName"));
-                student.setEmail(resultSet.getString("Email"));
-                student.setPassword(resultSet.getString("Password"));
-
-
-            }
+            token = JWT.create().withClaim("User", student.getEmail()).withExpiresAt(expDate).withIssuer("STFU").sign(algorithm);
+            studentTable.addToken(token, student.getIdStudent());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                resultSet.close();
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
         }
-        return student;
+        if (token != null) {
+            return token;
+        } else {
+            return null;
+        }
+    }
+
+    public CurrentStudentContext getStudentFromTokens(String token) throws SQLException {
+        Student student = studentTable.getStudentFromToken(token);
+        CurrentStudentContext context = new CurrentStudentContext();
+        context.setCurrentStudent(student);
+        return context;
     }
 
     /* MANGLER AT TESTES

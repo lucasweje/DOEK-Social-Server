@@ -1,33 +1,47 @@
 package server.models;
-import server.providers.StudentTable;
-import server.utility.Authenticator;
-
-import server.utility.Authenticator;
 
 public class Student {
 
-    private String firstName, lastName, email, password, idStudent,salt;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String password;
+    private int idStudent;
+    private String salt;
+    private long createdTime;
 
-    public Student(String idStudent, String firstName, String lastName, String email,String password, String salt) {
+    //has all student info.
+    public Student(int idStudent, String firstName, String lastName, String email, String password, long createdTime) {
         this.idStudent = idStudent;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.salt = salt;
+        this.createdTime = createdTime;
     }
 
-    public Student(String firstName, String lastName, String password, String email){
+    //used in verifyStudentCreation
+    public Student(String firstName, String lastName, String password, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.email = email;
     }
 
-    //Used for login - maybe
-    public Student(String firstName, String password) {
-        this.firstName = firstName;
+    //used in studentEndpoint
+    public Student(String email, String salt, String password) {
+        this.email = email;
+        this.salt = salt;
         this.password = password;
+    }
+
+    public Student(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    public Student() {
+
     }
 
     public String getSalt() {
@@ -37,19 +51,18 @@ public class Student {
     public void setSalt(String salt) {
         this.salt = salt;
     }
-    public Student() {
 
-    }
-
-    public String getIdStudent() {
+    public int getIdStudent() {
         return idStudent;
     }
 
-    public void setIdStudent(String idStudent) {
+    public void setIdStudent(int idStudent) {
         this.idStudent = idStudent;
     }
 
-    public String getFirstName() { return firstName; }
+    public String getFirstName() {
+        return firstName;
+    }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -77,5 +90,13 @@ public class Student {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public long getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(long createdTime) {
+        this.createdTime = createdTime;
     }
 }

@@ -1,19 +1,18 @@
 package server.providers;
 
+import server.models.Event;
 import server.models.Student;
 import server.utility.Authenticator;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.ws.rs.core.Response;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class StudentTable extends DBmanager {
 
-
-    //Nulstiller connection. Maskineriet brokker sig hvis connection ikke er sat fra starten af.
     Connection connection = null;
+/*
+    //Nulstiller connection. Maskineriet brokker sig hvis connection ikke er sat fra starten af.
 
     //Metode til at hente alle students.
     public ArrayList getStudents() throws IllegalAccessException {
@@ -36,7 +35,7 @@ public class StudentTable extends DBmanager {
                             resultSet.getString("lastName"),
                             resultSet.getString("email"),
                             resultSet.getString("password"),
-                            resultSet.getString("salt")
+                            resultSet.getLong("createdTime")
                     );
                     studentList.add(students);
 
@@ -52,7 +51,74 @@ public class StudentTable extends DBmanager {
         return studentList;
     }
 
-    // Henter en specifik bruger via idStudent attributten.
+    public boolean addStudent(Student student) throws Exception {
+
+
+        PreparedStatement addStudentStatement = connection.prepareStatement("INSERT INTO Students (idStudent, firstName, lastName, email, password) VALUES (?, ?, ?, ?, ?)");
+
+        try {
+            addStudentStatement.setString(1, student.getIdStudent());
+            addStudentStatement.setString(2, student.getFirstName());
+            addStudentStatement.setString(3, student.getLastName());
+            addStudentStatement.setString(4, student.getEmail());
+            addStudentStatement.setString(5, student.getPassword());
+
+            addStudentStatement.execute();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+*/
+
+    public ArrayList getAttendingEvents(String idStudent) throws IllegalAccessException {
+        Event event = null;
+        ResultSet resultSet = null;
+        ArrayList attendingEvents = new ArrayList();
+
+        //henter alle studenter der deltager på det valgte event.
+        try {
+            PreparedStatement getAttendingEvents = getConnection().prepareStatement
+                    ("SELECT she.*, s.*, e.* " +
+                            "FROM students_has_dsevent she " +
+                            "INNER JOIN students s " +
+                            "ON she.students_idStudent = s.idStudent " +
+                            "INNER JOIN dsevent e " +
+                            "ON she.dsevent_idEvent = e.idEvent " +
+                            "WHERE e.idEvent = ?");
+
+            getAttendingEvents.setString(1, idStudent);
+            resultSet = getAttendingEvents.executeQuery();
+
+            while (resultSet.next()) {
+                try {
+                    //Opretter ny instans af de studenter der er i ArrayListen. (Måden man henter oplysninger).
+                    event = new Event(
+                            resultSet.getString("idEvent"),
+                            resultSet.getInt("price"),
+                            resultSet.getString("idStudent"),
+                            resultSet.getString("eventName"),
+                            resultSet.getString("location"),
+                            resultSet.getString("description"),
+                            resultSet.getTimestamp("date"));
+
+                    attendingEvents.add(event);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (SQLException sqlException) {
+            System.out.println(sqlException.getMessage());
+        }
+
+        //Returnerer attendingStudents med oplysninger.
+        return attendingEvents;
+    }
+
+    // Skal ikke bruges, gemmes just in case.
+/*// Henter en specifik bruger via idStudent attributten.
     public Student getStudentById(String idStudent) throws IllegalAccessException {
         Student student = null;
         ResultSet resultSet = null;
@@ -72,7 +138,7 @@ public class StudentTable extends DBmanager {
                             resultSet.getString("lastName"),
                             resultSet.getString("email"),
                             resultSet.getString("password"),
-                            resultSet.getString("salt")
+                            resultSet.getLong("createdTime")
                     );
 
                 } catch (Exception e) {
@@ -85,34 +151,116 @@ public class StudentTable extends DBmanager {
 
         //Returnerer den enkelte student med oplysninger.
         return student;
-    }
-    public boolean addStudent(Student student) throws SQLException {
-//generer salt password
-        student.setSalt (Authenticator.randomSalt(student.getPassword()));
-//generer hashed password med salt.
-        student.setPassword(Authenticator.hashWithSalt(student.getPassword(),student.getSalt()));
+    }*/
 
-        PreparedStatement addStudentStatement = connection.prepareStatement("INSERT INTO Students (idStudent, firstName, lastName, email, password, salt) VALUES (?, ?, ?, ?,?, ?)");
+
+    public boolean addStudent(Student student) throws SQLException {
+        long unixTime = System.currentTimeMillis() / 1000L;
+//generer salt password
+        student.setSalt(student.getEmail() + unixTime);
+//generer hashed password med salt.
+        student.setPassword(Authenticator.hashWithSalt(student.getPassword(), student.getSalt()));
+        student.setCreatedTime(unixTime);
+
+        PreparedStatement addStudentStatement = getConnection().prepareStatement("INSERT INTO students (firstName, lastName, email, password, createdTime) VALUES (?, ?, ?, ?, ?)");
 
         try {
-            addStudentStatement.setString(1, student.getIdStudent());
-            addStudentStatement.setString(2, student.getFirstName());
-            addStudentStatement.setString(3, student.getLastName());
-            addStudentStatement.setString(4, student.getEmail());
-            addStudentStatement.setString(5, student.getPassword());
-            addStudentStatement.setString(6, student.getSalt());
-
-            int rowsUpdated = addStudentStatement.executeUpdate();
-
-            if(rowsUpdated != 1) {
-                throw new SQLException("ERROR - NOT 1 ROW CREATED");
+            addStudentStatement.setString(1, student.getFirstName());
+            addStudentStatement.setString(2, student.getLastName());
+            addStudentStatement.setString(3, student.getEmail());
+            addStudentStatement.setString(4, student.getPassword());
+            addStudentStatement.setLong(5, student.getCreatedTime());
+            try {
+                int rowsUpdated = addStudentStatement.executeUpdate();
+                if (rowsUpdated != 1) {
+                    throw new SQLException("More or less than 1 row was affected");
+                }
+            } catch (SQLIntegrityConstraintViolationException integrity) {
+                integrity.printStackTrace();
+                throw new SQLException("the user already exists");
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new SQLException("SQL Error");
         }
+
         return true;
     }
 
+    public Student getStudentByEmail(String email) {
+        Student student = null;
 
+        ResultSet resultSet = null;
+
+        try {
+            PreparedStatement getStudentEmailStatement = getConnection().prepareStatement("SELECT * FROM students WHERE email = ?");
+
+            getStudentEmailStatement.setString(1, email);
+            resultSet = getStudentEmailStatement.executeQuery();
+
+            while (resultSet.next()) {
+                student = new Student();
+                student.setIdStudent(resultSet.getInt("idStudent"));
+                student.setEmail(resultSet.getString("email"));
+                student.setPassword(resultSet.getString("password"));
+                student.setCreatedTime(resultSet.getLong("createdTime"));
+            }
+
+            if (student == null) {
+                throw new IllegalArgumentException();
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return student;
+    }
+
+    public void addToken(String token, int idStudent) throws SQLException {
+        PreparedStatement addTokenStatement;
+        try {
+            addTokenStatement = getConnection().prepareStatement("INSERT INTO tokens (token, students_IdStudent) VALUES (?,?)");
+            addTokenStatement.setString(1, token);
+            addTokenStatement.setInt(2, idStudent);
+                    addTokenStatement.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        public boolean deleteToken (String idStudent) throws SQLException {
+            PreparedStatement deleteTokenStatement = getConnection().prepareStatement("DELETE FROM tokens WHERE idStudent = ?");
+            try {
+                deleteTokenStatement.setString(1, idStudent);
+                deleteTokenStatement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+
+        public Student getStudentFromToken (String token) throws SQLException {
+            ResultSet resultSet = null;
+            Student studentFromToken = null;
+
+            try {
+
+                PreparedStatement getStudentFromToken = getConnection().prepareStatement("SELECT idStudent, firstName, lastName FROM students s INNER JOIN tokens t ON t.students_idStudent = s.idStudent WHERE t.token =?");
+
+
+                getStudentFromToken.setString(1, token);
+                resultSet = getStudentFromToken.executeQuery();
+
+                while (resultSet.next()) {
+                    studentFromToken = new Student();
+
+                    studentFromToken.setIdStudent(resultSet.getInt("idStudent"));
+                    studentFromToken.setFirstName(resultSet.getString("firstName"));
+                    studentFromToken.setLastName(resultSet.getString("lastName"));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return studentFromToken;
+        }
 }
