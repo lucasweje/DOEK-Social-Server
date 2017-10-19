@@ -18,7 +18,7 @@ public class EventTable extends DBmanager {
 
         try {
             PreparedStatement getAllEventsStatement = getConnection().prepareStatement
-                    ("SELECT * FROM events");
+                    ("SELECT * FROM dsevents");
 
             resultSet = getAllEventsStatement.executeQuery();
 
@@ -30,7 +30,7 @@ public class EventTable extends DBmanager {
                         resultSet.getString("eventName"),
                         resultSet.getString("location"),
                         resultSet.getString("description"),
-                        resultSet.getTimestamp("date"));
+                        resultSet.getDate("date"));
 
 
                         allEvents.add(event);
@@ -77,9 +77,9 @@ public class EventTable extends DBmanager {
 
         try {
             updateEventStatement = getConnection().prepareStatement
-                    ("UPDATE Events " +
-                            "SET EventName = ?, Location = ?, Price = ?, eventDate = ?, Description = ? " +
-                            "WHERE idEvent = ?, idStudent = ?");
+                    ("UPDATE dsevent " +
+                            "SET eventName = ?, location = ?, price = ?, date = ?, description = ? " +
+                            "WHERE idEvent = ?");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -88,8 +88,9 @@ public class EventTable extends DBmanager {
             updateEventStatement.setString(1, event.getEventName());
             updateEventStatement.setString(2, event.getLocation());
             updateEventStatement.setInt(3, event.getPrice());
-            updateEventStatement.setTimestamp(4, event.getDate());
+            updateEventStatement.setDate(4, event.getEventDate());
             updateEventStatement.setString(5, event.getDescription());
+            updateEventStatement.setInt(6, event.getIdEvent());
 
             updateEventStatement.executeUpdate();
         } catch (SQLException e) {

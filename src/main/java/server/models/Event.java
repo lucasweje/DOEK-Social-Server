@@ -1,21 +1,22 @@
 package server.models;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 public class Event {
 
     private int idEvent, price, studentId;
     private String eventName, location, description;
-    private Timestamp date;
+    private Date eventDate;
 
-    public Event(int idEvent, int price, int studentId, String eventName, String location, String description, Timestamp date) {
+    public Event(int idEvent, int price, int studentId, String eventName, String location, String description, Date eventDate) {
         this.idEvent = idEvent;
         this.price = price;
         this.studentId = studentId;
         this.eventName = eventName;
         this.location = location;
         this.description = description;
-        this.date = date;
+        this.eventDate = eventDate;
     }
 
 
@@ -68,11 +69,11 @@ public class Event {
     }
 
 
-    public Timestamp getDate() {
-        return date;
+    public Date getEventDate() {
+        return eventDate;
     }
 
-    public void setDate(Timestamp date) {
-        this.date = date;
+    public void setEventDate(Date eventDate) {
+        this.eventDate = eventDate;
     }
 }

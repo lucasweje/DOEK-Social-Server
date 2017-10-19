@@ -74,10 +74,11 @@ public class EventEndpoint {
 
     @PUT
     @Path("{idEvent}/updateEvents")
-    public Response updateEvent(String data) throws Exception {
+    public Response updateEvent(@PathParam("idEvent")String eventId, String data) throws Exception {
 
         Gson gson = new Gson();
         Event event = gson.fromJson(data, Event.class);
+        event.setIdEvent(Integer.parseInt(eventId));
 
         //Event decrypt = Crypter.encryptDecryptXOR(event);
 
