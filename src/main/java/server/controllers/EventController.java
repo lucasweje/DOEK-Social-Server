@@ -15,8 +15,16 @@ import java.util.ArrayList;
 
 import server.providers.EventTable;
 
+/**
+ * Created by STFU on 19/10/2017
+ */
+
 
 public class EventController {
+
+    /**
+     * EventController klassen står for at lave kald til databasen, og er en del af logik laget.
+     */
 /*
 
     //Udkommenteret indtil det virker således at DBManager mv kan testes
