@@ -10,11 +10,12 @@ import server.models.Event;
 import server.models.Student;
 import server.models.StudentHasEvent;
 
-import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 
 public class EventTable extends DBmanager {
 
@@ -89,18 +90,16 @@ public class EventTable extends DBmanager {
             } catch (SQLException sqlException) {
                 System.out.println(sqlException.getMessage());
             }
-
             //Returnerer attendingStudents med oplysninger.
             return attendingStudents;
         }
+    }
 
         public boolean joinEvent (int eventId, int studentId) throws IllegalArgumentException {
 
 
             try {
                 //kalder metoden der tjekker om studenten allerede har tilmeldt sig det pågældende event
-
-
                 //Statement der sætter studentens id og eventets id sammen i en tabel
                 PreparedStatement joinEvent = getConnection().prepareStatement
                         ("INSERT INTO student_has_dsevent (dsevent_idEvent, students_idStudent) VALUE (?, ?)");
@@ -120,26 +119,6 @@ public class EventTable extends DBmanager {
             }
             return true;
         }
-
-        public boolean createEvent (Event event) {
-
-            try {
-                PreparedStatement createEventStatement = getConnection().prepareStatement("INSERT INTO Events (idEvent, EventName, idStudent, Location, Price, Date, Description, Pictures) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-
-                createEventStatement.setInt(1, event.getIdEvent());
-                createEventStatement.setString(2, event.getEventName());
-                createEventStatement.setInt(3, event.getidStudent());
-                createEventStatement.setString(4, event.getLocation());
-                createEventStatement.setInt(5, event.getPrice());
-                createEventStatement.setDate(6, event.getEventDate());
-                createEventStatement.setString(7, event.getDescription());
-                return true;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return false;
-        }
-
             // Anvendes til at ændre et event. Modtager et idEvent og data om eventet. Dette opdates i DBmanager.
     // Skal der også anvendes et StudentID til, at genkende hvorvidt eventet tilhører den enkelte???
 
@@ -172,9 +151,8 @@ public class EventTable extends DBmanager {
 
     }
 
-/*
->>>>>>> master
-    public boolean createEvent (Event event) {
+
+    public boolean createEvent(Event event) {
 
         try {
             PreparedStatement createEventStatement = getConnection().prepareStatement("INSERT INTO dsevent (" +
@@ -183,41 +161,23 @@ public class EventTable extends DBmanager {
 
 
             createEventStatement.setString(1, event.getEventName());
-            createEventStatement.setString(2, event.getidStudent());
+            createEventStatement.setInt(2, event.getidStudent());
             createEventStatement.setString(3, event.getLocation());
             createEventStatement.setInt(4, event.getPrice());
             createEventStatement.setString(5, event.getDescription());
-            createEventStatement.setTimestamp(6, event.getDate());
-
-
+            createEventStatement.setDate(6, event.getEventDate());
             int rowsAffected = createEventStatement.executeUpdate();
 
-            if(rowsAffected != 1){
+            if (rowsAffected != 1) {
                 return false;
             }
+        } catch (SQLException e) {
 
-        }
-        catch (SQLException e) {
             e.printStackTrace();
         }
         return true;
     }
-/*
-public boolean deleteEvent (Event event) {
-    try {
->>>>>>> origin
 
-                createEventStatement.execute();
-
-            }
-
-            catch (SQLException e) {
-                e.printStackTrace();
-            }
-        return true;
-        }
-
-        /** */
     public boolean deleteEvent(Event event) {
 
         PreparedStatement deleteEventStatement = null;

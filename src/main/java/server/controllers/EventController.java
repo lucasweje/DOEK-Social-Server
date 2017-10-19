@@ -72,13 +72,14 @@ public class EventController {
         db.close();
         return updateEvent;
     }
-
 */
+
 
     public boolean createEvent(Event eventData) throws SQLException {
 
         EventTable eventTable = new EventTable();
         boolean createEvent = eventTable.createEvent(eventData);
+
         return createEvent;
     }
 
