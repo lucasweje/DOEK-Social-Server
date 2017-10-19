@@ -23,7 +23,8 @@ import server.providers.EventTable;
 public class EventController {
 
     /**
-     * EventController klassen står for at lave kald til databasen, og er en del af logik laget.
+     * EventController klassen forbinder vores endpoints med vores providers,
+     * som sender SQL statements til databasen
      */
 /*
 
