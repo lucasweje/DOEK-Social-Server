@@ -22,12 +22,12 @@ public class Authenticator {
     }
 
     public static String hashWithSalt(String password, String salt) {
-        return Authenticator.performHashing(password+salt);
+        return Authenticator.performHashing(password + salt);
 
 
     }
-    
-//taget fra jespers project secure-dis.
+
+    //taget fra jespers project secure-dis.
     private static String performHashing(String str) {
         authenticator.update(str.getBytes());
         byte[] hash = authenticator.digest();
