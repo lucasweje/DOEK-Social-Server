@@ -26,23 +26,9 @@ public class EventController {
      * EventController klassen forbinder vores endpoints med vores providers,
      * som sender SQL statements til databasen
      */
-/*
-
-    //Udkommenteret indtil det virker således at DBManager mv kan testes
-
 
     //Controller klasse for event. Laver kald til databasen.
     //API forbindes med database.
-
-    //Hedder vores database connector "DBConnector"?
-    public ArrayList<Event> getEvent() throws Exception {
-        DBConnector db = new DBConnector();
-        ArrayList<Event> events = db.getEvents();
-        db.close();
-        return events;
-    }
-
-
 
    EventTable eventTable = new EventTable();
 
@@ -50,29 +36,6 @@ public class EventController {
         ArrayList attendingStudents = eventTable.getAttendingStudents(idEvent);
         return attendingStudents;
     }
-
-    /*
-    public Event getEvent(int id) throws Exception {
-        DBConnnector db = new DBConnector();
-        Event event = db.getEvent(id);
-        db.close();
-        return event;
-
-    }
-
-
-
-}
-
-    //Hvilke parametre skal updateEvent indeholde?
-    public Boolean updateEvent(int id, String xxx, String xxx) throws Exception {
-        DBConnector db = new DBConnector();
-        //Indsæt parametre
-        boolean updateEvent = db.updateEvent(id, xxx);
-        db.close();
-        return updateEvent;
-    }
-*/
 
 
     public boolean createEvent(Event eventData) throws SQLException {
@@ -82,7 +45,6 @@ public class EventController {
 
         return createEvent;
     }
-
 
 
     public ArrayList<Event> getAllEvents() throws SQLException {
@@ -101,7 +63,7 @@ public class EventController {
         EventTable joinEvent = new EventTable();
         return joinEvent.joinEvent(idEvent, idStudent);
     }
-// Både idStudent og idEvent
+
     public boolean updateEvent(Event event) throws Exception {
         EventTable db = new EventTable();
         boolean updateEvent = db.updateEvent(event);

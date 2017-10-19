@@ -27,18 +27,12 @@ public class StudentController {
         return attendingEvents;
     }
 
-    /*
-        public StudentController() {
-            this.gson = new Gson();
-
-        }
-
-        public ArrayList<Student> getStudents() {
+      /*  public ArrayList<Student> getStudents() {
             DBmanager db = new DBmanager();
             ArrayList<Student> students = db.getStudents();
             return students;
         }
-
+*/
     /*
         public Student getStudents(int id) {
             DBmanager db = new DBmanager();
@@ -79,18 +73,3 @@ public class StudentController {
 
     }
 }
-
-
-/*
-    public boolean addStudent(Student student) throws Exception {
-
-        final Student newStudent = new Student();
-        newStudent.setFirstName(firstname);
-
-
-        studentTable.addStudent(currentUser) /*, new AsyncCallback<Boolean>() {
-
-    }
-        /*String hashedPassword = Digester.hashWithSalt(student.getPassword());
-        student.setPassword(hashedPassword);
-        return DBmanager.addStudent(student);*/

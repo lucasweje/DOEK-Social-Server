@@ -25,13 +25,7 @@ public class EventEndpoint {
     EventController eventController = new EventController();
     EventTable eventTable = new EventTable();
 
-
-    //  EventTable eventTable = new EventTable();
-    //Har udkommenteret mange linjer kode for at det ikke fejler
-
-
     //Skal bruges til at opdatere events (her bruges PUT)
-
     @PUT
     @Path("{idEvent}/updateEvents")
     public Response updateEvent(@PathParam("idEvent")String eventId, String data) throws Exception {
@@ -39,8 +33,6 @@ public class EventEndpoint {
         Gson gson = new Gson();
         Event event = gson.fromJson(data, Event.class);
         event.setIdEvent(Integer.parseInt(eventId));
-
-        //Event decrypt = Crypter.encryptDecryptXOR(event);
 
         if (eventController.updateEvent(event)) {
             return Response
@@ -53,7 +45,6 @@ public class EventEndpoint {
                     .status(400)
                     .entity("{\"Message\":\"Failed. No such event!\"}")
                     .build();
-
     }
 
     @POST

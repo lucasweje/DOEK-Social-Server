@@ -1,16 +1,6 @@
 package server.providers;
-
-
-import com.google.gson.Gson;
-
-
-import server.exceptions.ResponseException;
-
 import server.models.Event;
 import server.models.Student;
-import server.models.StudentHasEvent;
-
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,8 +8,6 @@ import java.util.ArrayList;
 
 
 public class EventTable extends DBmanager {
-
-    Connection connection = null;
 
         public ArrayList<Event> getAllEvents() throws SQLException {
             ArrayList<Event> allEvents = new ArrayList<>();
@@ -93,7 +81,6 @@ public class EventTable extends DBmanager {
             //Returnerer attendingStudents med oplysninger.
             return attendingStudents;
         }
-    }
 
         public boolean joinEvent (int eventId, int studentId) throws IllegalArgumentException {
 
@@ -120,7 +107,6 @@ public class EventTable extends DBmanager {
             return true;
         }
             // Anvendes til at ændre et event. Modtager et idEvent og data om eventet. Dette opdates i DBmanager.
-    // Skal der også anvendes et StudentID til, at genkende hvorvidt eventet tilhører den enkelte???
 
     public boolean updateEvent(Event event) throws Exception {
 

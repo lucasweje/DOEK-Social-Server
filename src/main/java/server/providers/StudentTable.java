@@ -11,10 +11,11 @@ import java.util.ArrayList;
 public class StudentTable extends DBmanager {
 
     Connection connection = null;
-/*
+
     //Nulstiller connection. Maskineriet brokker sig hvis connection ikke er sat fra starten af.
 
     //Metode til at hente alle students.
+
     public ArrayList getStudents() throws IllegalAccessException {
 
         //Opretter metodens attributter.
@@ -29,14 +30,11 @@ public class StudentTable extends DBmanager {
             while (resultSet.next()) {
                 try {
                     //Opretter ny instans af alle studenter. (Måden man henter oplysninger om alle studenter).
-                    Student students = new Student(
-                            resultSet.getString("idStudent"),
-                            resultSet.getString("firstName"),
-                            resultSet.getString("lastName"),
-                            resultSet.getString("email"),
-                            resultSet.getString("password"),
-                            resultSet.getLong("createdTime")
-                    );
+                    Student students = new Student();
+                            students.setIdStudent(resultSet.getInt("idStudent"));
+                            students.setFirstName(resultSet.getString("firstName"));
+                            students.setLastName(resultSet.getString("lastName"));
+                            students.setEmail(resultSet.getString("email"));
                     studentList.add(students);
 
                 } catch (Exception e) {
@@ -50,27 +48,6 @@ public class StudentTable extends DBmanager {
         //Returnerere listen med studenter.
         return studentList;
     }
-
-    public boolean addStudent(Student student) throws Exception {
-
-
-        PreparedStatement addStudentStatement = connection.prepareStatement("INSERT INTO Students (idStudent, firstName, lastName, email, password) VALUES (?, ?, ?, ?, ?)");
-
-        try {
-            addStudentStatement.setString(1, student.getIdStudent());
-            addStudentStatement.setString(2, student.getFirstName());
-            addStudentStatement.setString(3, student.getLastName());
-            addStudentStatement.setString(4, student.getEmail());
-            addStudentStatement.setString(5, student.getPassword());
-
-            addStudentStatement.execute();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return true;
-    }
-*/
 
     public ArrayList getAttendingEvents(String idStudent) throws IllegalAccessException {
         Event event = null;
@@ -117,52 +94,15 @@ public class StudentTable extends DBmanager {
         return attendingEvents;
     }
 
-    // Skal ikke bruges, gemmes just in case.
-/*// Henter en specifik bruger via idStudent attributten.
-    public Student getStudentById(String idStudent) throws IllegalAccessException {
-        Student student = null;
-        ResultSet resultSet = null;
-
-        //henter studenten med det valgte id.
-        try {
-            PreparedStatement getStudentById = getConnection().prepareStatement("SELECT * FROM Students WHERE idStudent=?");
-            getStudentById.setString(1, idStudent);
-            resultSet = getStudentById.executeQuery();
-
-            while (resultSet.next()) {
-                try {
-                    //Opretter ny instans af den valgte student. (Måden man henter oplysninger om den valgte student).
-                    student = new Student(
-                            resultSet.getString("idStudent"),
-                            resultSet.getString("firstName"),
-                            resultSet.getString("lastName"),
-                            resultSet.getString("email"),
-                            resultSet.getString("password"),
-                            resultSet.getLong("createdTime")
-                    );
-
-                } catch (Exception e) {
-
-                }
-            }
-        } catch (SQLException sqlException) {
-            System.out.println(sqlException.getMessage());
-        }
-
-        //Returnerer den enkelte student med oplysninger.
-        return student;
-<<<<<<< HEAD
-    }*/
-
 
     public boolean addStudent(Student student) throws SQLException {
         // Denne metode er taget fra henrik (Slack)
         long unixTime = System.currentTimeMillis() / 1000L;
-//generer salt password
+        //generer salt password
 
         student.setSalt(student.getEmail() + unixTime);
 
-//generer hashed password med salt.
+        //generer hashed password med salt.
         student.setPassword(Authenticator.hashWithSalt(student.getPassword(), student.getSalt()));
         student.setCreatedTime(unixTime);
 

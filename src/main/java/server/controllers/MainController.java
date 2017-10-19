@@ -19,7 +19,7 @@ public class MainController {
     public String setToken(Student student) {
         String token = null;
         try {
-            Algorithm algorithm = Algorithm.HMAC512("indsaetstring");
+            Algorithm algorithm = Algorithm.HMAC512("indsaet string");
             long timeValue = (System.currentTimeMillis() * 1000) + 2000125124L;
             Date expDate = new Date(timeValue);
 
@@ -43,14 +43,4 @@ public class MainController {
         context.setCurrentStudent(student);
         return context;
     }
-
-    /* MANGLER AT TESTES
-    public boolean logout(Student currentUser) throws IllegalArgumentException {
-        if(currentUser != null) {
-            currentUser = null;
-            return true;
-        }
-        //så er currentUser allerede null, send da en fejl tilbage - da ingen så er logget ind
-        return false;
-    }*/
 }

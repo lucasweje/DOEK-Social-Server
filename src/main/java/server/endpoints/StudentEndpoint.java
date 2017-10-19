@@ -34,7 +34,7 @@ public class StudentEndpoint {
     @GET
     public Response getStudents() {
 
-
+        //TO DO: sql statement.
         String json = new Gson().toJson(new String[]{"student1", "student2"});
         String crypted = Crypter.encryptDecrypt(json);
 
@@ -46,27 +46,8 @@ public class StudentEndpoint {
                 .entity(crypted) //skal ændres til connection med databasen når config filen er lavet.
                 .build();
 
-        //debugger kan stoppe program og eksekvere det og se hvad der sker.
     }
-/*
-    @POST
-    @Produces("Application/json")
-    public Response create(String data) throws Exception {
 
-        Gson gson = new Gson();
-        Student student = gson.fromJson(data, Student.class);
-
-        if (studentController.addStudent(student)) {
-            return Response
-                    .status(200)
-                    .entity("{message\":\"Success! Student created\"}")
-                    .build();
-        } else return Response.status(400).entity("{\"message\":\"failed\"}").build();
-    }
-}
-*/
-
- //Skal laves om til feature 10.
 @GET
  @Path("{idStudentEvents}/events")
  public Response getAttendingEvents(@PathParam("idStudentEvents")String idStudent) {
@@ -100,73 +81,7 @@ public class StudentEndpoint {
                  .build();
      }
  }
-/*
-   @GET
-    public Response getAll(){
-        return Response.status(200).entity("Foo").build();
-    }*/
 
-//getStudentById udkommenteret da vi sandsynligvis ikke skal bruge den.
-/*
-    @GET
-    @Path("{idStudent}")
-    public Response getStudentById(@PathParam("idStudent") String idStudent) {
-
-        Student foundStudent = null;
-
-        // If else statement tjekker om parametren er tom.
-        if (idStudent.isEmpty()) {
-
-            return Response
-                    .status(400)
-                    .entity("{\"Missing Student ID\":\"true\"}")
-                    .build();
-        }
-
-        try {
-            foundStudent = studentTable.getStudentById(idStudent);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        // If student not found:
-        if (!true) {
-
-            return Response
-                    .status(400)
-                    .entity("{\"Student not found\":\"true\"}")
-                    .build();
-        }
-
-        //Returnerer Gson til Json.
-        return Response
-                .status(200)
-                .type("application/json")
-                .entity(new Gson().toJson(foundStudent))
-                .build();
-    }
-
-    /* skal laves - hvordan sender man folk rundt normalt?
-    //skal sende brugeren til oprettelses formularen
-    @GET
-    @Path("/register")
-    public Response register() throws Exception {
-
-    }*/
-
-    /* MANGLER AT TESTES
-    //skal terminere nuværende session og omdirigere til /
-    @GET
-    public Response logout(Student currentUser) throws Exception {
-           try {
-               mainController.logout(currentUser);
-           } catch (IllegalArgumentException e) {
-               System.out.print(e.getMessage());
-               return Response.status(400).entity("No one was logged in, please log in before logging out").build();
-        }
-        return Response.status(303).entity("You've been logged out successfully").build();
-    }
-*/
     @POST
     @Path("/logout")
     public Response logout (String idStudent) throws SQLException {

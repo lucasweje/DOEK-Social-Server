@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 public class Log {
 
+//TO DO: Skal implementeres ved alle end points.
 
     public static void  writeLog(String className, Object eventObject, String eventDescription, Integer logLevel) {
         Logger log = LoggerFactory.getLogger(className);

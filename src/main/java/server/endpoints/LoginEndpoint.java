@@ -18,7 +18,6 @@ public class LoginEndpoint {
     StudentTable studentTable = new StudentTable();
     MainController mainController = new MainController();
 
-    //skal sende information til backend, hvorefter den returnerer true/false eller et student objekt, som så er vores user - snak med Jesper, virker det her nogenlunde korrekt?
     @POST
     public Response login(String jsonLogin) throws Exception {
 

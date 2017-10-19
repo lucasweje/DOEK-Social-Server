@@ -10,6 +10,8 @@ import java.util.Random;
 public class Crypter {
 
 
+    //TO DO: Skal implementeres under hvert end point.
+
     // XOR-kypteringsmetoden: (CR)
 //husk link, set på dalbys laptop.
     public static String encryptDecrypt(String input) {
@@ -23,62 +25,6 @@ public class Crypter {
         return output.toString();
     }
 }
-
-
-     /*
-
-    public String encrypt(String input, String key) {
-        try {
-            if (input == null || key == null)
-                return null;
-            char[] keys = key.toCharArray();
-            char[] inp = input.toCharArray();
-            BASE64Encoder encoder = new BASE64Encoder();
-
-            int il = inp.length;
-            int kl = keys.length;
-
-            char[] newInput = new char[il];
-
-            for (int i = 0; i < il; i++) {
-                newInput[i] = (char) (inp[i] ^ keys[i % kl]);
-            }
-            inp = null;
-            keys = null;
-            String temp = new String(newInput);
-            return new String(new BASE64Encoder().encodeBuffer(temp.getBytes()));
-        }
-        catch (Exception e) {
-            return null;
-        }
-    }
-    public String decrypt (String input, String key) {
-        try {
-            if (input==null || key==null)
-                return null,
-            BASE64Decoder decoder = new BASE64Decoder();
-            char [] keys =key.toCharArray();
-            input = new String(decoder.decodeBuffer(input));
-            char [] inp = input.toCharArray();
-
-            int il = inp.length;
-            int kl = keys.length;
-            char[] newInput = new char[il];
-
-            for (int i=0; i<il; i++) {
-                newInput[i] = (char) (inp[i] ^ keys[i % kl]);
-            }
-            inp=null;
-            keys=null;
-            return new String(newInput);
-
-            }
-    } catch(IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-*/
 
 
 
