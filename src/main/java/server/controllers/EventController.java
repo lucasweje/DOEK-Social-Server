@@ -15,8 +15,17 @@ import java.util.ArrayList;
 
 import server.providers.EventTable;
 
+/**
+ * Created by STFU on 19/10/2017
+ */
+
 
 public class EventController {
+
+    /**
+     * EventController klassen forbinder vores endpoints med vores providers,
+     * som sender SQL statements til databasen
+     */
 /*
 
     //Udkommenteret indtil det virker således at DBManager mv kan testes
@@ -52,6 +61,7 @@ public class EventController {
     }
 
 
+
 }
 
     //Hvilke parametre skal updateEvent indeholde?
@@ -62,11 +72,14 @@ public class EventController {
         db.close();
         return updateEvent;
     }
-
 */
-    public boolean createEvent(Event data) throws SQLException {
-        EventTable db = new EventTable();
-        boolean createEvent = db.createEvent(data);
+
+
+    public boolean createEvent(Event eventData) throws SQLException {
+
+        EventTable eventTable = new EventTable();
+        boolean createEvent = eventTable.createEvent(eventData);
+
         return createEvent;
     }
 
@@ -88,6 +101,13 @@ public class EventController {
     public boolean joinEvent(String idEvent, String idStudent) throws ResponseException {
         EventTable joinEvent = new EventTable();
         return joinEvent.joinEvent(idEvent, idStudent);
+    }
+// Både idStudent og idEvent
+    public boolean updateEvent(Event event) throws Exception {
+        EventTable db = new EventTable();
+        boolean updateEvent = db.updateEvent(event);
+        return updateEvent;
+
     }
 }
 

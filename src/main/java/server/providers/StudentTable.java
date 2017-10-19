@@ -95,13 +95,13 @@ public class StudentTable extends DBmanager {
                 try {
                     //Opretter ny instans af de studenter der er i ArrayListen. (Måden man henter oplysninger).
                     event = new Event(
-                            resultSet.getString("idEvent"),
+                            resultSet.getInt("idEvent"),
                             resultSet.getInt("price"),
-                            resultSet.getString("idStudent"),
+                            resultSet.getInt("idStudent"),
                             resultSet.getString("eventName"),
                             resultSet.getString("location"),
                             resultSet.getString("description"),
-                            resultSet.getTimestamp("date"));
+                            resultSet.getDate("date"));
 
                     attendingEvents.add(event);
 
@@ -156,6 +156,7 @@ public class StudentTable extends DBmanager {
 
 
     public boolean addStudent(Student student) throws SQLException {
+        // Denne metode er taget fra henrik (Slack)
         long unixTime = System.currentTimeMillis() / 1000L;
 //generer salt password
 
@@ -196,17 +197,17 @@ public class StudentTable extends DBmanager {
         ResultSet resultSet = null;
 
         try {
-            PreparedStatement getStudentEmailStatement = connection.prepareStatement("SELECT * FROM students WHERE email = ?");
+            PreparedStatement getStudentEmailStatement = getConnection().prepareStatement("SELECT * FROM students WHERE email = ?");
 
             getStudentEmailStatement.setString(1, email);
             resultSet = getStudentEmailStatement.executeQuery();
 
             while (resultSet.next()) {
-                student = new Student(
-                        resultSet.getString("email"),
-                        resultSet.getString("password"),
-                        resultSet.getString("createdTime")
-                );
+                student = new Student();
+                student.setIdStudent(resultSet.getInt("idStudent"));
+                student.setEmail(resultSet.getString("email"));
+                student.setPassword(resultSet.getString("password"));
+                student.setCreatedTime(resultSet.getLong("createdTime"));
             }
 
             if (student == null) {
@@ -237,7 +238,7 @@ public class StudentTable extends DBmanager {
             while (resultSet.next()) {
                 try {
                     studentFound = new Student();
-                    studentFound.setIdStudent(resultSet.getString("idStudent"));
+                    studentFound.setIdStudent(resultSet.getInt("idStudent"));
                     studentFound.setFirstName(resultSet.getString("firstName"));
                     studentFound.setLastName(resultSet.getString("lastName"));
                     studentFound.setPassword(resultSet.getString("password"));
@@ -289,28 +290,43 @@ public class StudentTable extends DBmanager {
         return true;
     }
 
-    public Student getStudentFromToken(String token) throws SQLException {
-        ResultSet resultset = null;
-        Student studentFromToken = null;
 
+    public void addToken(String token, int idStudent) throws SQLException {
+        PreparedStatement addTokenStatement;
         try {
-            PreparedStatement getStudentsFromToken = connection.prepareStatement("SELECT Tokens.idStudent from Tokens INNER JOIN Students on Tokens.idStudent=Students.idStudent WHERE Tokens.token = ?");
-            getStudentsFromToken.setString(1, token);
-            resultset = getStudentsFromToken.executeQuery();
-
-            while (resultset.next()) {
-                studentFromToken = new Student();
-
-                studentFromToken.setIdStudent(resultset.getString("idStudent"));
-                /// HVAD GØR VI::    studentFromToken.
-
+            addTokenStatement = getConnection().prepareStatement("INSERT INTO tokens (token, students_IdStudent) VALUES (?,?)");
+            addTokenStatement.setString(1, token);
+            addTokenStatement.setInt(2, idStudent);
+                    addTokenStatement.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
 
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+
+        public Student getStudentFromToken (String token) throws SQLException {
+            ResultSet resultSet = null;
+            Student studentFromToken = null;
+
+            try {
+
+                PreparedStatement getStudentFromToken = getConnection().prepareStatement("SELECT idStudent, firstName, lastName FROM students s INNER JOIN tokens t ON t.students_idStudent = s.idStudent WHERE t.token =?");
 
 
+                getStudentFromToken.setString(1, token);
+                resultSet = getStudentFromToken.executeQuery();
+
+                while (resultSet.next()) {
+                    studentFromToken = new Student();
+
+                    studentFromToken.setIdStudent(resultSet.getInt("idStudent"));
+                    studentFromToken.setFirstName(resultSet.getString("firstName"));
+                    studentFromToken.setLastName(resultSet.getString("lastName"));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return studentFromToken;
         }
-        return studentFromToken;
-    }
+
 }

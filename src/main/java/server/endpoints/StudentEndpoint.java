@@ -7,7 +7,10 @@ import server.controllers.StudentController;
 import server.controllers.TokenController;
 import server.models.Student;
 import server.providers.StudentTable;
+import server.resources.Log;
 import server.utility.Authenticator;
+import server.utility.CurrentStudentContext;
+import sun.applet.Main;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -23,13 +26,18 @@ public class StudentEndpoint {
     MainController mainController = new MainController();
     TokenController tokenController = new TokenController();
 
-    //Opretter arraylist med students.
+
+
+
+
 
     @GET
     public Response getStudents() {
 
+
         String json = new Gson().toJson(new String[]{"student1", "student2"});
         String crypted = Crypter.encryptDecrypt(json);
+
 
         //Returnerer Gson til Json.
         return Response
@@ -159,5 +167,35 @@ public class StudentEndpoint {
         return Response.status(303).entity("You've been logged out successfully").build();
     }
 */
+    @POST
+    @Path("/logout")
+    public Response logout (String idStudent) throws SQLException {
+        String id = new Gson().fromJson(idStudent, String.class);
+
+        boolean isLoggedOut = studentTable.deleteToken(id);
+
+        return Response.status(200).entity(isLoggedOut).build();
+    }
+
+    @GET
+    @Path("/profile")
+    public Response get(@HeaderParam("Authorization") String token) throws SQLException {
+
+        CurrentStudentContext student = mainController.getStudentFromTokens(token);
+
+        if (student.getCurrentStudent() != null) {
+            return Response
+                    .status(200)
+                    .type("application/json")
+                    .entity(new Gson().toJson(student))
+                    .build();
+        } else {
+            return Response
+                    .status(404)
+                    .type("application/json")
+                    .entity("fejl")
+                    .build();
+        }
+    }
 
 }
