@@ -11,6 +11,7 @@ import server.models.Event;
 import server.models.Student;
 import server.models.StudentHasEvent;
 import server.providers.EventTable;
+import server.resources.Log;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -28,23 +29,33 @@ public class EventEndpoint {
     //Skal bruges til at opdatere events (her bruges PUT)
     @PUT
     @Path("{idEvent}/updateEvents")
-    public Response updateEvent(@PathParam("idEvent")String eventId, String data) throws Exception {
+    public Response updateEvent(@PathParam("idEvent") String eventId, String data) throws Exception {
 
         Gson gson = new Gson();
         Event event = gson.fromJson(data, Event.class);
         event.setIdEvent(Integer.parseInt(eventId));
 
         if (eventController.updateEvent(event)) {
+
+
+            //getIdEvent eller getEventName?
+            Log.writeLog(getClass().getName(), this, "Event with ID: " + event.getIdEvent() + " has been updated", 0);
+
             return Response
                     .status(200)
                     .entity("{\"Message\":\"Success! Event updated\"}")
                     .build();
 
         } else
-            return Response
-                    .status(400)
-                    .entity("{\"Message\":\"Failed. No such event!\"}")
-                    .build();
+            Log.writeLog(getClass().getName(), this, "Event not found", 2);
+
+        return Response
+
+                //Bør det ikke være 404 og ikke 400? jf. https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+                //Ikke kun her
+                .status(400)
+                .entity("{\"Message\":\"Failed. No such event!\"}")
+                .build();
     }
 
     @POST
@@ -56,12 +67,19 @@ public class EventEndpoint {
 
         EventController eventController = new EventController();
         if (eventController.createEvent(event)) {
+
+            Log.writeLog(getClass().getName(), this, event.getEventName() + " created", 0);
+
             return Response
                     .status(200)
                     .type("application/json")
                     .entity("{message\":\"Success! Event created\"}")
                     .build();
         } else {
+
+            Log.writeLog(getClass().getName(), this, "Not able to create event", 2);
+
+
             return Response
                     .status(400)
                     .type("application/json")
@@ -79,11 +97,18 @@ public class EventEndpoint {
         Event event = gson.fromJson(data, Event.class);
 
         if (eventController.deleteEvent(event)) {
+
+            Log.writeLog(getClass().getName(), this, "Event deleted", 0);
+
+
             return Response.status(200)
                     .entity("{\"message\":\"Success! Event deleted\"}")
                     .build();
 
         } else {
+
+            Log.writeLog(getClass().getName(), this, "Event not deleted", 2);
+
             return Response.status(400)
                     .entity("{\"message\":\"failed\"}")
                     .build();
@@ -97,8 +122,11 @@ public class EventEndpoint {
         EventController eventController = new EventController();
 
 
-        //kald en metode der henter alle brugere fra databasen (gemmer dem i en ArrayList??)
+        //kald en metode der henter alle ?brugere? fra databasen (gemmer dem i en ArrayList??)
         try {
+
+            Log.writeLog(getClass().getName(), this, "All events fetched", 0);
+
             return Response
                     .status(200)
                     .type("application/json")
@@ -110,6 +138,8 @@ public class EventEndpoint {
             message.setStatus(500);
             message.setError(e.getMessage());
 
+            Log.writeLog(getClass().getName(), this, "Internal sever error", 2);
+
             return Response
                     .status(500)
                     .type("application/json")
@@ -118,39 +148,44 @@ public class EventEndpoint {
         }
     }
 
-        @GET
-        @Path("{idEventStudents}/students")
-        public Response getAttendingStudents(@PathParam("idEventStudents")String idEvent) {
+    @GET
+    @Path("{idEventStudents}/students")
+    public Response getAttendingStudents(@PathParam("idEventStudents") String idEvent) {
 
-            EventTable eventTable = new EventTable();
-            ArrayList<Student> foundAttendingStudents = null;
+        EventTable eventTable = new EventTable();
+        ArrayList<Student> foundAttendingStudents = null;
 
-            if (idEvent.isEmpty()) {
+        if (idEvent.isEmpty()) {
+
+            Log.writeLog(getClass().getName(), this, "Attending students not found", 2);
+
+            return Response
+                    .status(400)
+                    .entity("{\"Missing Student ID\":\"true\"}")
+                    .build();
+        } else {
+            try {
+                foundAttendingStudents = eventTable.getAttendingStudents(idEvent);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+            // If student not found:
+            if (!true) {
+                Log.writeLog(getClass().getName(), this, "Student not found", 2);
                 return Response
                         .status(400)
-                        .entity("{\"Missing Student ID\":\"true\"}")
-                        .build();
-            }else{
-                try {
-                    foundAttendingStudents = eventTable.getAttendingStudents(idEvent);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-
-                // If student not found:
-                if (!true) {
-                    return Response
-                            .status(400)
-                            .entity("{\"Student not found\":\"true\"}")
-                            .build();
-                }
-                return Response
-                        .status(200)
-                        .type("application/json")
-                        .entity(new Gson().toJson(foundAttendingStudents))
+                        .entity("{\"Student not found\":\"true\"}")
                         .build();
             }
+            Log.writeLog(getClass().getName(), this, "Attending students fetched", 0);
+            return Response
+                    .status(200)
+                    .type("application/json")
+                    .entity(new Gson().toJson(foundAttendingStudents))
+                    .build();
         }
+    }
 
     @POST
     @Path("/join")
@@ -161,6 +196,8 @@ public class EventEndpoint {
 
         try {
             eventController.joinEvent(studentHasEvent.getEvent_idEvent(), studentHasEvent.getStudent_idStudent());
+
+            Log.writeLog(getClass().getName(), this, "Event joined", 0);
             return Response
                     .status(200)
                     .type("application/json")
@@ -172,6 +209,8 @@ public class EventEndpoint {
             ErrorMessage message = new ErrorMessage();
             message.setError(e.getMessage());
             message.setStatus(e.getStatus());
+
+            Log.writeLog(getClass().getName(), this, "Not able to join event - " + e.getStatus() + " " + e.getMessage(), 2);
 
             return Response
                     .status(e.getStatus())

@@ -16,6 +16,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import server.utility.Crypter;
 
 @Path("/students")
@@ -27,16 +28,14 @@ public class StudentEndpoint {
     TokenController tokenController = new TokenController();
 
 
-
-
-
-
     @GET
-    public Response getStudents() {
+    public Response getStudents() throws IllegalAccessException {
 
         //TO DO: sql statement.
-        String json = new Gson().toJson(new String[]{"student1", "student2"});
+        String json = new Gson().toJson(studentTable.getStudents());
         String crypted = Crypter.encryptDecrypt(json);
+
+        Log.writeLog(getClass().getName(), this, "Get students", 0);
 
 
         //Returnerer Gson til Json.
@@ -46,48 +45,60 @@ public class StudentEndpoint {
                 .entity(crypted) //skal ændres til connection med databasen når config filen er lavet.
                 .build();
 
+
     }
 
-@GET
- @Path("{idStudentEvents}/events")
- public Response getAttendingEvents(@PathParam("idStudentEvents")String idStudent) {
+    @GET
+    @Path("{idStudentEvents}/events")
+    public Response getAttendingEvents(@PathParam("idStudentEvents") String idStudent) {
 
-     StudentTable studentTable = new StudentTable();
-     ArrayList foundAttendingEvents = null;
+        StudentTable studentTable = new StudentTable();
+        ArrayList foundAttendingEvents = null;
 
-     if (idStudent.isEmpty()) {
-         return Response
-                 .status(400)
-                 .entity("{\"Missing Student ID\":\"true\"}")
-                 .build();
-     }else{
-         try {
-             foundAttendingEvents = studentTable.getAttendingEvents(idStudent);
-         } catch (IllegalAccessException e) {
-             e.printStackTrace();
-         }
 
-         // If student not found:
-         if (!true) {
-             return Response
-                     .status(400)
-                     .entity("{\"Student not found\":\"true\"}")
-                     .build();
-         }
-         return Response
-                 .status(200)
-                 .type("application/json")
-                 .entity(new Gson().toJson(foundAttendingEvents))
-                 .build();
-     }
- }
+        if (idStudent.isEmpty()) {
+            Log.writeLog(getClass().getName(), this, "Missing student ID", 2);
+
+            return Response
+                    .status(400)
+                    .entity("{\"Missing Student ID\":\"true\"}")
+                    .build();
+        } else {
+            try {
+                foundAttendingEvents = studentTable.getAttendingEvents(idStudent);
+
+                Log.writeLog(getClass().getName(), this, "Get attending events", 0);
+
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+            // If student not found:
+            if (!true) {
+                Log.writeLog(getClass().getName(), this, "Student not found therefore no attending events", 2);
+
+                return Response
+                        .status(400)
+                        .entity("{\"Student not found\":\"true\"}")
+                        .build();
+            }
+            return Response
+                    .status(200)
+                    .type("application/json")
+                    .entity(new Gson().toJson(foundAttendingEvents))
+                    .build();
+        }
+    }
 
     @POST
     @Path("/logout")
-    public Response logout (String idStudent) throws SQLException {
+    public Response logout(String idStudent) throws SQLException {
         String id = new Gson().fromJson(idStudent, String.class);
 
         boolean isLoggedOut = studentTable.deleteToken(id);
+
+        Log.writeLog(getClass().getName(), this, "User logged out", 0);
+
 
         return Response.status(200).entity(isLoggedOut).build();
     }
@@ -99,12 +110,17 @@ public class StudentEndpoint {
         CurrentStudentContext student = mainController.getStudentFromTokens(token);
 
         if (student.getCurrentStudent() != null) {
+
+            Log.writeLog(getClass().getName(), this, "Current student found: " + student.getCurrentStudent(), 0);
+
             return Response
                     .status(200)
                     .type("application/json")
                     .entity(new Gson().toJson(student))
                     .build();
         } else {
+            Log.writeLog(getClass().getName(), this, "Current student not found - 404", 2);
+
             return Response
                     .status(404)
                     .type("application/json")
