@@ -77,8 +77,8 @@ public class StudentTable extends DBmanager {
                             resultSet.getInt("idStudent"),
                             resultSet.getString("eventName"),
                             resultSet.getString("location"),
-                            resultSet.getLong("description"),
-                            resultSet.getDate("date"));
+                            resultSet.getString("description"),
+                            resultSet.getString("date"));
 
                     attendingEvents.add(event);
 

@@ -25,12 +25,13 @@ public class EventTable extends DBmanager {
                             resultSet.getInt("idStudent"),
                             resultSet.getString("eventName"),
                             resultSet.getString("location"),
-                            resultSet.getLong("description"),
-                            resultSet.getDate("eventDate"));
+                            resultSet.getString("description"),
+                            resultSet.getString("eventDate"));
                     allEvents.add(event);
                 }
 
                 resultSet.close();
+                this.close();
 
                 getAllEventsStatement.close();
             } catch (SQLException e) {
@@ -125,8 +126,8 @@ public class EventTable extends DBmanager {
             updateEventStatement.setString(1, event.getEventName());
             updateEventStatement.setString(2, event.getLocation());
             updateEventStatement.setInt(3, event.getPrice());
-            updateEventStatement.setDate(4, event.getEventDate());
-            updateEventStatement.setLong(5, event.getDescription());
+            updateEventStatement.setString(4, event.getEventDate());
+            updateEventStatement.setString(5, event.getDescription());
             updateEventStatement.setInt(6, event.getIdEvent());
 
             updateEventStatement.executeUpdate();
@@ -145,13 +146,12 @@ public class EventTable extends DBmanager {
                     "eventName, idStudent, location, price, description, eventDate) VALUES (" +
                     "?, ?, ?, ?, ?, ?)");
 
-
             createEventStatement.setString(1, event.getEventName());
             createEventStatement.setInt(2, event.getidStudent());
             createEventStatement.setString(3, event.getLocation());
             createEventStatement.setInt(4, event.getPrice());
-            createEventStatement.setLong(5, event.getDescription());
-            createEventStatement.setDate(6, event.getEventDate());
+            createEventStatement.setString(5, event.getDescription());
+            createEventStatement.setString(6, event.getEventDate());
             int rowsAffected = createEventStatement.executeUpdate();
 
             if (rowsAffected != 1) {
