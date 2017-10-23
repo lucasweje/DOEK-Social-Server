@@ -20,18 +20,19 @@ public class EventTable extends DBmanager {
                 PreparedStatement getAllEventsStatement = getConnection().prepareStatement
                         ("SELECT * FROM dsevent");
 
+                resultSet = getAllEventsStatement.executeQuery();
+
                 while (resultSet.next()) {
-                    Event event = new Event(
-                            resultSet.getInt("idEvent"),
-                            resultSet.getInt("price"),
-                            resultSet.getInt("idStudent"),
-                            resultSet.getString("eventName"),
-                            resultSet.getString("location"),
-                            resultSet.getString("description"),
-                            resultSet.getString("eventDate"));
+                    Event event = new Event();
+                    event.setIdEvent(resultSet.getInt("idEvent"));
+                    event.setPrice(resultSet.getInt("price"));
+                    event.setIdStudent(resultSet.getInt("owner"));
+                    event.setEventName(resultSet.getString("eventName"));
+                    event.setLocation(resultSet.getString("location"));
+                    event.setDescription(resultSet.getString("description"));
+                    event.setEventDate(resultSet.getString("eventDate"));
                     allEvents.add(event);
                 }
-            resultSet = getAllEventsStatement.executeQuery();
                 resultSet.close();
             getAllEventsStatement.close();
         } catch (SQLException e) {
@@ -91,7 +92,6 @@ public class EventTable extends DBmanager {
                 //Statement der sætter studentens id og eventets id sammen i en tabel
                 PreparedStatement joinEvent = getConnection().prepareStatement
                         ("INSERT INTO students_has_dsevent (dsevent_idEvent, students_idStudent) VALUE (?, ?)");
-            // OBS skal være en string men der er ikke ændret i model.Event endnu
             joinEvent.setInt(1, eventId);
             joinEvent.setInt(2, studentId);
 
