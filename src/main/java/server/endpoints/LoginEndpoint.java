@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import server.models.Student;
 import server.models.Token;
 import server.providers.StudentTable;
+import server.resources.Log;
 import server.utility.Authenticator;
 import server.controllers.MainController;
 
@@ -27,7 +28,13 @@ public class LoginEndpoint {
         Student needAuthStudent = gson.fromJson(jsonLogin, Student.class);
         try {
             foundStudent = studentTable.getStudentByEmail(needAuthStudent.getEmail());
+
+            //Mht. sikkerhed er det så dumt at kalde "foundstudent" i logfilen?
+            Log.writeLog(getClass().getName(), this, foundStudent + " logged in", 0);
+
         } catch (Exception notFound) {
+            Log.writeLog(getClass().getName(), this, "Email not found/not existing", 2);
+
             return Response.status(401).type("plain/text").entity("Email does not exist").build();
         }
 
@@ -35,8 +42,15 @@ public class LoginEndpoint {
 
         if (doHash.equals(foundStudent.getPassword())) {
             String token = mainController.setToken(foundStudent);
+
+            Log.writeLog(getClass().getName(), this, "Password hashed", 0);
+
             return Response.status(200).entity(new Gson().toJson(token)).build();
         } else {
+
+            Log.writeLog(getClass().getName(), this, "Password incorect", 2);
+
+
             return Response.status(401).type("plain/text").entity("password not correct").build();
         }
     }

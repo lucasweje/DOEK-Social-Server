@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import server.controllers.StudentController;
 import server.models.Student;
 import server.providers.StudentTable;
+import server.resources.Log;
+import server.utility.Crypter;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -18,6 +20,8 @@ public class RegisterEndpoint {
     StudentController studentController = new StudentController();
     StudentTable studentTable = new StudentTable();
 
+
+
     @POST
     @Produces("Application/json")
     public Response register(String jsonStudent) throws Exception {
@@ -28,7 +32,14 @@ public class RegisterEndpoint {
             student = gson.fromJson(jsonStudent, Student.class);
         } catch (IllegalArgumentException e) {
             System.out.print(e.getMessage());
-            return Response.status(400).entity("første try i createStudent virker ikke").build();
+            //Den her response giver ikke nogen mening??
+
+            Log.writeLog(getClass().getName(), this, "User couldn't be registered", 2);
+
+            return Response
+                    .status(400)
+                    .entity("første try i createStudent virker ikke")
+                    .build();
         }
 
         try {
@@ -36,14 +47,29 @@ public class RegisterEndpoint {
         } catch (IllegalArgumentException ee) {
             System.out.print(ee.getMessage());
             //Bør måske ændres til at user ikke kunne verifies pga forkert info om fornavn, efternavn, kodeord eller email
-            return Response.status(400).entity("andet try i createStudent virker ikke").build();
+
+            Log.writeLog(getClass().getName(), this, "User couldn't be registered", 2);
+
+            return Response
+                    .status(400)
+                    .entity("andet try i createStudent virker ikke").build();
         }
         try {
             studentTable.addStudent(student);
         } catch (SQLException e) {
-            return Response.status(404).type("text/plain").entity("This user already exists, please log-in.").build();
-        }
 
-        return Response.status(200).entity("{message\":\"Success! Student created\"}").build();
+            Log.writeLog(getClass().getName(), this, "User already exists", 2);
+
+            return Response
+                    .status(404)
+                    .type("text/plain")
+                    .entity("This user already exists, please log-in.").build();
+        }
+        Log.writeLog(getClass().getName(), this, student + " registered", 0);
+
+        return Response
+                .status(200)
+                .entity("{message\":\"Success! Student created\"}")
+                .build();
     }
 }

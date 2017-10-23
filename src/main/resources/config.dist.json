@@ -3,6 +3,6 @@
   "dbPort": "",
   "dbName": "",
   "dbUser": "",
-  "dbPassword": ""
-
+  "dbPassword": "",
+  "encryption": ""
 }

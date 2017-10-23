@@ -12,11 +12,10 @@ import java.util.ArrayList;
 
 public class EventTable extends DBmanager {
 
-    public ArrayList<Event> getAllEvents() throws SQLException {
+    public ArrayList<Event> getAllEvents() {
         ArrayList<Event> allEvents = new ArrayList<>();
 
         ResultSet resultSet = null;
-
             try {
                 PreparedStatement getAllEventsStatement = getConnection().prepareStatement
                         ("SELECT * FROM dsevent");
@@ -71,9 +70,6 @@ public class EventTable extends DBmanager {
                     student.setFirstName(resultSet.getString("firstName"));
                     student.setLastName(resultSet.getString("lastName"));
                     student.setEmail(resultSet.getString("email"));
-
-                    attendingStudents.add(student);
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -88,11 +84,11 @@ public class EventTable extends DBmanager {
     public boolean joinEvent(int eventId, int studentId) throws IllegalArgumentException {
 
 
-            try {
-                //kalder metoden der tjekker om studenten allerede har tilmeldt sig det pågældende event
-                //Statement der sætter studentens id og eventets id sammen i en tabel
-                PreparedStatement joinEvent = getConnection().prepareStatement
-                        ("INSERT INTO students_has_dsevent (dsevent_idEvent, students_idStudent) VALUE (?, ?)");
+        try {
+            //kalder metoden der tjekker om studenten allerede har tilmeldt sig det pågældende event
+            //Statement der sætter studentens id og eventets id sammen i en tabel
+            PreparedStatement joinEvent = getConnection().prepareStatement
+                    ("INSERT INTO students_has_dsevent (dsevent_idEvent, students_idStudent) VALUE (?, ?)");
             joinEvent.setInt(1, eventId);
             joinEvent.setInt(2, studentId);
 
