@@ -2,6 +2,7 @@ package server.providers;
 
 import server.models.Event;
 import server.models.Student;
+import server.models.Token;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,25 +16,24 @@ public class EventTable extends DBmanager {
         ArrayList<Event> allEvents = new ArrayList<>();
 
         ResultSet resultSet = null;
+            try {
+                PreparedStatement getAllEventsStatement = getConnection().prepareStatement
+                        ("SELECT * FROM dsevent");
 
-        try {
-            PreparedStatement getAllEventsStatement = getConnection().prepareStatement
-                    ("SELECT * FROM dsevent");
+                resultSet = getAllEventsStatement.executeQuery();
 
-            resultSet = getAllEventsStatement.executeQuery();
-
-            while (resultSet.next()) {
-                Event event = new Event();
-                event.setIdEvent(resultSet.getInt("idEvent"));
-                event.setPrice(resultSet.getInt("price"));
-                event.setIdStudent(resultSet.getInt("owner"));
-                event.setEventName(resultSet.getString("eventName"));
-                event.setLocation(resultSet.getString("location"));
-                event.setDescription(resultSet.getString("description"));
-                event.setEventDate(resultSet.getString("eventDate"));
-                allEvents.add(event);
-            }
-            resultSet.close();
+                while (resultSet.next()) {
+                    Event event = new Event();
+                    event.setIdEvent(resultSet.getInt("idEvent"));
+                    event.setPrice(resultSet.getInt("price"));
+                    event.setOwner(resultSet.getInt("owner"));
+                    event.setEventName(resultSet.getString("eventName"));
+                    event.setLocation(resultSet.getString("location"));
+                    event.setDescription(resultSet.getString("description"));
+                    event.setEventDate(resultSet.getString("eventDate"));
+                    allEvents.add(event);
+                }
+                resultSet.close();
             getAllEventsStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -139,11 +139,12 @@ public class EventTable extends DBmanager {
 
         try {
             PreparedStatement createEventStatement = getConnection().prepareStatement("INSERT INTO dsevent (" +
-                    "eventName, idStudent, location, price, description, eventDate) VALUES (" +
+                    "eventName, owner, location, price, description, eventDate) VALUES (" +
                     "?, ?, ?, ?, ?, ?)");
 
             createEventStatement.setString(1, event.getEventName());
-            createEventStatement.setInt(2, event.getidStudent());
+            // mangler at idStudent kommer fra en token fra den student der er logget ind
+            createEventStatement.setInt(2, event.getOwner());
             createEventStatement.setString(3, event.getLocation());
             createEventStatement.setInt(4, event.getPrice());
             createEventStatement.setString(5, event.getDescription());
