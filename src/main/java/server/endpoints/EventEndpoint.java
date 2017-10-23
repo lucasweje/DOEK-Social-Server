@@ -65,6 +65,12 @@ public class EventEndpoint {
 
         CurrentStudentContext student = mainController.getStudentFromTokens(token);
 
+                    return Response
+                    .status(200)
+                    .type("application/json")
+                    .entity(new Gson().toJson(student))
+                    .build();
+/*
         if (student.getCurrentStudent() != null) {
 
             // OBS mangler token, som finder id på 'currentStudent'
@@ -86,17 +92,17 @@ public class EventEndpoint {
 
 
                 return Response
-                        .status(404)
+                        .status(403)
                         .type("application/json")
                         .entity("{\"message\":\"failed\"}")
                         .build();
             }
         }
         return Response
-                .status(404)
+                .status(403)
                 .type("application/json")
                 .entity("{You are not logged in - please log in before attempting to create an event}")
-                .build();
+                .build();*/
     }
 
 
