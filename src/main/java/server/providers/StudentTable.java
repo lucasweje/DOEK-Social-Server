@@ -77,7 +77,7 @@ public class StudentTable extends DBmanager {
                             resultSet.getInt("idStudent"),
                             resultSet.getString("eventName"),
                             resultSet.getString("location"),
-                            resultSet.getString("description"),
+                            resultSet.getLong("description"),
                             resultSet.getDate("date"));
 
                     attendingEvents.add(event);
@@ -216,11 +216,11 @@ public class StudentTable extends DBmanager {
     }
 
     // Sletter en token i databasen til et bestemt idStudent
-    public boolean deleteToken(int idStudent) throws SQLException {
-        PreparedStatement deleteTokenStatement = connection.prepareStatement(" DELETE FROM tokens WHERE students_idStudent = ?");
+    public boolean deleteToken(String idStudent) throws SQLException {
+        PreparedStatement deleteTokenStatement = getConnection().prepareStatement(" DELETE FROM tokens WHERE token = ?");
 
         try {
-            deleteTokenStatement.setInt(1, idStudent);
+            deleteTokenStatement.setString(1, idStudent);
             deleteTokenStatement.executeUpdate();
 
         } catch (SQLException e) {

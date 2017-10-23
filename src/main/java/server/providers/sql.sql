@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `stfu`.`students` (
 -- Table `mydb`.`tokens`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `stfu`.`tokens` (
-  `idtokens` INT(11) NOT NULL,
+  `idtokens` INT(11) NOT NULL AUTO_INCREMENT,
   `students_idStudent` INT(11) NOT NULL,
   `token` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`idtokens`, `students_idStudent`, `token`),
@@ -55,10 +55,10 @@ USE `stfu` ;
 CREATE TABLE IF NOT EXISTS `stfu`.`dsevent` (
   `idEvent` INT(11) NOT NULL AUTO_INCREMENT,
   `eventName` VARCHAR(100) NOT NULL,
-  `idStudent` VARCHAR(100) NOT NULL,
+  `idStudent` INT(11) NOT NULL,
   `location` VARCHAR(100) NOT NULL,
   `price` INT(11) NOT NULL,
-  `eventDate` DATE NOT NULL,
+  `eventDate` VARCHAR(100) NOT NULL,
   `description` LONGTEXT NOT NULL,
   PRIMARY KEY (`idEvent`),
   UNIQUE INDEX `idEvent_UNIQUE` (`idEvent` ASC))
