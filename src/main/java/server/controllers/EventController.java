@@ -30,7 +30,7 @@ public class EventController {
     //Controller klasse for event. Laver kald til databasen.
     //API forbindes med database.
 
-   EventTable eventTable = new EventTable();
+    EventTable eventTable = new EventTable();
 
     public ArrayList getAttendingStudents(String idEvent) throws IllegalAccessException {
         ArrayList attendingStudents = eventTable.getAttendingStudents(idEvent);
@@ -38,18 +38,16 @@ public class EventController {
     }
 
 
-    public boolean createEvent(Event eventData)  {
-
+    public boolean createEvent(Event eventData) throws SQLException {
         EventTable eventTable = new EventTable();
         boolean createEvent = eventTable.createEvent(eventData);
-
         return createEvent;
     }
 
 
     public ArrayList<Event> getAllEvents() {
-            EventTable allEvents = new EventTable();
-            return allEvents.getAllEvents();
+        EventTable allEvents = new EventTable();
+        return allEvents.getAllEvents();
 
     }
 
