@@ -23,7 +23,7 @@ public class TokenController {
 
     // Metode til ta slette en token (eventuelt ved log ud)
 
-    public boolean deleteToken(int token) throws SQLException{
+    public boolean deleteToken(String token) throws SQLException{
         StudentTable st = new StudentTable();
         boolean deleteToken = st.deleteToken(token);
         st.close();

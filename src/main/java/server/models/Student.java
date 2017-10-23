@@ -55,17 +55,18 @@ public class Student {
     }
 
 
-    public Token getToken(){
+    public Token getToken() {
         return token;
     }
-    public void setToken(Token token){
+
+    public void setToken(Token token) {
         this.token = token;
     }
 
-        public int getIdStudent() {
+    public int getIdStudent() {
 
-            return idStudent;
-        }
+        return idStudent;
+    }
 
     public void setIdStudent(int idStudent) {
         this.idStudent = idStudent;
