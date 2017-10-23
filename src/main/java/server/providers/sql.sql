@@ -55,11 +55,11 @@ USE `stfu` ;
 CREATE TABLE IF NOT EXISTS `stfu`.`dsevent` (
   `idEvent` INT(11) NOT NULL AUTO_INCREMENT,
   `eventName` VARCHAR(100) NOT NULL,
-  `idStudent` INT(11) NOT NULL,
+  `owner` INT(11) NOT NULL,
   `location` VARCHAR(100) NOT NULL,
   `price` INT(11) NOT NULL,
   `eventDate` VARCHAR(100) NOT NULL,
-  `description` LONGTEXT NOT NULL,
+  `description` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`idEvent`),
   UNIQUE INDEX `idEvent_UNIQUE` (`idEvent` ASC))
 ENGINE = InnoDB
