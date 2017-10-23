@@ -59,9 +59,9 @@ public class EventController {
         return deleteEvent;
     }
 
-    public boolean joinEvent(int idEvent, int idStudent) throws ResponseException {
+    public boolean joinEvent(int eventId, int studentId) throws ResponseException {
         EventTable joinEvent = new EventTable();
-        return joinEvent.joinEvent(idEvent, idStudent);
+        return joinEvent.joinEvent(eventId, studentId);
     }
 
     public boolean updateEvent(Event event) throws Exception {

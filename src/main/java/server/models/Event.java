@@ -6,11 +6,10 @@ import java.sql.Timestamp;
 public class Event {
 
     private int idEvent, price, idStudent;
-    private String eventName, location, description;
-    private Date eventDate;
+    private String eventName, location, eventDate;
+    private String description;
 
-    public Event(int idEvent, int price, int idStudent, String eventName, String location, String description, Date eventDate) {
-
+    public Event(int idEvent, int price, int idStudent, String eventName, String location, String description, String eventDate) {
         this.idEvent = idEvent;
         this.price = price;
         this.idStudent = idStudent;
@@ -18,6 +17,9 @@ public class Event {
         this.location = location;
         this.description = description;
         this.eventDate = eventDate;
+    }
+
+    public Event() {
     }
 
 
@@ -32,16 +34,15 @@ public class Event {
     public int getPrice() {
         return price;
     }
-
-    public void setPrice(Integer price) {
+      public void setPrice(int price) {
         this.price = price;
     }
 
     public int getidStudent() {
         return idStudent;
     }
-
-    public void setIdStudent() {
+  
+      public void setIdStudent(int idStudent) {
         this.idStudent = idStudent;
     }
 
@@ -61,20 +62,19 @@ public class Event {
         this.location = location;
     }
 
+    public String getEventDate() {
+        return eventDate;
+    }
+
+    public void setEventDate(String eventDate) {
+        this.eventDate = eventDate;
+    }
+
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-
-    public Date getEventDate() {
-        return eventDate;
-    }
-
-    public void setEventDate(Date eventDate) {
-        this.eventDate = eventDate;
     }
 }
