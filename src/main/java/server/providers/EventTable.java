@@ -112,7 +112,7 @@ public class EventTable extends DBmanager {
         try {
             updateEventStatement = getConnection().prepareStatement
                     ("UPDATE dsevent " +
-                            "SET eventName = ?, location = ?, price = ?, date = ?, description = ? " +
+                            "SET eventName = ?, location = ?, price = ?, eventDate = ?, description = ? " +
                             "WHERE idEvent = ?");
         } catch (SQLException e) {
             e.printStackTrace();

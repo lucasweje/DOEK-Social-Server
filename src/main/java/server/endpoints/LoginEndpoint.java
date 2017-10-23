@@ -45,7 +45,7 @@ public class LoginEndpoint {
 
             Log.writeLog(getClass().getName(), this, "Password hashed", 0);
 
-            return Response.status(200).entity(new Gson().toJson(token)).build();
+            return Response.status(200).entity(new Gson().toJson("You are now logged in! :)")).build();
         } else {
 
             Log.writeLog(getClass().getName(), this, "Password incorect", 2);
