@@ -27,26 +27,6 @@ public class StudentEndpoint {
     MainController mainController = new MainController();
     TokenController tokenController = new TokenController();
 
-
-    @GET
-    public Response getStudents() throws IllegalAccessException {
-
-        //TO DO: sql statement.
-        String json = new Gson().toJson(studentTable.getStudents());
-        String crypted = Crypter.encryptDecrypt(json);
-
-        Log.writeLog(getClass().getName(), this, "Get students", 0);
-
-        //Returnerer Gson til Json.
-        return Response
-                .status(200)
-                .type("application/json")
-                .entity(crypted) //skal ændres til connection med databasen når config filen er lavet.
-                .build();
-
-
-    }
-
     @GET
     @Path("{idStudentEvents}/events")
     public Response getAttendingEvents(@PathParam("idStudentEvents") String idStudent) {

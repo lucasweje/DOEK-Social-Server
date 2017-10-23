@@ -10,45 +10,6 @@ import java.util.ArrayList;
 
 public class StudentTable extends DBmanager {
 
-    Connection connection = null;
-
-    //Nulstiller connection. Maskineriet brokker sig hvis connection ikke er sat fra starten af.
-
-    //Metode til at hente alle students.
-
-    public ArrayList getStudents() throws IllegalAccessException {
-
-        //Opretter metodens attributter.
-        ArrayList studentList = new ArrayList();
-        ResultSet resultSet = null;
-
-        //henter alle students, der ikke er slettet.
-        try {
-            PreparedStatement getStudents = getConnection().prepareStatement("SELECT * FROM Students WHERE Deleted != 1");
-            resultSet = getStudents.executeQuery();
-
-            while (resultSet.next()) {
-                try {
-                    //Opretter ny instans af alle studenter. (Måden man henter oplysninger om alle studenter).
-                    Student students = new Student();
-                    students.setIdStudent(resultSet.getInt("idStudent"));
-                    students.setFirstName(resultSet.getString("firstName"));
-                    students.setLastName(resultSet.getString("lastName"));
-                    students.setEmail(resultSet.getString("email"));
-                    studentList.add(students);
-
-                } catch (Exception e) {
-
-                }
-            }
-        } catch (SQLException sqlException) {
-            System.out.println(sqlException.getMessage());
-        }
-
-        //Returnerere listen med studenter.
-        return studentList;
-    }
-
     public ArrayList getAttendingEvents(String idStudent) throws IllegalAccessException {
         Event event = null;
         ResultSet resultSet = null;
@@ -169,7 +130,7 @@ public class StudentTable extends DBmanager {
         Student studentFound = null;
 
         try {
-            PreparedStatement authorize = connection.prepareStatement("SELECT * FROM Students WHERE email = ? AND Password = ? AND Deleted = 0");
+            PreparedStatement authorize = getConnection().prepareStatement("SELECT * FROM Students WHERE email = ? AND Password = ? AND Deleted = 0");
             authorize.setString(1, email);
             // Skal spille sammen med hashing, ellers stemmer det ikke overens med oplysningene fra databasen
             authorize.setString(2, Authenticator.hashWithSalt(password, "foo"));
@@ -205,7 +166,7 @@ public class StudentTable extends DBmanager {
 
         PreparedStatement addTokenStatement;
         try {
-            addTokenStatement = connection.prepareStatement("INSERT INTO tokens (token, idStudent) VALUES (?,?)");
+            addTokenStatement = getConnection().prepareStatement("INSERT INTO tokens (token, idStudent) VALUES (?,?)");
             addTokenStatement.setString(1, token);
             addTokenStatement.setString(2, idStudent);
             addTokenStatement.executeUpdate();
@@ -222,12 +183,16 @@ public class StudentTable extends DBmanager {
 
         try {
             deleteTokenStatement.setString(1, idStudent);
-            deleteTokenStatement.executeUpdate();
+            int rowsAffected = deleteTokenStatement.executeUpdate();
+            if(rowsAffected == 1) {
+                return true;
+            }
+            return false;
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return true;
+        return false;
     }
 
 
