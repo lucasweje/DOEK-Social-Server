@@ -16,26 +16,23 @@ public class EventTable extends DBmanager {
 
         ResultSet resultSet = null;
 
-        try {
-            PreparedStatement getAllEventsStatement = getConnection().prepareStatement("SELECT * FROM dsevent");
+            try {
+                PreparedStatement getAllEventsStatement = getConnection().prepareStatement
+                        ("SELECT * FROM dsevent");
 
+                while (resultSet.next()) {
+                    Event event = new Event(
+                            resultSet.getInt("idEvent"),
+                            resultSet.getInt("price"),
+                            resultSet.getInt("idStudent"),
+                            resultSet.getString("eventName"),
+                            resultSet.getString("location"),
+                            resultSet.getString("description"),
+                            resultSet.getString("eventDate"));
+                    allEvents.add(event);
+                }
             resultSet = getAllEventsStatement.executeQuery();
-
-            while (resultSet.next()) {
-                Event event = new Event();
-
-                event.setIdEvent(resultSet.getInt("idEvent"));
-                event.setPrice(resultSet.getInt("price"));
-                event.setIdStudent(resultSet.getInt("idStudent"));
-                event.setEventName(resultSet.getString("eventName"));
-                event.setLocation(resultSet.getString("location"));
-                event.setDescription(resultSet.getLong("description"));
-                event.setEventDate(resultSet.getDate("eventDate"));
-                allEvents.add(event);
-            }
-
-            resultSet.close();
-
+                resultSet.close();
             getAllEventsStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -89,12 +86,11 @@ public class EventTable extends DBmanager {
     public boolean joinEvent(int eventId, int studentId) throws IllegalArgumentException {
 
 
-        try {
-            //kalder metoden der tjekker om studenten allerede har tilmeldt sig det pågældende event
-            //Statement der sætter studentens id og eventets id sammen i en tabel
-            PreparedStatement joinEvent = getConnection().prepareStatement
-                    ("INSERT INTO student_has_dsevent (dsevent_idEvent, students_idStudent) VALUE (?, ?)");
-
+            try {
+                //kalder metoden der tjekker om studenten allerede har tilmeldt sig det pågældende event
+                //Statement der sætter studentens id og eventets id sammen i en tabel
+                PreparedStatement joinEvent = getConnection().prepareStatement
+                        ("INSERT INTO students_has_dsevent (dsevent_idEvent, students_idStudent) VALUE (?, ?)");
             // OBS skal være en string men der er ikke ændret i model.Event endnu
             joinEvent.setInt(1, eventId);
             joinEvent.setInt(2, studentId);
@@ -129,8 +125,8 @@ public class EventTable extends DBmanager {
             updateEventStatement.setString(1, event.getEventName());
             updateEventStatement.setString(2, event.getLocation());
             updateEventStatement.setInt(3, event.getPrice());
-            updateEventStatement.setDate(4, event.getEventDate());
-            updateEventStatement.setLong(5, event.getDescription());
+            updateEventStatement.setString(4, event.getEventDate());
+            updateEventStatement.setString(5, event.getDescription());
             updateEventStatement.setInt(6, event.getIdEvent());
 
             updateEventStatement.executeUpdate();
@@ -149,13 +145,13 @@ public class EventTable extends DBmanager {
                     "eventName, idStudent, location, price, description, eventDate) VALUES (" +
                     "?, ?, ?, ?, ?, ?)");
 
-
             createEventStatement.setString(1, event.getEventName());
             createEventStatement.setInt(2, event.getidStudent());
             createEventStatement.setString(3, event.getLocation());
             createEventStatement.setInt(4, event.getPrice());
-            createEventStatement.setLong(5, event.getDescription());
-            createEventStatement.setDate(6, event.getEventDate());
+            createEventStatement.setString(5, event.getDescription());
+            createEventStatement.setString(6, event.getEventDate());
+
             int rowsAffected = createEventStatement.executeUpdate();
 
             if (rowsAffected != 1) {
