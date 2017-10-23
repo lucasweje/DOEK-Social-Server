@@ -85,13 +85,13 @@ public class EventEndpoint {
         }
     }
 
-    @DELETE
+    @PUT
     @Path("{idEvent}/delete-event")
-    public Response deleteEvent(String data) throws Exception {
+    public Response deleteEvent(@PathParam("idEvent") String eventId, String data) throws Exception {
 
-        EventController eventController = new EventController();
         Gson gson = new Gson();
         Event event = gson.fromJson(data, Event.class);
+        event.setIdEvent(Integer.parseInt(eventId));
 
         if (eventController.deleteEvent(event)) {
 
