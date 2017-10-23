@@ -86,10 +86,10 @@ public class StudentEndpoint {
     public Response logout (String idStudent) throws SQLException {
         int idStudentGson = new Gson().fromJson(idStudent, Integer.class);
 
-        if(studentTable.deleteToken(idStudentGson)) {
+        if(tokenController.deleteToken(idStudentGson)) {
             return Response.status(200).entity("You are now logged out").build();
         } else {
-            return Response.status(500).entity("There was an error").build();
+            return Response.status(404).entity("There was an error").build();
         }
     }
 

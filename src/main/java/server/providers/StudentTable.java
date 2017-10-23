@@ -217,7 +217,7 @@ public class StudentTable extends DBmanager {
 
     // Sletter en token i databasen til et bestemt idStudent
     public boolean deleteToken(int idStudent) throws SQLException {
-        PreparedStatement deleteTokenStatement = connection.prepareStatement(" DELETE FROM tokens WHERE token = ?");
+        PreparedStatement deleteTokenStatement = connection.prepareStatement(" DELETE FROM tokens WHERE students_idStudent = ?");
 
         try {
             deleteTokenStatement.setInt(1, idStudent);
@@ -233,7 +233,7 @@ public class StudentTable extends DBmanager {
     public void addToken(String token, int idStudent) throws SQLException {
         PreparedStatement addTokenStatement;
         try {
-            addTokenStatement = getConnection().prepareStatement("INSERT INTO tokens (token, students_IdStudent) VALUES (?,?)");
+            addTokenStatement = getConnection().prepareStatement("INSERT INTO tokens (token, students_idStudent) VALUES (? , ?)");
             addTokenStatement.setString(1, token);
             addTokenStatement.setInt(2, idStudent);
             addTokenStatement.executeUpdate();
