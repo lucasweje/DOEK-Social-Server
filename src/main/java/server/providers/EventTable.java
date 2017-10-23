@@ -70,9 +70,6 @@ public class EventTable extends DBmanager {
                     student.setFirstName(resultSet.getString("firstName"));
                     student.setLastName(resultSet.getString("lastName"));
                     student.setEmail(resultSet.getString("email"));
-
-                    attendingStudents.add(student);
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
