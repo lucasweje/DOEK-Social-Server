@@ -71,7 +71,7 @@ public class EventEndpoint {
             Event event = new Gson().fromJson(eventData, Event.class);
 
             EventController eventController = new EventController();
-            if (eventController.createEvent(event)) {
+            if (eventController.createEvent(event, student)) {
 
                 Log.writeLog(getClass().getName(), this, event.getEventName() + " created", 0);
 

@@ -4,7 +4,7 @@ import org.apache.ibatis.jdbc.Null;
 import server.models.Student;
 
 //Kan lagre current students i server RAM'et.
-public class CurrentStudentContext {
+public class CurrentStudentContext extends Student {
 
     private Student currentStudent;
 
