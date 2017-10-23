@@ -32,12 +32,11 @@ public class StudentEndpoint {
 
 
     @GET
-    public Response getStudents() {
+    public Response getStudents() throws IllegalAccessException {
 
         //TO DO: sql statement.
-        String json = new Gson().toJson(new String[]{"student1", "student2"});
+        String json = new Gson().toJson(studentTable.getStudents());
         String crypted = Crypter.encryptDecrypt(json);
-
 
         //Returnerer Gson til Json.
         return Response
@@ -84,12 +83,12 @@ public class StudentEndpoint {
 
     @POST
     @Path("/logout")
-    public Response logout (String idStudent) throws SQLException {
-        String id = new Gson().fromJson(idStudent, String.class);
-
-        boolean isLoggedOut = studentTable.deleteToken(id);
-
-        return Response.status(200).entity(isLoggedOut).build();
+    public Response logout(@HeaderParam("Authorization") String idStudent) throws SQLException {
+        if(tokenController.deleteToken(idStudent)) {
+            return Response.status(200).entity("You are now logged out").build();
+        } else {
+            return Response.status(404).entity("There was an error").build();
+        }
     }
 
     @GET

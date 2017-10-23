@@ -10,7 +10,6 @@ public class Event {
     private String description;
 
     public Event(int idEvent, int price, int idStudent, String eventName, String location, String description, String eventDate) {
-
         this.idEvent = idEvent;
         this.price = price;
         this.idStudent = idStudent;
@@ -18,6 +17,9 @@ public class Event {
         this.location = location;
         this.description = description;
         this.eventDate = eventDate;
+    }
+
+    public Event() {
     }
 
 
@@ -32,16 +34,15 @@ public class Event {
     public int getPrice() {
         return price;
     }
-
-    public void setPrice(Integer price) {
+      public void setPrice(int price) {
         this.price = price;
     }
 
     public int getidStudent() {
         return idStudent;
     }
-
-    public void setIdStudent() {
+  
+      public void setIdStudent(int idStudent) {
         this.idStudent = idStudent;
     }
 
@@ -59,18 +60,6 @@ public class Event {
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public int getIdStudent() {
-        return idStudent;
-    }
-
-    public void setIdStudent(int idStudent) {
-        this.idStudent = idStudent;
     }
 
     public String getEventDate() {

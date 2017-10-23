@@ -27,7 +27,10 @@ public class TokenController {
         StudentTable st = new StudentTable();
         boolean deleteToken = st.deleteToken(token);
         st.close();
-        return true;
+        if(deleteToken) {
+            return true;
+        }
+        return false;
     }
 
 
