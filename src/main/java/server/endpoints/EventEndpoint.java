@@ -11,6 +11,7 @@ import server.models.Student;
 import server.models.StudentHasEvent;
 import server.providers.EventTable;
 import server.resources.Log;
+import server.utility.Crypter;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -117,6 +118,10 @@ public class EventEndpoint {
 
         EventController eventController = new EventController();
 
+        String json = new Gson().toJson(eventController.getAllEvents());
+
+        String crypted = Crypter.encryptDecrypt(json);
+
 
         //kald en metode der henter alle ?brugere? fra databasen (gemmer dem i en ArrayList??)
         try {
@@ -126,9 +131,9 @@ public class EventEndpoint {
             return Response
                     .status(200)
                     .type("application/json")
-                    .entity(new Gson().toJson(eventController.getAllEvents()))
+                    .entity(crypted)
                     .build();
-        } catch (SQLException e) {
+        } catch (Exception e) {
 
             ErrorMessage message = new ErrorMessage();
             message.setStatus(500);

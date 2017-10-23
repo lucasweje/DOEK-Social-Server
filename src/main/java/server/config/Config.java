@@ -11,6 +11,7 @@ public final class Config {
     private static String dbName;
     private static String dbUser;
     private static String dbPassword;
+    private static boolean encryption;
 
     public void initConfig() throws IOException {
 
@@ -33,6 +34,8 @@ public final class Config {
         JsonParser parser = new JsonParser();
 
         json = (JsonObject) parser.parse(stringBuffer.toString());
+
+
 
         setDbUrl(json.get("dbUrl").toString().replace("\"", ""));
         setDbPort(Integer.parseInt(json.get("dbPort").toString().replace("\"", "")));
@@ -80,5 +83,9 @@ public final class Config {
     public static void setDbPassword(String dbPassword) {
         Config.dbPassword = dbPassword;
     }
+
+    public static boolean getEncryption () { return encryption;}
+
+    public static void setEncryption (boolean encryption) {Config.encryption = encryption;}
 
 }

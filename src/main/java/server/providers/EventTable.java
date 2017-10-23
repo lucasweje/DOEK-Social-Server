@@ -11,29 +11,29 @@ import java.util.ArrayList;
 
 public class EventTable extends DBmanager {
 
-    public ArrayList<Event> getAllEvents() throws SQLException {
+    public ArrayList<Event> getAllEvents() {
         ArrayList<Event> allEvents = new ArrayList<>();
 
         ResultSet resultSet = null;
 
-            try {
-                PreparedStatement getAllEventsStatement = getConnection().prepareStatement
-                        ("SELECT * FROM dsevent");
+        try {
+            PreparedStatement getAllEventsStatement = getConnection().prepareStatement
+                    ("SELECT * FROM dsevent");
 
-                resultSet = getAllEventsStatement.executeQuery();
+            resultSet = getAllEventsStatement.executeQuery();
 
-                while (resultSet.next()) {
-                    Event event = new Event();
-                    event.setIdEvent(resultSet.getInt("idEvent"));
-                    event.setPrice(resultSet.getInt("price"));
-                    event.setIdStudent(resultSet.getInt("owner"));
-                    event.setEventName(resultSet.getString("eventName"));
-                    event.setLocation(resultSet.getString("location"));
-                    event.setDescription(resultSet.getString("description"));
-                    event.setEventDate(resultSet.getString("eventDate"));
-                    allEvents.add(event);
-                }
-                resultSet.close();
+            while (resultSet.next()) {
+                Event event = new Event();
+                event.setIdEvent(resultSet.getInt("idEvent"));
+                event.setPrice(resultSet.getInt("price"));
+                event.setIdStudent(resultSet.getInt("owner"));
+                event.setEventName(resultSet.getString("eventName"));
+                event.setLocation(resultSet.getString("location"));
+                event.setDescription(resultSet.getString("description"));
+                event.setEventDate(resultSet.getString("eventDate"));
+                allEvents.add(event);
+            }
+            resultSet.close();
             getAllEventsStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -84,11 +84,11 @@ public class EventTable extends DBmanager {
     public boolean joinEvent(int eventId, int studentId) throws IllegalArgumentException {
 
 
-            try {
-                //kalder metoden der tjekker om studenten allerede har tilmeldt sig det pågældende event
-                //Statement der sætter studentens id og eventets id sammen i en tabel
-                PreparedStatement joinEvent = getConnection().prepareStatement
-                        ("INSERT INTO students_has_dsevent (dsevent_idEvent, students_idStudent) VALUE (?, ?)");
+        try {
+            //kalder metoden der tjekker om studenten allerede har tilmeldt sig det pågældende event
+            //Statement der sætter studentens id og eventets id sammen i en tabel
+            PreparedStatement joinEvent = getConnection().prepareStatement
+                    ("INSERT INTO students_has_dsevent (dsevent_idEvent, students_idStudent) VALUE (?, ?)");
             joinEvent.setInt(1, eventId);
             joinEvent.setInt(2, studentId);
 
