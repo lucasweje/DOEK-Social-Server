@@ -156,6 +156,9 @@ public class EventEndpoint {
         EventTable eventTable = new EventTable();
         ArrayList<Student> foundAttendingStudents = null;
 
+        String json = new Gson().toJson(eventController);
+        String crypted = Crypter.encryptDecrypt(json);
+
         if (idEvent.isEmpty()) {
 
             Log.writeLog(getClass().getName(), this, "Attending students not found", 2);
