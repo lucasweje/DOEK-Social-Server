@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class EventTable extends DBmanager {
 
-        public ArrayList<Event> getAllEvents() throws SQLException {
+        public ArrayList<Event> getAllEvents() {
             ArrayList<Event> allEvents = new ArrayList<>();
 
             ResultSet resultSet = null;

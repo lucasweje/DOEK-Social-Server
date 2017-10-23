@@ -5,6 +5,7 @@ import server.controllers.StudentController;
 import server.models.Student;
 import server.providers.StudentTable;
 import server.resources.Log;
+import server.utility.Crypter;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -18,6 +19,8 @@ public class RegisterEndpoint {
 
     StudentController studentController = new StudentController();
     StudentTable studentTable = new StudentTable();
+
+
 
     @POST
     @Produces("Application/json")
@@ -63,6 +66,7 @@ public class RegisterEndpoint {
                     .entity("This user already exists, please log-in.").build();
         }
         Log.writeLog(getClass().getName(), this, student + " registered", 0);
+
         return Response
                 .status(200)
                 .entity("{message\":\"Success! Student created\"}")
