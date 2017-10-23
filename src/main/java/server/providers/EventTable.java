@@ -25,7 +25,7 @@ public class EventTable extends DBmanager {
                             resultSet.getInt("idStudent"),
                             resultSet.getString("eventName"),
                             resultSet.getString("location"),
-                            resultSet.getString("description"),
+                            resultSet.getLong("description"),
                             resultSet.getDate("eventDate"));
                     allEvents.add(event);
                 }
@@ -89,7 +89,7 @@ public class EventTable extends DBmanager {
                 //kalder metoden der tjekker om studenten allerede har tilmeldt sig det pågældende event
                 //Statement der sætter studentens id og eventets id sammen i en tabel
                 PreparedStatement joinEvent = getConnection().prepareStatement
-                        ("INSERT INTO student_has_dsevent (dsevent_idEvent, students_idStudent) VALUE (?, ?)");
+                        ("INSERT INTO students_has_dsevent (dsevent_idEvent, students_idStudent) VALUE (?, ?)");
 
                 // OBS skal være en string men der er ikke ændret i model.Event endnu
                 joinEvent.setInt(1, eventId);
@@ -126,7 +126,7 @@ public class EventTable extends DBmanager {
             updateEventStatement.setString(2, event.getLocation());
             updateEventStatement.setInt(3, event.getPrice());
             updateEventStatement.setDate(4, event.getEventDate());
-            updateEventStatement.setString(5, event.getDescription());
+            updateEventStatement.setLong(5, event.getDescription());
             updateEventStatement.setInt(6, event.getIdEvent());
 
             updateEventStatement.executeUpdate();
@@ -150,7 +150,7 @@ public class EventTable extends DBmanager {
             createEventStatement.setInt(2, event.getidStudent());
             createEventStatement.setString(3, event.getLocation());
             createEventStatement.setInt(4, event.getPrice());
-            createEventStatement.setString(5, event.getDescription());
+            createEventStatement.setLong(5, event.getDescription());
             createEventStatement.setDate(6, event.getEventDate());
             int rowsAffected = createEventStatement.executeUpdate();
 

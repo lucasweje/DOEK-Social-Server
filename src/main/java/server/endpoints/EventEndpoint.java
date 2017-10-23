@@ -3,7 +3,6 @@ package server.endpoints;
 import javax.ws.rs.Path;
 
 import com.google.gson.Gson;
-import com.sun.org.apache.regexp.internal.RE;
 import server.controllers.EventController;
 import server.exceptions.ErrorMessage;
 import server.exceptions.ResponseException;
@@ -14,9 +13,7 @@ import server.providers.EventTable;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
-import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 
 @Path("/events")
@@ -51,7 +48,6 @@ public class EventEndpoint {
     public Response createEvent(String eventData) throws SQLException {
 
         // OBS mangler token, som finder id på 'currentStudent'
-
         Event event = new Gson().fromJson(eventData, Event.class);
 
         EventController eventController = new EventController();
@@ -160,7 +156,7 @@ public class EventEndpoint {
         StudentHasEvent studentHasEvent = new Gson().fromJson(eventJson, StudentHasEvent.class);
 
         try {
-            eventController.joinEvent(studentHasEvent.getEvent_idEvent(), studentHasEvent.getStudent_idStudent());
+            eventController.joinEvent(studentHasEvent.getIdEvent(), studentHasEvent.getStudent_idStudent());
             return Response
                     .status(200)
                     .type("application/json")
