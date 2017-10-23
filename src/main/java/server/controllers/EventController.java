@@ -53,13 +53,13 @@ public class EventController {
 
     }
 
-    public boolean deleteEvent(Event event) {
+    public boolean deleteEvent(Event event) throws Exception {
         EventTable db = new EventTable();
         boolean deleteEvent = db.deleteEvent(event);
         return deleteEvent;
     }
 
-    public boolean joinEvent(int eventId, int studentId) {
+    public boolean joinEvent(int eventId, int studentId) throws ResponseException {
         EventTable joinEvent = new EventTable();
         return joinEvent.joinEvent(eventId, studentId);
     }
