@@ -63,7 +63,7 @@ public class StudentTable extends DBmanager {
                             "ON she.students_idStudent = s.idStudent " +
                             "INNER JOIN dsevent e " +
                             "ON she.dsevent_idEvent = e.idEvent " +
-                            "WHERE e.idEvent = ?");
+                            "WHERE e.idStudent = ?");
 
             getAttendingEvents.setString(1, idStudent);
             resultSet = getAttendingEvents.executeQuery();
@@ -204,8 +204,7 @@ public class StudentTable extends DBmanager {
 
         PreparedStatement addTokenStatement;
         try {
-            //HUSK AT TILFØJE EN TABEL DER HEDDER TOKENS I DATABASEN
-            addTokenStatement = connection.prepareStatement("INSERT INTO Tokens (token, idStudent) VALUES (?,?)");
+            addTokenStatement = connection.prepareStatement("INSERT INTO tokens (token, idStudent) VALUES (?,?)");
             addTokenStatement.setString(1, token);
             addTokenStatement.setString(2, idStudent);
             addTokenStatement.executeUpdate();
@@ -217,12 +216,11 @@ public class StudentTable extends DBmanager {
     }
 
     // Sletter en token i databasen til et bestemt idStudent
-
-    public boolean deleteToken(String token) throws SQLException {
-        PreparedStatement deleteTokenStatement = connection.prepareStatement(" DELETE FROM Tokens WHERE token= ?");
+    public boolean deleteToken(int idStudent) throws SQLException {
+        PreparedStatement deleteTokenStatement = connection.prepareStatement(" DELETE FROM tokens WHERE students_idStudent = ?");
 
         try {
-            deleteTokenStatement.setString(1, token);
+            deleteTokenStatement.setInt(1, idStudent);
             deleteTokenStatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -235,7 +233,7 @@ public class StudentTable extends DBmanager {
     public void addToken(String token, int idStudent) throws SQLException {
         PreparedStatement addTokenStatement;
         try {
-            addTokenStatement = getConnection().prepareStatement("INSERT INTO tokens (token, students_IdStudent) VALUES (?,?)");
+            addTokenStatement = getConnection().prepareStatement("INSERT INTO tokens (token, students_idStudent) VALUES (? , ?)");
             addTokenStatement.setString(1, token);
             addTokenStatement.setInt(2, idStudent);
             addTokenStatement.executeUpdate();

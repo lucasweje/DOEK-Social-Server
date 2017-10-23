@@ -55,7 +55,7 @@ public class EventTable extends DBmanager {
                                 "ON she.dsevent_idEvent = e.idEvent " +
                                 "INNER JOIN students s " +
                                 "ON she.students_idStudent = s.idStudent " +
-                                "WHERE e.idEvent = ?");
+                                "WHERE e.idStudent = ?");
 
                 getAttendingStudents.setString(1, idEvent);
                 resultSet = getAttendingStudents.executeQuery();
