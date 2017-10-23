@@ -16,24 +16,24 @@ public class EventTable extends DBmanager {
         ArrayList<Event> allEvents = new ArrayList<>();
 
         ResultSet resultSet = null;
-            try {
-                PreparedStatement getAllEventsStatement = getConnection().prepareStatement
-                        ("SELECT * FROM dsevent");
+        try {
+            PreparedStatement getAllEventsStatement = getConnection().prepareStatement
+                    ("SELECT * FROM dsevent");
 
-                resultSet = getAllEventsStatement.executeQuery();
+            resultSet = getAllEventsStatement.executeQuery();
 
-                while (resultSet.next()) {
-                    Event event = new Event();
-                    event.setIdEvent(resultSet.getInt("idEvent"));
-                    event.setPrice(resultSet.getInt("price"));
-                    event.setOwner(resultSet.getInt("owner"));
-                    event.setEventName(resultSet.getString("eventName"));
-                    event.setLocation(resultSet.getString("location"));
-                    event.setDescription(resultSet.getString("description"));
-                    event.setEventDate(resultSet.getString("eventDate"));
-                    allEvents.add(event);
-                }
-                resultSet.close();
+            while (resultSet.next()) {
+                Event event = new Event();
+                event.setIdEvent(resultSet.getInt("idEvent"));
+                event.setPrice(resultSet.getInt("price"));
+                event.setOwner(resultSet.getInt("owner"));
+                event.setEventName(resultSet.getString("eventName"));
+                event.setLocation(resultSet.getString("location"));
+                event.setDescription(resultSet.getString("description"));
+                event.setEventDate(resultSet.getString("eventDate"));
+                allEvents.add(event);
+            }
+            resultSet.close();
             getAllEventsStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -135,10 +135,9 @@ public class EventTable extends DBmanager {
     }
 
 
-    public boolean createEvent(Event event) {
+    public boolean createEvent(Event event) throws SQLException {
 
-        try {
-            PreparedStatement createEventStatement = getConnection().prepareStatement("INSERT INTO dsevent (" +
+        PreparedStatement createEventStatement = getConnection().prepareStatement("INSERT INTO dsevent (" +
                     "eventName, owner, location, price, description, eventDate) VALUES (" +
                     "?, ?, ?, ?, ?, ?)");
 
@@ -155,24 +154,17 @@ public class EventTable extends DBmanager {
             if (rowsAffected != 1) {
                 return false;
             }
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-        }
         return true;
     }
 
-    public boolean deleteEvent(Event event) {
+    public boolean deleteEvent(Event event) throws SQLException {
 
         PreparedStatement deleteEventStatement = null;
-        try {
-            deleteEventStatement = getConnection().prepareStatement
-                    ("UPDATE dsevent " +
-                            "SET isDeleted = 1 " +
-                            "WHERE idEvent = ?;");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        deleteEventStatement = getConnection().prepareStatement
+                ("UPDATE dsevent " +
+                        "SET isDeleted = 1 " +
+                        "WHERE idEvent = ?;");
+
         try {
             deleteEventStatement.setInt(1, event.getIdEvent());
             try {

@@ -26,7 +26,7 @@ public class EventEndpoint {
 
     //Skal bruges til at opdatere events (her bruges PUT)
     @PUT
-    @Path("{idEvent}/updateEvents")
+    @Path("{idEvent}/update-event")
     public Response updateEvent(@PathParam("idEvent") String eventId, String data) throws Exception {
 
         Gson gson = new Gson();
@@ -86,7 +86,7 @@ public class EventEndpoint {
     }
 
     @DELETE
-    @Path("{idEvent}/studentEvents")
+    @Path("{idEvent}/delete-event")
     public Response deleteEvent(String data) throws Exception {
 
         EventController eventController = new EventController();
