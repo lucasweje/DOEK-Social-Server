@@ -38,7 +38,9 @@ public class EventController {
     }
 
 
+
     public boolean createEvent(Event eventData) throws SQLException {
+
         EventTable eventTable = new EventTable();
         boolean createEvent = eventTable.createEvent(eventData);
         return createEvent;
