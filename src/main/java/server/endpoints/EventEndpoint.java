@@ -42,7 +42,7 @@ public class EventEndpoint {
 
         } else
             return Response
-                    .status(400)
+                    .status(404)
                     .entity("{\"Message\":\"Failed. No such event!\"}")
                     .build();
     }
@@ -63,7 +63,7 @@ public class EventEndpoint {
                     .build();
         } else {
             return Response
-                    .status(400)
+                    .status(404)
                     .type("application/json")
                     .entity("{\"message\":\"failed\"}")
                     .build();

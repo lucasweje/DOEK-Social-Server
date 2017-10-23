@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `stfu`.`dsevent` (
   `idStudent` INT(11) NOT NULL,
   `location` VARCHAR(100) NOT NULL,
   `price` INT(11) NOT NULL,
-  `eventDate` DATE NOT NULL,
+  `eventDate` VARCHAR(100) NOT NULL,
   `description` LONGTEXT NOT NULL,
   PRIMARY KEY (`idEvent`),
   UNIQUE INDEX `idEvent_UNIQUE` (`idEvent` ASC))
