@@ -16,17 +16,17 @@ public final class Config {
 
         JsonObject json = new JsonObject();
 
-        //Filen hentes i Inputstream
-        //config.java åbnes for at kunne læses
-        //Bufferedreader læser streamen igennem
+        //File is loaded into Inputstream
+        //config.java is opended and read
+        //Bufferedreader reads through the stream
         InputStream input = this.getClass().getClassLoader().getResourceAsStream("/config.json");
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 
-        //Stringbuffer bruges til at samle hele filen i en streng
+        //Stringbuffer is being used to merge the whole file into one String
         StringBuffer stringBuffer = new StringBuffer();
         String str = "";
 
-        //Filen læses en linje ad gangen og indlæses i stringbuffer
+        //The file is being read one line at the time and is loaded into the Stringbuffer
         while((str = reader.readLine()) != null){
             stringBuffer.append(str);
         }
