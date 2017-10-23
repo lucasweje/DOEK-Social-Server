@@ -37,7 +37,6 @@ public class StudentEndpoint {
 
         Log.writeLog(getClass().getName(), this, "Get students", 0);
 
-
         //Returnerer Gson til Json.
         return Response
                 .status(200)
@@ -92,15 +91,13 @@ public class StudentEndpoint {
 
     @POST
     @Path("/logout")
-    public Response logout(String idStudent) throws SQLException {
-        String id = new Gson().fromJson(idStudent, String.class);
-
-        boolean isLoggedOut = studentTable.deleteToken(id);
-
-        Log.writeLog(getClass().getName(), this, "User logged out", 0);
-
-
-        return Response.status(200).entity(isLoggedOut).build();
+    public Response logout(@HeaderParam("Authorization") String idStudent) throws SQLException {
+        if(tokenController.deleteToken(idStudent)) {
+            Log.writeLog(getClass().getName(), this, "User logged out", 0);
+            return Response.status(200).entity("You are now logged out").build();
+        } else {
+            return Response.status(404).entity("There was an error").build();
+        }
     }
 
     @GET
