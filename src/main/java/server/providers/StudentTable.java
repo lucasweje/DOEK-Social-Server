@@ -15,7 +15,7 @@ public class StudentTable extends DBmanager {
         ResultSet resultSet = null;
         ArrayList attendingEvents = new ArrayList();
 
-        //henter alle studenter der deltager på det valgte event.
+        //henter alle events en studerende deltager på.
         try {
             PreparedStatement getAttendingEvents = getConnection().prepareStatement
                     ("SELECT she.*, s.*, e.* " +
@@ -24,7 +24,7 @@ public class StudentTable extends DBmanager {
                             "ON she.students_idStudent = s.idStudent " +
                             "INNER JOIN dsevent e " +
                             "ON she.dsevent_idEvent = e.idEvent " +
-                            "WHERE e.idStudent = ?");
+                            "WHERE s.idStudent = ?");
 
             getAttendingEvents.setString(1, idStudent);
             resultSet = getAttendingEvents.executeQuery();
@@ -32,18 +32,16 @@ public class StudentTable extends DBmanager {
             while (resultSet.next()) {
                 try {
                     //Opretter ny instans af de studenter der er i ArrayListen. (Måden man henter oplysninger).
-                    event = new Event(
-                            resultSet.getInt("idEvent"),
-                            resultSet.getInt("price"),
-                            resultSet.getInt("idStudent"),
-                            resultSet.getString("eventName"),
-                            resultSet.getString("location"),
-                            resultSet.getString("description"),
-                            resultSet.getString("date"));
-
+                    event = new Event();
+                    event.setIdEvent(resultSet.getInt("idEvent"));
+                    event.setEventDate(resultSet.getString("eventName"));
+                    event.setOwner(resultSet.getInt("owner"));
+                    event.setLocation(resultSet.getString("location"));
+                    event.setPrice(resultSet.getInt("price"));
+                    event.setEventDate(resultSet.getString("eventDate"));
+                    event.setDescription(resultSet.getString("description"));
 
                     attendingEvents.add(event);
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -51,11 +49,9 @@ public class StudentTable extends DBmanager {
         } catch (SQLException sqlException) {
             System.out.println(sqlException.getMessage());
         }
-
         //Returnerer attendingStudents med oplysninger.
         return attendingEvents;
     }
-
 
     public boolean addStudent(Student student) throws SQLException {
         // Denne metode er taget fra henrik (Slack)

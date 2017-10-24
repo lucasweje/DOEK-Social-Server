@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import server.controllers.MainController;
 import server.controllers.StudentController;
 import server.controllers.TokenController;
+import server.models.Event;
 import server.models.Student;
 import server.providers.StudentTable;
 import server.resources.Log;
@@ -28,44 +29,39 @@ public class StudentEndpoint {
     TokenController tokenController = new TokenController();
 
     @GET
-    @Path("{idEvents}/events")
-    public Response getAttendingEvents(@PathParam("idEvents") String idStudent) {
+    @Path("{idStudent}/events")
+    public Response getAttendingEvents(@PathParam("idStudent") String idStudent) throws SQLException, IllegalAccessException {
 
         StudentTable studentTable = new StudentTable();
-        ArrayList foundAttendingEvents = null;
-
+        ArrayList<Event> foundAttendingEvents = null;
 
         if (idStudent.isEmpty()) {
-            Log.writeLog(getClass().getName(), this, "Missing student ID", 2);
+
+            Log.writeLog(getClass().getName(), this, "Student not found", 2);
 
             return Response
                     .status(400)
                     .entity("{\"Missing Student ID\":\"true\"}")
                     .build();
         } else {
-            try {
-                foundAttendingEvents = studentTable.getAttendingEvents(idStudent);
-
-                Log.writeLog(getClass().getName(), this, "Get attending events", 0);
-
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-
-            // If student not found:
-            if (!true) {
-                Log.writeLog(getClass().getName(), this, "Student not found therefore no attending events", 2);
-
+            foundAttendingEvents = studentTable.getAttendingEvents(idStudent);
+            // if event not found
+            if (foundAttendingEvents.isEmpty()) {
+                Log.writeLog(getClass().getName(), this, "Student has no attending events", 2);
                 return Response
                         .status(400)
-                        .entity("{\"Student not found\":\"true\"}")
+                        .entity("{no attending events}")
+                        .build();
+            } else {
+                String json = new Gson().toJson(foundAttendingEvents);
+                String crypted = Crypter.encryptDecrypt(json);
+                Log.writeLog(getClass().getName(), this, "Attending events fetched", 0);
+                return Response
+                        .status(200)
+                        .type("application/json)")
+                        .entity(crypted)
                         .build();
             }
-            return Response
-                    .status(200)
-                    .type("application/json")
-                    .entity(new Gson().toJson(foundAttendingEvents))
-                    .build();
         }
     }
 

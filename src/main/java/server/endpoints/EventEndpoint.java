@@ -175,8 +175,8 @@ public class EventEndpoint {
     }
 
     @GET
-    @Path("{idStudents}/students")
-    public Response getAttendingStudents(@PathParam("idStudents") String idEvent) throws SQLException, IllegalAccessException {
+    @Path("{idEvent}/students")
+    public Response getAttendingStudents(@PathParam("idEvent") String idEvent) throws SQLException, IllegalAccessException {
 
         EventTable eventTable = new EventTable();
         ArrayList<Student> foundAttendingStudents = null;
