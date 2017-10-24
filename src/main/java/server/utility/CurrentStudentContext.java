@@ -11,7 +11,7 @@ public class CurrentStudentContext extends Student {
         return currentStudent;
     }
 
-    public void setCurrentStudent(Student currentStudent){
+    public void setCurrentStudent(Student currentStudent) {
         this.currentStudent = currentStudent;
     }
 }
