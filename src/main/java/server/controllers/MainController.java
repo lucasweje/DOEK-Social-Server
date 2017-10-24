@@ -7,24 +7,23 @@ import server.providers.StudentTable;
 import server.utility.CurrentStudentContext;
 
 import java.io.UnsupportedEncodingException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 
 public class MainController {
 
-    private static Connection connection = null;
     StudentTable studentTable = new StudentTable();
 
     public String setToken(Student student) {
         String token = null;
         try {
-            Algorithm algorithm = Algorithm.HMAC512("indsaet string");
+            Algorithm algorithm = Algorithm.HMAC512("harpoonsurvival");
             long timeValue = (System.currentTimeMillis() * 1000) + 2000125124L;
             Date expDate = new Date(timeValue);
 
             token = JWT.create().withClaim("User", student.getEmail()).withExpiresAt(expDate).withIssuer("STFU").sign(algorithm);
             studentTable.addToken(token, student.getIdStudent());
+            studentTable.close();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -41,6 +40,7 @@ public class MainController {
         Student student = studentTable.getStudentFromToken(token);
         CurrentStudentContext context = new CurrentStudentContext();
         context.setCurrentStudent(student);
+        studentTable.close();
         return context;
     }
 }

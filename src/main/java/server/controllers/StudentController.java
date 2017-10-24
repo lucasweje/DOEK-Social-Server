@@ -1,9 +1,6 @@
 package server.controllers;
 
-import com.google.gson.Gson;
-import server.models.Event;
 import server.models.Student;
-import server.providers.DBmanager;
 import server.providers.StudentTable;
 
 import java.util.ArrayList;
@@ -22,30 +19,18 @@ public class StudentController {
 
     StudentTable studentTable = new StudentTable();
 
-    public ArrayList getAttendingEvents(String idStudent) throws IllegalAccessException {
+    public ArrayList getAttendingEvents(int idStudent) throws IllegalAccessException {
         ArrayList attendingEvents = studentTable.getAttendingEvents(idStudent);
+        studentTable.close();
         return attendingEvents;
     }
-
-      /*  public ArrayList<Student> getStudents() {
-            DBmanager db = new DBmanager();
-            ArrayList<Student> students = db.getStudents();
-            return students;
-        }
-*/
-    /*
-        public Student getStudents(int id) {
-            DBmanager db = new DBmanager();
-            Student student = db.getStudents(id);
-            return students;
-        }*/
 
 //Denne metode bruges til at verificere en student, når brugeren skal oprette sig i døk social.
 
     public Student verifyStudentCreation(String firstName, String lastName, String password, String email) throws IllegalArgumentException {
         Student verifiedStudent = new Student(firstName, lastName, password, email);
 
-            // Nedenunder viser at der skal være et "@", når man indtaster sin mail.
+        // Nedenunder viser at der skal være et "@", når man indtaster sin mail.
         if (!email.contains("@")) {
             throw new IllegalArgumentException("Email did not contain @");
 
@@ -69,7 +54,6 @@ public class StudentController {
         }
         //hvis alle tjeks godkendes så bliver studenten returneret
         return verifiedStudent;
-
 
     }
 }

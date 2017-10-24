@@ -1,12 +1,14 @@
 package server.endpoints;
 
 import com.google.gson.Gson;
+import server.controllers.MainController;
 import server.controllers.StudentController;
 import server.models.Student;
 import server.providers.StudentTable;
 import server.resources.Log;
-import server.utility.Crypter;
+import server.utility.CurrentStudentContext;
 
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -17,57 +19,63 @@ import java.sql.SQLException;
 @Path("/register")
 public class RegisterEndpoint {
 
-    StudentController studentController = new StudentController();
-    StudentTable studentTable = new StudentTable();
-
+    private StudentController studentController = new StudentController();
+    private StudentTable studentTable = new StudentTable();
+    private MainController mainController = new MainController();
+    private Gson gson = new Gson();
 
     @POST
     @Produces("Application/json")
-    public Response register(String jsonStudent) throws Exception {
+    public Response register(@HeaderParam("Authorization") String token, String jsonStudent) throws Exception {
 
-        Gson gson = new Gson();
-        Student student;
-        try {
-            student = gson.fromJson(jsonStudent, Student.class);
-        } catch (IllegalArgumentException e) {
-            System.out.print(e.getMessage());
-            //Den her response giver ikke nogen mening??
-
-            Log.writeLog(getClass().getName(), this, "User couldn't be registered", 2);
-
+        CurrentStudentContext student = mainController.getStudentFromTokens(token);
+        Student currentStudent = student.getCurrentStudent();
+        if (currentStudent != null) {
             return Response
                     .status(400)
-                    .entity("første try i createStudent virker ikke")
+                    .type("plain/text")
+                    .entity("You are already logged in, no need to register again. Please log out before trying to register a new account")
                     .build();
+        } else {
+            Student registerStudent;
+            try {
+                registerStudent = gson.fromJson(jsonStudent, Student.class);
+            } catch (IllegalArgumentException e) {
+                System.out.print(e.getMessage());
+                Log.writeLog(getClass().getName(), this, "User couldn't be registered", 2);
+                return Response
+                        .status(400)
+                        .type("plain/text")
+                        .entity("The entered information isn't valid, please try again.")
+                        .build();
+            }
+            try {
+                studentController.verifyStudentCreation(registerStudent.getFirstName(), registerStudent.getLastName(), registerStudent.getPassword(), registerStudent.getEmail());
+            } catch (IllegalArgumentException ee) {
+                System.out.print(ee.getMessage());
+                //Bør måske ændres til at user ikke kunne verifies pga forkert info om fornavn, efternavn, kodeord eller email
+                Log.writeLog(getClass().getName(), this, "User couldn't be registered", 2);
+                return Response
+                        .status(400)
+                        .type("text/plain")
+                        .entity("Some of the information didn't fulfill our requirements, please try again.")
+                        .build();
+            }
+            try {
+                studentTable.addStudent(registerStudent);
+            } catch (SQLException e) {
+                Log.writeLog(getClass().getName(), this, "User already exists", 2);
+                return Response
+                        .status(404)
+                        .type("text/plain")
+                        .entity("This user already exists, please log-in.")
+                        .build();
+            }
+            Log.writeLog(getClass().getName(), this, registerStudent + " registered", 0);
         }
-
-        try {
-            studentController.verifyStudentCreation(student.getFirstName(), student.getLastName(), student.getPassword(), student.getEmail());
-        } catch (IllegalArgumentException ee) {
-            System.out.print(ee.getMessage());
-            //Bør måske ændres til at user ikke kunne verifies pga forkert info om fornavn, efternavn, kodeord eller email
-
-            Log.writeLog(getClass().getName(), this, "User couldn't be registered", 2);
-
-            return Response
-                    .status(400)
-                    .entity("andet try i createStudent virker ikke").build();
-        }
-        try {
-            studentTable.addStudent(student);
-        } catch (SQLException e) {
-
-            Log.writeLog(getClass().getName(), this, "User already exists", 2);
-
-            return Response
-                    .status(404)
-                    .type("text/plain")
-                    .entity("This user already exists, please log-in.").build();
-        }
-        Log.writeLog(getClass().getName(), this, student + " registered", 0);
-
         return Response
                 .status(200)
+                .type("text/plain")
                 .entity("{message\":\"Success! Student created\"}")
                 .build();
     }

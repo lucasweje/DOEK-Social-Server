@@ -9,34 +9,24 @@ import server.utility.Crypter;
 
 public class TokenController {
 
-    DBmanager dBmanager = new DBmanager();
     StudentTable st = new StudentTable();
 
     // Metode til at modtage en token og sende et student objekt retur
     public Student getStudentFromTokens(String token) throws SQLException {
-        StudentTable st = new StudentTable();
         Student student = st.getStudentFromToken(token);
         st.close();
         return student;
-
     }
 
     // Metode til ta slette en token (eventuelt ved log ud)
-
-    public boolean deleteToken(String token) throws SQLException{
-        StudentTable st = new StudentTable();
+    public boolean deleteToken(String token) throws SQLException {
         boolean deleteToken = st.deleteToken(token);
         st.close();
-        if(deleteToken) {
+        if (deleteToken) {
             return true;
         }
         return false;
     }
-
-
-
-
-
 
 
 }
