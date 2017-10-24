@@ -175,8 +175,8 @@ public class EventEndpoint {
     }
 
     @GET
-    @Path("{idEventStudents}/students")
-    public Response getAttendingStudents(@PathParam("idEventStudents") String idEvent) throws SQLException, IllegalAccessException {
+    @Path("{idStudents}/students")
+    public Response getAttendingStudents(@PathParam("idStudents") String idEvent) throws SQLException, IllegalAccessException {
 
         EventTable eventTable = new EventTable();
         ArrayList<Student> foundAttendingStudents = null;
@@ -196,7 +196,7 @@ public class EventEndpoint {
                 Log.writeLog(getClass().getName(), this, "No attending students at event", 2);
                 return Response
                         .status(400)
-                        .entity("{\"No attending students}")
+                        .entity("{No attending students}")
                         .build();
             } else {
                 String json = new Gson().toJson(foundAttendingStudents);

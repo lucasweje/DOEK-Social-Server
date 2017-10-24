@@ -28,8 +28,8 @@ public class StudentEndpoint {
     TokenController tokenController = new TokenController();
 
     @GET
-    @Path("{idStudentEvents}/events")
-    public Response getAttendingEvents(@PathParam("idStudentEvents") String idStudent) {
+    @Path("{idEvents}/events")
+    public Response getAttendingEvents(@PathParam("idEvents") String idStudent) {
 
         StudentTable studentTable = new StudentTable();
         ArrayList foundAttendingEvents = null;
