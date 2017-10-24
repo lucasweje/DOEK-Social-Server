@@ -1,7 +1,6 @@
 package server.providers;
 
 import server.config.Config;
-import server.models.Student;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

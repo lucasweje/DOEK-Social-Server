@@ -6,7 +6,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.io.IOException;
 
-
 //Istantiere kun config filen.
 public class ServletContextClass implements ServletContextListener {
     @Override
@@ -20,6 +19,5 @@ public class ServletContextClass implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
-
     }
 }

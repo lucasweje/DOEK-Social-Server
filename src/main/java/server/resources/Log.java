@@ -1,10 +1,7 @@
 package server.resources;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-
 
 public class Log {
 
@@ -18,10 +15,7 @@ public class Log {
      */
 
     public static void writeLog(String className, Object eventObject, String eventDescription, Integer logLevel) {
-
-
         Logger log = LoggerFactory.getLogger(className);
-
         switch (logLevel) {
             case 2:
                 log.debug(eventDescription, eventObject);
@@ -35,9 +29,7 @@ public class Log {
             default:
                 log.info(eventDescription, eventObject);
                 break;
-
         }
-
     }
 }
 

@@ -2,8 +2,6 @@ package server.providers;
 
 import server.models.Event;
 import server.models.Student;
-import server.models.Token;
-import server.utility.CurrentStudentContext;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,16 +11,14 @@ import java.util.ArrayList;
 
 public class EventTable extends DBmanager {
 
+    private ResultSet resultSet;
+
     public ArrayList<Event> getAllEvents() {
         ArrayList<Event> allEvents = new ArrayList<>();
 
-        ResultSet resultSet = null;
         try {
-            PreparedStatement getAllEventsStatement = getConnection().prepareStatement
-                    ("SELECT * FROM dsevent");
-
+            PreparedStatement getAllEventsStatement = getConnection().prepareStatement("SELECT * FROM dsevent");
             resultSet = getAllEventsStatement.executeQuery();
-
             while (resultSet.next()) {
                 Event event = new Event();
                 event.setIdEvent(resultSet.getInt("idEvent"));
@@ -39,14 +35,11 @@ public class EventTable extends DBmanager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return allEvents;
     }
 
-
-    public ArrayList getAttendingStudents(String idEvent) throws IllegalAccessException {
-        Student student = null;
-        ResultSet resultSet = null;
+    public ArrayList getAttendingStudents(String idEvent) throws IllegalAccessException, SQLException {
+        Student student;
         ArrayList attendingStudents = new ArrayList();
 
         //henter alle studenter der deltager på det valgte event.
@@ -62,9 +55,8 @@ public class EventTable extends DBmanager {
 
             getAttendingStudents.setString(1, idEvent);
             resultSet = getAttendingStudents.executeQuery();
-
-            while (resultSet.next()) {
-                try {
+            try {
+                while (resultSet.next()) {
                     //Opretter ny instans af de studenter der er i ArrayListen. (Måden man henter oplysninger).
                     student = new Student();
                     student.setIdStudent(resultSet.getInt("idStudent"));
@@ -73,9 +65,12 @@ public class EventTable extends DBmanager {
                     student.setEmail(resultSet.getString("email"));
 
                     attendingStudents.add(student);
-                } catch (Exception e) {
-                    e.printStackTrace();
+
                 }
+                resultSet.close();
+                getAttendingStudents.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         } catch (SQLException sqlException) {
             System.out.println(sqlException.getMessage());
@@ -85,7 +80,6 @@ public class EventTable extends DBmanager {
     }
 
     public boolean joinEvent(int eventId, int studentId) throws IllegalArgumentException {
-
 
         try {
             //kalder metoden der tjekker om studenten allerede har tilmeldt sig det pågældende event
@@ -99,6 +93,7 @@ public class EventTable extends DBmanager {
             if (rowsAffected != 1) {
                 return false;
             }
+            joinEvent.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -132,6 +127,7 @@ public class EventTable extends DBmanager {
             if (rowsAffected != 1) {
                 return false;
             }
+            updateEventStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -156,26 +152,28 @@ public class EventTable extends DBmanager {
         int rowsAffected = createEventStatement.executeUpdate();
 
         if (rowsAffected != 1) {
-            return false;
+            throw new SQLException("More or less than 1 row was affected");
         }
+        createEventStatement.close();
         return true;
     }
 
-    public boolean deleteEvent(Event event) throws SQLException {
+    public boolean deleteEvent(Event event, Student student) throws SQLException {
 
-        PreparedStatement deleteEventStatement = null;
-        deleteEventStatement = getConnection().prepareStatement
+        PreparedStatement deleteEventStatement = getConnection().prepareStatement
                 ("UPDATE dsevent " +
                         "SET isDeleted = 1 " +
-                        "WHERE idEvent = ?;");
+                        "WHERE idEvent = ? AND owner = ?;");
 
         try {
             deleteEventStatement.setInt(1, event.getIdEvent());
+            deleteEventStatement.setInt(2, student.getIdStudent());
             try {
                 int rowsUpdated = deleteEventStatement.executeUpdate();
                 if (rowsUpdated != 1) {
                     throw new SQLException("More or less than 1 row was affected");
                 }
+                deleteEventStatement.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

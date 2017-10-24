@@ -7,11 +7,8 @@ import server.controllers.StudentController;
 import server.controllers.TokenController;
 import server.models.Event;
 import server.models.Student;
-import server.providers.StudentTable;
 import server.resources.Log;
-import server.utility.Authenticator;
 import server.utility.CurrentStudentContext;
-import sun.applet.Main;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -27,50 +24,75 @@ public class StudentEndpoint {
     private MainController mainController = new MainController();
     private TokenController tokenController = new TokenController();
 
+
     @GET
     @Path("{idStudent}/events")
-    public Response getAttendingEvents(@PathParam("idStudent") String idStudent) throws SQLException, IllegalAccessException {
-
-        ArrayList<Event> foundAttendingEvents = null;
-
-        if (idStudent.isEmpty()) {
-
-            Log.writeLog(getClass().getName(), this, "Student not found", 2);
-
-            return Response
-                    .status(400)
-                    .entity("{\"Missing Student ID\":\"true\"}")
-                    .build();
-        } else {
-            foundAttendingEvents = studentController.getAttendingEvents(idStudent);
-            // if event not found
-            if (foundAttendingEvents.isEmpty()) {
-                Log.writeLog(getClass().getName(), this, "Student has no attending events", 2);
+    public Response getAttendingEvents(@HeaderParam("Authorization") String token, @PathParam("idStudent") String idStudent) throws SQLException, IllegalAccessException {
+        CurrentStudentContext student = mainController.getStudentFromTokens(token);
+        Student currentStudent = student.getCurrentStudent();
+        if (currentStudent != null) {
+            ArrayList<Event> foundAttendingEvents;
+            if (idStudent.isEmpty()) {
+                Log.writeLog(getClass().getName(), this, "Student not found", 2);
                 return Response
                         .status(400)
-                        .entity("{no attending events}")
+                        .entity("{\"Missing Student ID\":\"true\"}")
                         .build();
             } else {
-                String json = new Gson().toJson(foundAttendingEvents);
-                String crypted = Crypter.encryptDecrypt(json);
-                Log.writeLog(getClass().getName(), this, "Attending events fetched", 0);
-                return Response
-                        .status(200)
-                        .type("application/json")
-                        .entity(crypted)
-                        .build();
+                foundAttendingEvents = studentController.getAttendingEvents(idStudent);
+                // if event not found
+                if (foundAttendingEvents.isEmpty()) {
+                    Log.writeLog(getClass().getName(), this, "Student has no attending events", 2);
+                    return Response
+                            .status(400)
+                            .entity("{no attending events}")
+                            .build();
+                } else {
+                    String json = new Gson().toJson(foundAttendingEvents);
+                    String crypted = Crypter.encryptDecrypt(json);
+                    Log.writeLog(getClass().getName(), this, "Attending events fetched", 0);
+                    return Response
+                            .status(200)
+                            .type("application/json")
+                            .entity(crypted)
+                            .build();
+                }
             }
+        } else {
+            return Response
+                    .status(403)
+                    .type("plain/text")
+                    .entity("You are not logged in - please log in before attempting to view events you are attending")
+                    .build();
         }
     }
 
     @POST
     @Path("/logout")
-    public Response logout(@HeaderParam("Authorization") String idStudent) throws SQLException {
-        if(tokenController.deleteToken(idStudent)) {
-            Log.writeLog(getClass().getName(), this, "User logged out", 0);
-            return Response.status(200).entity("You are now logged out").build();
+    public Response logout(@HeaderParam("Authorization") String token) throws SQLException {
+        CurrentStudentContext student = mainController.getStudentFromTokens(token);
+        Student currentStudent = student.getCurrentStudent();
+        if (currentStudent != null) {
+            if (tokenController.deleteToken(token)) {
+                Log.writeLog(getClass().getName(), this, "User logged out", 0);
+                return Response
+                        .status(200)
+                        .type("plain/text")
+                        .entity("You are now logged out")
+                        .build();
+            } else {
+                return Response
+                        .status(404)
+                        .type("plain/text")
+                        .entity("There was an error, we couldn't log you out.")
+                        .build();
+            }
         } else {
-            return Response.status(404).entity("There was an error").build();
+            return Response
+                    .status(403)
+                    .type("plain/text")
+                    .entity("{You are not logged in - please log in before attempting to log out}")
+                    .build();
         }
     }
 
@@ -79,23 +101,22 @@ public class StudentEndpoint {
     public Response get(@HeaderParam("Authorization") String token) throws SQLException {
 
         CurrentStudentContext student = mainController.getStudentFromTokens(token);
+        Student currentStudent = student.getCurrentStudent();
+        if (currentStudent != null) {
 
-        if (student.getCurrentStudent() != null) {
-
-            Log.writeLog(getClass().getName(), this, "Current student found: " + student.getCurrentStudent(), 0);
+            Log.writeLog(getClass().getName(), this, "Current student found: " + currentStudent, 0);
 
             return Response
                     .status(200)
                     .type("application/json")
-                    .entity(new Gson().toJson(student))
+                    .entity(new Gson().toJson(currentStudent))
                     .build();
         } else {
-            Log.writeLog(getClass().getName(), this, "Current student not found - 404", 2);
-
+            Log.writeLog(getClass().getName(), this, "Current student not found - 403", 2);
             return Response
-                    .status(404)
-                    .type("application/json")
-                    .entity("fejl")
+                    .status(403)
+                    .type("plain/text")
+                    .entity("You aren't logged in, please log in before trying to view your profile")
                     .build();
         }
     }

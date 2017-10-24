@@ -1,8 +1,5 @@
 package server.models;
 
-import java.sql.Date;
-import java.sql.Timestamp;
-
 public class Event {
 
     private int idEvent, price, owner;
@@ -34,7 +31,8 @@ public class Event {
     public int getPrice() {
         return price;
     }
-      public void setPrice(int price) {
+
+    public void setPrice(int price) {
         this.price = price;
     }
 

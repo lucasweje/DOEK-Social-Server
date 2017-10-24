@@ -10,12 +10,9 @@ public class Authenticator {
 
     public Authenticator() {
     }
-
     static {
         try {
             authenticator = MessageDigest.getInstance("MD5");
-
-
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
