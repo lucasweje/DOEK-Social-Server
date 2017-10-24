@@ -94,8 +94,6 @@ public class EventTable extends DBmanager {
             joinEvent.setInt(2, studentId);
 
             int rowsAffected = joinEvent.executeUpdate();
-
-
             if (rowsAffected != 1) {
                 return false;
             }

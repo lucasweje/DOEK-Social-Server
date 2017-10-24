@@ -21,7 +21,6 @@ public class RegisterEndpoint {
     StudentTable studentTable = new StudentTable();
 
 
-
     @POST
     @Produces("Application/json")
     public Response register(String jsonStudent) throws Exception {
