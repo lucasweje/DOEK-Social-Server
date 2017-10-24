@@ -43,7 +43,11 @@ public class LoginEndpoint {
             } catch (Exception notFound) {
                 Log.writeLog(getClass().getName(), this, "Email not found/not existing", 2);
 
-                return Response.status(401).type("plain/text").entity("Email does not exist").build();
+                return Response
+                        .status(401)
+                        .type("plain/text")
+                        .entity("Email does not exist")
+                        .build();
             }
 
             String doHash = Authenticator.hashWithSalt(needAuthStudent.getPassword(), (needAuthStudent.getEmail() + foundStudent.getCreatedTime()));
@@ -52,10 +56,18 @@ public class LoginEndpoint {
                 //sets the token for the student
                 mainController.setToken(foundStudent);
                 Log.writeLog(getClass().getName(), this, "Password hashed", 0);
-                return Response.status(200).entity(new Gson().toJson("You are now logged in! :)")).build();
+                return Response
+                        .status(200)
+                        .type("plain/text")
+                        .entity("You are now logged in! :)")
+                        .build();
             } else {
                 Log.writeLog(getClass().getName(), this, "Password incorect", 2);
-                return Response.status(403).type("plain/text").entity("Password not correct").build();
+                return Response
+                        .status(403)
+                        .type("plain/text")
+                        .entity("Password not correct")
+                        .build();
             }
         }
     }

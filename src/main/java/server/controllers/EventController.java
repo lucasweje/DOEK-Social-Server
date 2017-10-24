@@ -25,7 +25,7 @@ public class EventController {
     //API forbindes med database.
     EventTable eventTable = new EventTable();
 
-    public ArrayList getAttendingStudents(String idEvent) throws IllegalAccessException {
+    public ArrayList getAttendingStudents(String idEvent) throws IllegalAccessException, SQLException {
         ArrayList attendingStudents = eventTable.getAttendingStudents(idEvent);
         eventTable.close();
         return attendingStudents;

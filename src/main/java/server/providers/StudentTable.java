@@ -11,7 +11,7 @@ public class StudentTable extends DBmanager {
     private ResultSet resultSet;
     private Student student;
 
-    public ArrayList getAttendingEvents(String idStudent) throws IllegalAccessException {
+    public ArrayList getAttendingEvents(int idStudent) throws IllegalAccessException {
         ArrayList attendingEvents = new ArrayList();
         //henter alle events en studerende deltager på.
         try {
@@ -24,7 +24,7 @@ public class StudentTable extends DBmanager {
                             "ON she.dsevent_idEvent = e.idEvent " +
                             "WHERE s.idStudent = ?");
 
-            getAttendingEvents.setString(1, idStudent);
+            getAttendingEvents.setInt(1, idStudent);
             resultSet = getAttendingEvents.executeQuery();
 
             while (resultSet.next()) {

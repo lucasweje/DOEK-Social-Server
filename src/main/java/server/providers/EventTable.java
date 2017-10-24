@@ -17,7 +17,7 @@ public class EventTable extends DBmanager {
         ArrayList<Event> allEvents = new ArrayList<>();
 
         try {
-            PreparedStatement getAllEventsStatement = getConnection().prepareStatement("SELECT * FROM dsevent");
+            PreparedStatement getAllEventsStatement = getConnection().prepareStatement("SELECT * FROM dsevent WHERE isDeleted = 0");
             resultSet = getAllEventsStatement.executeQuery();
             while (resultSet.next()) {
                 Event event = new Event();

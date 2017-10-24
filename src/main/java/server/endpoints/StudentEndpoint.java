@@ -27,25 +27,27 @@ public class StudentEndpoint {
 
     @GET
     @Path("{idStudent}/events")
-    public Response getAttendingEvents(@HeaderParam("Authorization") String token, @PathParam("idStudent") String idStudent) throws SQLException, IllegalAccessException {
+    public Response getAttendingEvents(@HeaderParam("Authorization") String token, @PathParam("idStudent") int idStudent) throws SQLException, IllegalAccessException {
         CurrentStudentContext student = mainController.getStudentFromTokens(token);
         Student currentStudent = student.getCurrentStudent();
+
         if (currentStudent != null) {
-            ArrayList<Event> foundAttendingEvents;
-            if (idStudent.isEmpty()) {
-                Log.writeLog(getClass().getName(), this, "Student not found", 2);
+            if (currentStudent.getIdStudent() != idStudent) {
                 return Response
-                        .status(400)
-                        .entity("{\"Missing Student ID\":\"true\"}")
+                        .status(403)
+                        .type("plain/text")
+                        .entity("You're not allowed to view this persons events. You can only view your own events.")
                         .build();
             } else {
+                ArrayList<Event> foundAttendingEvents;
                 foundAttendingEvents = studentController.getAttendingEvents(idStudent);
                 // if event not found
                 if (foundAttendingEvents.isEmpty()) {
                     Log.writeLog(getClass().getName(), this, "Student has no attending events", 2);
                     return Response
                             .status(400)
-                            .entity("{no attending events}")
+                            .type("plain/text")
+                            .entity("You are not attending any events")
                             .build();
                 } else {
                     String json = new Gson().toJson(foundAttendingEvents);

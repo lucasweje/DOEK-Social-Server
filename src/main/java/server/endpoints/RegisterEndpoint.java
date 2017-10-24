@@ -45,6 +45,7 @@ public class RegisterEndpoint {
                 Log.writeLog(getClass().getName(), this, "User couldn't be registered", 2);
                 return Response
                         .status(400)
+                        .type("plain/text")
                         .entity("The entered information isn't valid, please try again.")
                         .build();
             }
@@ -56,6 +57,7 @@ public class RegisterEndpoint {
                 Log.writeLog(getClass().getName(), this, "User couldn't be registered", 2);
                 return Response
                         .status(400)
+                        .type("text/plain")
                         .entity("Some of the information didn't fulfill our requirements, please try again.")
                         .build();
             }
@@ -66,12 +68,14 @@ public class RegisterEndpoint {
                 return Response
                         .status(404)
                         .type("text/plain")
-                        .entity("This user already exists, please log-in.").build();
+                        .entity("This user already exists, please log-in.")
+                        .build();
             }
             Log.writeLog(getClass().getName(), this, registerStudent + " registered", 0);
         }
         return Response
                 .status(200)
+                .type("text/plain")
                 .entity("{message\":\"Success! Student created\"}")
                 .build();
     }

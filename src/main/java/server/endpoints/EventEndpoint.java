@@ -9,7 +9,6 @@ import server.exceptions.ErrorMessage;
 import server.exceptions.ResponseException;
 import server.models.Event;
 import server.models.Student;
-import server.models.StudentHasEvent;
 import server.resources.Log;
 import server.utility.Crypter;
 import server.utility.CurrentStudentContext;
@@ -44,7 +43,7 @@ public class EventEndpoint {
                 return Response
                         .status(200)
                         .type("plain/text")
-                        .entity("{\"Message\":\"Success! Event updated\"}")
+                        .entity("Success! Event updated")
                         .build();
 
             } else {
@@ -79,14 +78,14 @@ public class EventEndpoint {
                 return Response
                         .status(200)
                         .type("plain/text")
-                        .entity("{message\":\"Success! Event created\"}")
+                        .entity("Success! Event created")
                         .build();
             } else {
                 Log.writeLog(getClass().getName(), this, "Not able to create event", 2);
                 return Response
                         .status(403)
                         .type("plain/text")
-                        .entity("{\"message\":\"failed\"}")
+                        .entity("Failed! Event couldn't be created")
                         .build();
             }
         } else {
@@ -137,9 +136,9 @@ public class EventEndpoint {
         Student currentStudent = student.getCurrentStudent();
 
         if (currentStudent != null) {
-            String json = gson.toJson(eventController.getAllEvents());
-            String crypted = Crypter.encryptDecrypt(json);
             try {
+                String json = gson.toJson(eventController.getAllEvents());
+                String crypted = Crypter.encryptDecrypt(json);
                 Log.writeLog(getClass().getName(), this, "All events fetched", 0);
                 return Response
                         .status(200)
@@ -219,10 +218,10 @@ public class EventEndpoint {
         CurrentStudentContext student = mainController.getStudentFromTokens(token);
         Student currentStudent = student.getCurrentStudent();
         if (currentStudent != null) {
-            StudentHasEvent studentHasEvent = gson.fromJson(eventJson, StudentHasEvent.class);
+            Event event = gson.fromJson(eventJson, Event.class);
 
             try {
-                eventController.joinEvent(studentHasEvent.getIdEvent(), studentHasEvent.getStudent_idStudent());
+                eventController.joinEvent(event.getIdEvent(), currentStudent.getIdStudent());
                 Log.writeLog(getClass().getName(), this, "Event joined", 0);
                 return Response
                         .status(200)
