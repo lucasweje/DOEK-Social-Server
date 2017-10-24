@@ -23,16 +23,14 @@ import server.utility.Crypter;
 @Path("/students")
 public class StudentEndpoint {
 
-    StudentTable studentTable = new StudentTable();
-    StudentController controller = new StudentController();
-    MainController mainController = new MainController();
-    TokenController tokenController = new TokenController();
+    private StudentController studentController = new StudentController();
+    private MainController mainController = new MainController();
+    private TokenController tokenController = new TokenController();
 
     @GET
     @Path("{idStudent}/events")
     public Response getAttendingEvents(@PathParam("idStudent") String idStudent) throws SQLException, IllegalAccessException {
 
-        StudentTable studentTable = new StudentTable();
         ArrayList<Event> foundAttendingEvents = null;
 
         if (idStudent.isEmpty()) {
@@ -44,7 +42,7 @@ public class StudentEndpoint {
                     .entity("{\"Missing Student ID\":\"true\"}")
                     .build();
         } else {
-            foundAttendingEvents = studentTable.getAttendingEvents(idStudent);
+            foundAttendingEvents = studentController.getAttendingEvents(idStudent);
             // if event not found
             if (foundAttendingEvents.isEmpty()) {
                 Log.writeLog(getClass().getName(), this, "Student has no attending events", 2);
@@ -58,7 +56,7 @@ public class StudentEndpoint {
                 Log.writeLog(getClass().getName(), this, "Attending events fetched", 0);
                 return Response
                         .status(200)
-                        .type("application/json)")
+                        .type("application/json")
                         .entity(crypted)
                         .build();
             }

@@ -34,7 +34,7 @@ public class StudentTable extends DBmanager {
                     //Opretter ny instans af de studenter der er i ArrayListen. (Måden man henter oplysninger).
                     event = new Event();
                     event.setIdEvent(resultSet.getInt("idEvent"));
-                    event.setEventDate(resultSet.getString("eventName"));
+                    event.setEventName(resultSet.getString("eventName"));
                     event.setOwner(resultSet.getInt("owner"));
                     event.setLocation(resultSet.getString("location"));
                     event.setPrice(resultSet.getInt("price"));
