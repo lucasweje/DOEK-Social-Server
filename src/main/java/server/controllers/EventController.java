@@ -62,9 +62,9 @@ public class EventController {
         return joinEvent.joinEvent(eventId, studentId);
     }
 
-    public boolean updateEvent(Event event) throws Exception {
+    public boolean updateEvent(Event event, Student student) throws Exception {
         EventTable db = new EventTable();
-        boolean updateEvent = db.updateEvent(event);
+        boolean updateEvent = db.updateEvent(event, student);
         return updateEvent;
 
     }

@@ -31,33 +31,44 @@ public class EventEndpoint {
     //Skal bruges til at opdatere events (her bruges PUT)
     @PUT
     @Path("{idEvent}/update-event")
-    public Response updateEvent(@PathParam("idEvent") String eventId, String data) throws Exception {
+    public Response updateEvent(@HeaderParam("Authorization") String token, @PathParam("idEvent") int eventId, String data) throws Exception {
 
-        Gson gson = new Gson();
-        Event event = gson.fromJson(data, Event.class);
-        event.setIdEvent(Integer.parseInt(eventId));
+        CurrentStudentContext student = mainController.getStudentFromTokens(token);
+        Student currentStudent = student.getCurrentStudent();
+        if (student.getCurrentStudent() != null) {
 
-        if (eventController.updateEvent(event)) {
+            Gson gson = new Gson();
+            Event event = gson.fromJson(data, Event.class);
+            event.setIdEvent(eventId);
+
+            if (eventController.updateEvent(event, currentStudent)) {
 
 
-            //getIdEvent eller getEventName?
-            Log.writeLog(getClass().getName(), this, "Event with ID: " + event.getIdEvent() + " has been updated", 0);
+                //getIdEvent eller getEventName?
+                Log.writeLog(getClass().getName(), this, "Event with ID: " + event.getIdEvent() + " has been updated", 0);
+
+                return Response
+                        .status(200)
+                        .entity("{\"Message\":\"Success! Event updated\"}")
+                        .build();
+
+            } else
+                Log.writeLog(getClass().getName(), this, "Event not found", 2);
 
             return Response
-                    .status(200)
-                    .entity("{\"Message\":\"Success! Event updated\"}")
+                    //Bør det ikke være 404 og ikke 400? jf. https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
+                    //Ikke kun her
+                    .status(403)
+                    .entity("Either the event wasn't found, or you aren't the owner of the event and therefore you cannot update it")
                     .build();
+        } else {
+            return Response
+                    .status(403)
+                    .type("plain/text")
+                    .entity("{You are not logged in - please log in before attempting to update an event}")
+                    .build();
+        }
 
-        } else
-            Log.writeLog(getClass().getName(), this, "Event not found", 2);
-
-        return Response
-
-                //Bør det ikke være 404 og ikke 400? jf. https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
-                //Ikke kun her
-                .status(404)
-                .entity("{\"Message\":\"Failed. No such event!\"}")
-                .build();
     }
 
     @POST

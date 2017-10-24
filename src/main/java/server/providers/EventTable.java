@@ -102,17 +102,17 @@ public class EventTable extends DBmanager {
         }
         return true;
     }
-    // Anvendes til at ændre et event. Modtager et idEvent og data om eventet. Dette opdates i DBmanager.
 
-    public boolean updateEvent(Event event) throws Exception {
+    // Anvendes til at ændre et event. Modtager et idEvent og data om eventet. Dette opdates i DBmanager.
+    public boolean updateEvent(Event event, Student student) throws Exception {
 
         PreparedStatement updateEventStatement = null;
-
+        int currentStudentId = student.getIdStudent();
         try {
             updateEventStatement = getConnection().prepareStatement
                     ("UPDATE dsevent " +
                             "SET eventName = ?, location = ?, price = ?, eventDate = ?, description = ? " +
-                            "WHERE idEvent = ?");
+                            "WHERE idEvent = ? AND owner = ?");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -124,8 +124,12 @@ public class EventTable extends DBmanager {
             updateEventStatement.setString(4, event.getEventDate());
             updateEventStatement.setString(5, event.getDescription());
             updateEventStatement.setInt(6, event.getIdEvent());
+            updateEventStatement.setInt(7, currentStudentId);
 
-            updateEventStatement.executeUpdate();
+            int rowsAffected = updateEventStatement.executeUpdate();
+            if (rowsAffected != 1) {
+                return false;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -137,21 +141,21 @@ public class EventTable extends DBmanager {
     public boolean createEvent(Event event, Student student) throws SQLException {
 
         PreparedStatement createEventStatement = getConnection().prepareStatement("INSERT INTO dsevent (" +
-                    "eventName, owner, location, price, description, eventDate) VALUES (" +
-                    "?, ?, ?, ?, ?, ?)");
+                "eventName, owner, location, price, description, eventDate) VALUES (" +
+                "?, ?, ?, ?, ?, ?)");
 
-            createEventStatement.setString(1, event.getEventName());
-            createEventStatement.setInt(2, student.getIdStudent());
-            createEventStatement.setString(3, event.getLocation());
-            createEventStatement.setInt(4, event.getPrice());
-            createEventStatement.setString(5, event.getDescription());
-            createEventStatement.setString(6, event.getEventDate());
+        createEventStatement.setString(1, event.getEventName());
+        createEventStatement.setInt(2, student.getIdStudent());
+        createEventStatement.setString(3, event.getLocation());
+        createEventStatement.setInt(4, event.getPrice());
+        createEventStatement.setString(5, event.getDescription());
+        createEventStatement.setString(6, event.getEventDate());
 
-            int rowsAffected = createEventStatement.executeUpdate();
+        int rowsAffected = createEventStatement.executeUpdate();
 
-            if (rowsAffected != 1) {
-                return false;
-            }
+        if (rowsAffected != 1) {
+            return false;
+        }
         return true;
     }
 
