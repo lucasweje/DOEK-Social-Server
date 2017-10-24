@@ -3,6 +3,7 @@ package server.providers;
 import server.models.Event;
 import server.models.Student;
 import server.models.Token;
+import server.utility.CurrentStudentContext;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -133,15 +134,14 @@ public class EventTable extends DBmanager {
     }
 
 
-    public boolean createEvent(Event event) throws SQLException {
+    public boolean createEvent(Event event, Student student) throws SQLException {
 
         PreparedStatement createEventStatement = getConnection().prepareStatement("INSERT INTO dsevent (" +
                     "eventName, owner, location, price, description, eventDate) VALUES (" +
                     "?, ?, ?, ?, ?, ?)");
 
             createEventStatement.setString(1, event.getEventName());
-            // mangler at idStudent kommer fra en token fra den student der er logget ind
-            createEventStatement.setInt(2, event.getOwner());
+            createEventStatement.setInt(2, student.getIdStudent());
             createEventStatement.setString(3, event.getLocation());
             createEventStatement.setInt(4, event.getPrice());
             createEventStatement.setString(5, event.getDescription());

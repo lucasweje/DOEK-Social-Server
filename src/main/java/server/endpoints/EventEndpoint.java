@@ -4,6 +4,7 @@ import javax.ws.rs.Path;
 
 import com.google.gson.Gson;
 import server.controllers.EventController;
+import server.controllers.MainController;
 import server.exceptions.ErrorMessage;
 import server.exceptions.ResponseException;
 import server.models.Event;
@@ -12,6 +13,7 @@ import server.models.StudentHasEvent;
 import server.providers.EventTable;
 import server.resources.Log;
 import server.utility.Crypter;
+import server.utility.CurrentStudentContext;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -23,6 +25,8 @@ public class EventEndpoint {
 
     EventController eventController = new EventController();
     EventTable eventTable = new EventTable();
+    MainController mainController = new MainController();
+
 
     //Skal bruges til at opdatere events (her bruges PUT)
     @PUT
@@ -57,32 +61,42 @@ public class EventEndpoint {
     }
 
     @POST
-    public Response createEvent(String eventData) throws SQLException {
+    public Response createEvent(@HeaderParam("Authorization") String token, String eventData) throws SQLException {
 
-        // OBS mangler token, som finder id på 'currentStudent'
-        Event event = new Gson().fromJson(eventData, Event.class);
+        CurrentStudentContext student = mainController.getStudentFromTokens(token);
 
-        EventController eventController = new EventController();
-        if (eventController.createEvent(event)) {
+        if (student.getCurrentStudent() != null) {
 
-            Log.writeLog(getClass().getName(), this, event.getEventName() + " created", 0);
+            // OBS mangler token, som finder id på 'currentStudent'
+            Event event = new Gson().fromJson(eventData, Event.class);
 
-            return Response
-                    .status(200)
-                    .type("application/json")
-                    .entity("{message\":\"Success! Event created\"}")
-                    .build();
-        } else {
+            EventController eventController = new EventController();
+            if (eventController.createEvent(event, student.getCurrentStudent())) {
 
-            Log.writeLog(getClass().getName(), this, "Not able to create event", 2);
+                Log.writeLog(getClass().getName(), this, event.getEventName() + " created", 0);
+
+                return Response
+                        .status(200)
+                        .type("application/json")
+                        .entity("{message\":\"Success! Event created\"}")
+                        .build();
+            } else {
+
+                Log.writeLog(getClass().getName(), this, "Not able to create event", 2);
 
 
-            return Response
-                    .status(404)
-                    .type("application/json")
-                    .entity("{\"message\":\"failed\"}")
-                    .build();
+                return Response
+                        .status(403)
+                        .type("application/json")
+                        .entity("{\"message\":\"failed\"}")
+                        .build();
+            }
         }
+        return Response
+                .status(403)
+                .type("application/json")
+                .entity("{You are not logged in - please log in before attempting to create an event}")
+                .build();
     }
 
     @PUT

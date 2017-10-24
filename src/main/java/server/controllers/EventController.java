@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import server.providers.EventTable;
+import server.utility.CurrentStudentContext;
 
 /**
  * Created by STFU on 19/10/2017
@@ -37,12 +38,9 @@ public class EventController {
         return attendingStudents;
     }
 
-
-
-    public boolean createEvent(Event eventData) throws SQLException {
-
+    public boolean createEvent(Event eventData, Student student) throws SQLException {
         EventTable eventTable = new EventTable();
-        boolean createEvent = eventTable.createEvent(eventData);
+        boolean createEvent = eventTable.createEvent(eventData, student);
         return createEvent;
     }
 

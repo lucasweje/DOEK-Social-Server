@@ -215,7 +215,7 @@ public class StudentTable extends DBmanager {
 
         try {
 
-            PreparedStatement getStudentFromToken = getConnection().prepareStatement("SELECT idStudent, firstName, lastName FROM students s INNER JOIN tokens t ON t.students_idStudent = s.idStudent WHERE t.token =?");
+            PreparedStatement getStudentFromToken = getConnection().prepareStatement("SELECT idStudent, firstName, lastName, email, createdTime FROM students s INNER JOIN tokens t ON t.students_idStudent = s.idStudent WHERE t.token = ?");
 
 
             getStudentFromToken.setString(1, token);
@@ -227,6 +227,9 @@ public class StudentTable extends DBmanager {
                 studentFromToken.setIdStudent(resultSet.getInt("idStudent"));
                 studentFromToken.setFirstName(resultSet.getString("firstName"));
                 studentFromToken.setLastName(resultSet.getString("lastName"));
+                studentFromToken.setEmail(resultSet.getString("email"));
+                studentFromToken.setCreatedTime(resultSet.getLong("createdTime"));
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
