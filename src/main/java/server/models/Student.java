@@ -10,6 +10,7 @@ public class Student {
     private String salt;
     private long createdTime;
     private Token token;
+    private String verifyPassword;
 
 
     //has all student info.
@@ -23,10 +24,11 @@ public class Student {
     }
 
     //used in verifyStudentCreation
-    public Student(String firstName, String lastName, String password, String email) {
+    public Student(String firstName, String lastName, String password, String verifyPassword, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
+        this.verifyPassword = verifyPassword;
         this.email = email;
     }
 
@@ -110,5 +112,13 @@ public class Student {
 
     public void setCreatedTime(long createdTime) {
         this.createdTime = createdTime;
+    }
+
+    public String getVerifyPassword() {
+        return verifyPassword;
+    }
+
+    public void setVerifyPassword(String verifyPassword) {
+        this.verifyPassword = verifyPassword;
     }
 }
