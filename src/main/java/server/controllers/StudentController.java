@@ -51,7 +51,7 @@ public class StudentController {
         } else if (!password.matches(".*[a-zA-Z].*") || !password.matches(".*\\d.*")) {
             throw new IllegalArgumentException("password must contain atleast one char and one number");
 
-        } else if (!password.matches(verifyPassword)) {
+        } else if (!password.equals(verifyPassword)) {
             throw new IllegalArgumentException("The two passwords are not equal to each other");
         }
         //hvis alle tjeks godkendes så bliver studenten returneret
