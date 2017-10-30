@@ -14,7 +14,7 @@ import java.util.Date;
 
 public class TokenController {
 
-    StudentTable studentTable = new StudentTable();
+    private StudentTable studentTable = new StudentTable();
 
 
 /*

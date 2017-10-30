@@ -9,7 +9,8 @@ import java.sql.SQLException;
 
 public class DBmanager {
 
-    public Connection getConnection() {
+    //har ikke public/private da den så er package-private
+    Connection getConnection() {
 
         Connection connection = null;
 

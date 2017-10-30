@@ -21,9 +21,9 @@ import java.util.ArrayList;
 @Path("/events")
 public class EventEndpoint {
 
-    EventController eventController = new EventController();
-    TokenController tokenController = new TokenController();
-    Gson gson = new Gson();
+    private EventController eventController = new EventController();
+    private TokenController tokenController = new TokenController();
+    private Gson gson = new Gson();
 
     @PUT
     @Path("{idEvent}/update-event")
