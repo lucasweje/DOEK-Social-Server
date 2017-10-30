@@ -1,11 +1,11 @@
 package server.endpoints;
 
 import com.google.gson.Gson;
+import server.controllers.TokenController;
 import server.models.Student;
 import server.providers.StudentTable;
 import server.resources.Log;
 import server.utility.Authenticator;
-import server.controllers.MainController;
 import server.utility.CurrentStudentContext;
 
 import javax.ws.rs.HeaderParam;
@@ -18,13 +18,13 @@ import javax.ws.rs.core.Response;
 public class LoginEndpoint {
 
     private StudentTable studentTable = new StudentTable();
-    private MainController mainController = new MainController();
+    private TokenController tokenController = new TokenController();
     private Gson gson = new Gson();
 
     @POST
     public Response login(@HeaderParam("Authorization") String token, String jsonLogin) throws Exception {
 
-        CurrentStudentContext student = mainController.getStudentFromTokens(token);
+        CurrentStudentContext student = tokenController.getStudentFromTokens(token);
         Student currentStudent = student.getCurrentStudent();
         if (currentStudent != null) {
             return Response
@@ -54,7 +54,7 @@ public class LoginEndpoint {
 
             if (doHash.equals(foundStudent.getPassword())) {
                 //sets the token for the student
-                mainController.setToken(foundStudent);
+                tokenController.setToken(foundStudent);
                 Log.writeLog(getClass().getName(), this, "Password hashed", 0);
                 return Response
                         .status(200)

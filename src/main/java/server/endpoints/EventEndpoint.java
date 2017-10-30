@@ -4,7 +4,7 @@ import javax.ws.rs.Path;
 
 import com.google.gson.Gson;
 import server.controllers.EventController;
-import server.controllers.MainController;
+import server.controllers.TokenController;
 import server.exceptions.ErrorMessage;
 import server.exceptions.ResponseException;
 import server.models.Event;
@@ -22,14 +22,14 @@ import java.util.ArrayList;
 public class EventEndpoint {
 
     EventController eventController = new EventController();
-    MainController mainController = new MainController();
+    TokenController tokenController = new TokenController();
     Gson gson = new Gson();
 
     @PUT
     @Path("{idEvent}/update-event")
     public Response updateEvent(@HeaderParam("Authorization") String token, @PathParam("idEvent") int eventId, String data) throws Exception {
 
-        CurrentStudentContext student = mainController.getStudentFromTokens(token);
+        CurrentStudentContext student = tokenController.getStudentFromTokens(token);
         Student currentStudent = student.getCurrentStudent();
         if (currentStudent != null) {
 
@@ -68,7 +68,7 @@ public class EventEndpoint {
     @POST
     public Response createEvent(@HeaderParam("Authorization") String token, String eventData) throws SQLException {
 
-        CurrentStudentContext student = mainController.getStudentFromTokens(token);
+        CurrentStudentContext student = tokenController.getStudentFromTokens(token);
         Student currentStudent = student.getCurrentStudent();
 
         if (currentStudent != null) {
@@ -101,7 +101,7 @@ public class EventEndpoint {
     @Path("{idEvent}/delete-event")
     public Response deleteEvent(@HeaderParam("Authorization") String token, @PathParam("idEvent") String eventId, String data) throws Exception {
 
-        CurrentStudentContext student = mainController.getStudentFromTokens(token);
+        CurrentStudentContext student = tokenController.getStudentFromTokens(token);
         Student currentStudent = student.getCurrentStudent();
         if (currentStudent != null) {
             Event event = gson.fromJson(data, Event.class);
@@ -132,7 +132,7 @@ public class EventEndpoint {
 
     @GET
     public Response getEvents(@HeaderParam("Authorization") String token) throws SQLException {
-        CurrentStudentContext student = mainController.getStudentFromTokens(token);
+        CurrentStudentContext student = tokenController.getStudentFromTokens(token);
         Student currentStudent = student.getCurrentStudent();
 
         if (currentStudent != null) {
@@ -169,7 +169,7 @@ public class EventEndpoint {
     @Path("{idEvent}/students")
     public Response getAttendingStudents(@HeaderParam("Authorization") String token, @PathParam("idEvent") String idEvent) throws SQLException, IllegalAccessException {
 
-        CurrentStudentContext student = mainController.getStudentFromTokens(token);
+        CurrentStudentContext student = tokenController.getStudentFromTokens(token);
         Student currentStudent = student.getCurrentStudent();
         if (currentStudent != null) {
             ArrayList<Student> foundAttendingStudents;
@@ -215,7 +215,7 @@ public class EventEndpoint {
     @POST
     @Path("/join")
     public Response joinEvent(@HeaderParam("Authorization") String token, String eventJson) throws SQLException {
-        CurrentStudentContext student = mainController.getStudentFromTokens(token);
+        CurrentStudentContext student = tokenController.getStudentFromTokens(token);
         Student currentStudent = student.getCurrentStudent();
         if (currentStudent != null) {
             Event event = gson.fromJson(eventJson, Event.class);
