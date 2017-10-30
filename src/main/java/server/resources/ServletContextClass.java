@@ -6,7 +6,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.io.IOException;
 
-//Istantiere kun config filen.
+//Instantiere kun config filen.
 public class ServletContextClass implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {

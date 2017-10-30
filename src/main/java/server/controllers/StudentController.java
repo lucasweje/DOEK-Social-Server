@@ -17,7 +17,7 @@ public class StudentController {
      */
 
 
-    StudentTable studentTable = new StudentTable();
+    private StudentTable studentTable = new StudentTable();
 
     public ArrayList getAttendingEvents(int idStudent) throws IllegalAccessException {
         ArrayList attendingEvents = studentTable.getAttendingEvents(idStudent);

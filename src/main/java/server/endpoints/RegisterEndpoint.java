@@ -1,8 +1,8 @@
 package server.endpoints;
 
 import com.google.gson.Gson;
-import server.controllers.MainController;
 import server.controllers.StudentController;
+import server.controllers.TokenController;
 import server.models.Student;
 import server.providers.StudentTable;
 import server.resources.Log;
@@ -21,14 +21,15 @@ public class RegisterEndpoint {
 
     private StudentController studentController = new StudentController();
     private StudentTable studentTable = new StudentTable();
-    private MainController mainController = new MainController();
+    private TokenController tokenController = new TokenController();
+
     private Gson gson = new Gson();
 
     @POST
     @Produces("Application/json")
     public Response register(@HeaderParam("Authorization") String token, String jsonStudent) throws Exception {
 
-        CurrentStudentContext student = mainController.getStudentFromTokens(token);
+        CurrentStudentContext student = tokenController.getStudentFromTokens(token);
         Student currentStudent = student.getCurrentStudent();
         if (currentStudent != null) {
             return Response
