@@ -18,7 +18,9 @@ public class Crypter {
                 output.append((char) (input.charAt(i) ^ key[i % key.length]));
             }
             return output.toString();
-        } else return input;
+        } else {
+            return input;
+        }
     }
 }
 

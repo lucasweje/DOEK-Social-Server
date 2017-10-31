@@ -42,6 +42,7 @@ public final class Config {
         setDbName(json.get("dbName").toString().replace("\"", ""));
         setDbUser(json.get("dbUser").toString().replace("\"", ""));
         setDbPassword(json.get("dbPassword").toString().replace("\"", ""));
+        setEncryption(json.get("encryption").getAsBoolean());
     }
 
     public static String getDbUrl() {
