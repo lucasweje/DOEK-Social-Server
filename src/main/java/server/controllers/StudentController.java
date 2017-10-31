@@ -27,7 +27,7 @@ public class StudentController {
 
 //Denne metode bruges til at verificere en student, når brugeren skal oprette sig i døk social.
 
-    public Student verifyStudentCreation(String firstName, String lastName, String password, String verifyPassword, String email) throws IllegalArgumentException {
+    public Student verifyStudentCreation(String firstName, String lastName, String password, String email, String verifyPassword) throws IllegalArgumentException {
         Student verifiedStudent = new Student(firstName, lastName, password, verifyPassword, email);
 
         // Nedenunder viser at der skal være et "@", når man indtaster sin mail.

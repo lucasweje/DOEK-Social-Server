@@ -100,7 +100,7 @@ public class EventTable extends DBmanager {
         return true;
     }
 
-    // Anvendes til at ændre et event. Modtager et idEvent og data om eventet. Dette opdates i DBmanager.
+    // Anvendes til at ændre et event. Modtager et idEvent og data om eventet. Dette updates i DBmanager.
     public boolean updateEvent(Event event, Student student) throws Exception {
 
         PreparedStatement updateEventStatement = null;
