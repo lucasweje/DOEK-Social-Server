@@ -236,7 +236,7 @@ public class EventEndpoint {
             try {
                 eventController.joinEvent(event.getIdEvent(), currentStudent.getIdStudent());
 
-                String json = new Gson().toJson(currentStudent);
+                String json = new Gson().toJson(event);
                 String crypted = Crypter.encryptDecrypt(json);
 
                 Log.writeLog(getClass().getName(), this, "Event joined", 0);
