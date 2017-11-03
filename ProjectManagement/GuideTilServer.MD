@@ -1,5 +1,5 @@
 # Server v1 
-- *Sidst odateret d. 03/11/2017*
+- *Sidst opdateret d. 03/11/2017*
 
 
 ## Kort intro
