@@ -198,7 +198,7 @@ public class EventEndpoint {
                 foundAttendingStudents = eventController.getAttendingStudents(idEvent);
                 // If student not found:
                 if (foundAttendingStudents.isEmpty()) {
-                    Log.writeLog(getClass().getName(), this, "No attending students at event", 2);
+                    Log.writeLog(getClass().getName(), this, "No atten'ding students at event", 2);
                     return Response
                             .status(400)
                             .type("plain/text")
