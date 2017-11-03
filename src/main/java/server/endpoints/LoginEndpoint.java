@@ -1,11 +1,12 @@
 package server.endpoints;
 
 import com.google.gson.Gson;
+import server.controllers.TokenController;
 import server.models.Student;
 import server.providers.StudentTable;
 import server.resources.Log;
 import server.utility.Authenticator;
-import server.controllers.MainController;
+import server.utility.Crypter;
 import server.utility.CurrentStudentContext;
 
 import javax.ws.rs.HeaderParam;
@@ -18,15 +19,17 @@ import javax.ws.rs.core.Response;
 public class LoginEndpoint {
 
     private StudentTable studentTable = new StudentTable();
-    private MainController mainController = new MainController();
+    private TokenController tokenController = new TokenController();
     private Gson gson = new Gson();
 
     @POST
     public Response login(@HeaderParam("Authorization") String token, String jsonLogin) throws Exception {
 
-        CurrentStudentContext student = mainController.getStudentFromTokens(token);
+        CurrentStudentContext student = tokenController.getStudentFromTokens(token);
         Student currentStudent = student.getCurrentStudent();
         if (currentStudent != null) {
+
+            Log.writeLog(getClass().getName(), this, "Already logged in", 2);
             return Response
                     .status(400)
                     .type("plain/text")
@@ -37,8 +40,6 @@ public class LoginEndpoint {
             Student needAuthStudent = gson.fromJson(jsonLogin, Student.class);
             try {
                 foundStudent = studentTable.getStudentByEmail(needAuthStudent.getEmail());
-                //Mht. sikkerhed er det så dumt at kalde "foundstudent" i logfilen?
-                Log.writeLog(getClass().getName(), this, foundStudent + " logged in", 0);
 
             } catch (Exception notFound) {
                 Log.writeLog(getClass().getName(), this, "Email not found/not existing", 2);
@@ -54,12 +55,16 @@ public class LoginEndpoint {
 
             if (doHash.equals(foundStudent.getPassword())) {
                 //sets the token for the student
-                mainController.setToken(foundStudent);
-                Log.writeLog(getClass().getName(), this, "Password hashed", 0);
+                tokenController.setToken(foundStudent);
+
+                String json = new Gson().toJson(foundStudent);
+                String crypted = Crypter.encryptDecrypt(json);
+
+                Log.writeLog(getClass().getName(), this, "Logged in", 0);
                 return Response
                         .status(200)
-                        .type("plain/text")
-                        .entity("You are now logged in! :)")
+                        .type("application/json")
+                        .entity(new Gson().toJson(crypted))
                         .build();
             } else {
                 Log.writeLog(getClass().getName(), this, "Password incorect", 2);

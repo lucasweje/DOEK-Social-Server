@@ -5,7 +5,6 @@ import java.security.NoSuchAlgorithmException;
 
 public class Authenticator {
 
-    private static String salt;
     private static MessageDigest authenticator;
 
     public Authenticator() {

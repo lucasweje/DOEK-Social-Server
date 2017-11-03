@@ -2,7 +2,6 @@ package server.endpoints;
 
 
 import com.google.gson.Gson;
-import server.controllers.MainController;
 import server.controllers.StudentController;
 import server.controllers.TokenController;
 import server.models.Event;
@@ -21,14 +20,13 @@ import server.utility.Crypter;
 public class StudentEndpoint {
 
     private StudentController studentController = new StudentController();
-    private MainController mainController = new MainController();
     private TokenController tokenController = new TokenController();
 
 
     @GET
     @Path("{idStudent}/events")
     public Response getAttendingEvents(@HeaderParam("Authorization") String token, @PathParam("idStudent") int idStudent) throws SQLException, IllegalAccessException {
-        CurrentStudentContext student = mainController.getStudentFromTokens(token);
+        CurrentStudentContext student = tokenController.getStudentFromTokens(token);
         Student currentStudent = student.getCurrentStudent();
 
         if (currentStudent != null) {
@@ -56,7 +54,7 @@ public class StudentEndpoint {
                     return Response
                             .status(200)
                             .type("application/json")
-                            .entity(crypted)
+                            .entity(new Gson().toJson(crypted))
                             .build();
                 }
             }
@@ -72,7 +70,7 @@ public class StudentEndpoint {
     @POST
     @Path("/logout")
     public Response logout(@HeaderParam("Authorization") String token) throws SQLException {
-        CurrentStudentContext student = mainController.getStudentFromTokens(token);
+        CurrentStudentContext student = tokenController.getStudentFromTokens(token);
         Student currentStudent = student.getCurrentStudent();
         if (currentStudent != null) {
             if (tokenController.deleteToken(token)) {
@@ -102,16 +100,16 @@ public class StudentEndpoint {
     @Path("/profile")
     public Response get(@HeaderParam("Authorization") String token) throws SQLException {
 
-        CurrentStudentContext student = mainController.getStudentFromTokens(token);
+        CurrentStudentContext student = tokenController.getStudentFromTokens(token);
         Student currentStudent = student.getCurrentStudent();
         if (currentStudent != null) {
-
+            String json = new Gson().toJson(currentStudent);
+            String crypted = Crypter.encryptDecrypt(json);
             Log.writeLog(getClass().getName(), this, "Current student found: " + currentStudent, 0);
-
             return Response
                     .status(200)
                     .type("application/json")
-                    .entity(new Gson().toJson(currentStudent))
+                    .entity(new Gson().toJson(crypted))
                     .build();
         } else {
             Log.writeLog(getClass().getName(), this, "Current student not found - 403", 2);

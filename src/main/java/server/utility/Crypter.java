@@ -8,7 +8,7 @@ public class Crypter {
 
     // XOR-kypteringsmetoden: (CR)
 //husk link, set på dalbys laptop.
-    public static String encryptDecrypt(String input) {
+        public static String encryptDecrypt(String input) {
 
         if (Config.getEncryption()) {
             char[] key = {'J', 'M', 'F'};
@@ -18,7 +18,9 @@ public class Crypter {
                 output.append((char) (input.charAt(i) ^ key[i % key.length]));
             }
             return output.toString();
-        } else return input;
+        } else {
+            return input;
+        }
     }
 }
 

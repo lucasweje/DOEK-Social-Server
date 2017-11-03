@@ -1,11 +1,12 @@
 package server.endpoints;
 
 import com.google.gson.Gson;
-import server.controllers.MainController;
 import server.controllers.StudentController;
+import server.controllers.TokenController;
 import server.models.Student;
 import server.providers.StudentTable;
 import server.resources.Log;
+import server.utility.Crypter;
 import server.utility.CurrentStudentContext;
 
 import javax.ws.rs.HeaderParam;
@@ -21,14 +22,15 @@ public class RegisterEndpoint {
 
     private StudentController studentController = new StudentController();
     private StudentTable studentTable = new StudentTable();
-    private MainController mainController = new MainController();
+    private TokenController tokenController = new TokenController();
+
     private Gson gson = new Gson();
 
     @POST
     @Produces("Application/json")
     public Response register(@HeaderParam("Authorization") String token, String jsonStudent) throws Exception {
 
-        CurrentStudentContext student = mainController.getStudentFromTokens(token);
+        CurrentStudentContext student = tokenController.getStudentFromTokens(token);
         Student currentStudent = student.getCurrentStudent();
         if (currentStudent != null) {
             return Response
@@ -38,6 +40,7 @@ public class RegisterEndpoint {
                     .build();
         } else {
             Student registerStudent;
+
             try {
                 registerStudent = gson.fromJson(jsonStudent, Student.class);
             } catch (IllegalArgumentException e) {
@@ -50,7 +53,7 @@ public class RegisterEndpoint {
                         .build();
             }
             try {
-                studentController.verifyStudentCreation(registerStudent.getFirstName(), registerStudent.getLastName(), registerStudent.getPassword(), registerStudent.getEmail());
+                studentController.verifyStudentCreation(registerStudent.getFirstName(), registerStudent.getLastName(), registerStudent.getPassword(), registerStudent.getEmail(), registerStudent.getVerifyPassword());
             } catch (IllegalArgumentException ee) {
                 System.out.print(ee.getMessage());
                 //Bør måske ændres til at user ikke kunne verifies pga forkert info om fornavn, efternavn, kodeord eller email
@@ -63,6 +66,17 @@ public class RegisterEndpoint {
             }
             try {
                 studentTable.addStudent(registerStudent);
+
+                String json = new Gson().toJson(registerStudent);
+                String crypted = Crypter.encryptDecrypt(json);
+
+                Log.writeLog(getClass().getName(), this, registerStudent + " registered", 0);
+                return Response
+                        .status(200)
+                        .type("application/json")
+                        .entity(new Gson().toJson(crypted))
+                        .build();
+
             } catch (SQLException e) {
                 Log.writeLog(getClass().getName(), this, "User already exists", 2);
                 return Response
@@ -71,12 +85,7 @@ public class RegisterEndpoint {
                         .entity("This user already exists, please log-in.")
                         .build();
             }
-            Log.writeLog(getClass().getName(), this, registerStudent + " registered", 0);
         }
-        return Response
-                .status(200)
-                .type("text/plain")
-                .entity("{message\":\"Success! Student created\"}")
-                .build();
+
     }
 }

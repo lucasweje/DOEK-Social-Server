@@ -17,7 +17,7 @@ public class StudentController {
      */
 
 
-    StudentTable studentTable = new StudentTable();
+    private StudentTable studentTable = new StudentTable();
 
     public ArrayList getAttendingEvents(int idStudent) throws IllegalAccessException {
         ArrayList attendingEvents = studentTable.getAttendingEvents(idStudent);
@@ -27,8 +27,8 @@ public class StudentController {
 
 //Denne metode bruges til at verificere en student, når brugeren skal oprette sig i døk social.
 
-    public Student verifyStudentCreation(String firstName, String lastName, String password, String email) throws IllegalArgumentException {
-        Student verifiedStudent = new Student(firstName, lastName, password, email);
+    public Student verifyStudentCreation(String firstName, String lastName, String password, String email, String verifyPassword) throws IllegalArgumentException {
+        Student verifiedStudent = new Student(firstName, lastName, password, verifyPassword, email);
 
         // Nedenunder viser at der skal være et "@", når man indtaster sin mail.
         if (!email.contains("@")) {
@@ -51,6 +51,8 @@ public class StudentController {
         } else if (!password.matches(".*[a-zA-Z].*") || !password.matches(".*\\d.*")) {
             throw new IllegalArgumentException("password must contain atleast one char and one number");
 
+        } else if (!password.equals(verifyPassword)) {
+            throw new IllegalArgumentException("The two passwords are not equal to each other");
         }
         //hvis alle tjeks godkendes så bliver studenten returneret
         return verifiedStudent;
