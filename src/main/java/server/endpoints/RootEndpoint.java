@@ -1,6 +1,8 @@
 package server.endpoints;
 
+import com.google.gson.Gson;
 import server.resources.Log;
+import server.utility.Crypter;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -12,7 +14,15 @@ public class RootEndpoint {
 
     @GET
     public Response defaultGetMethod(){
+
+        String json = new Gson().toJson("Foo - test");
+        String crypted = Crypter.encryptDecrypt(json);
+
         Log.writeLog(getClass().getName(), this, "TEST", 0);
-        return Response.status(200).type("text/plain").entity("FOO").build();
+        return Response
+                .status(200)
+                .type("text/plain")
+                .entity(crypted)
+                .build();
     }
 }

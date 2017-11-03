@@ -6,6 +6,7 @@ import server.models.Student;
 import server.providers.StudentTable;
 import server.resources.Log;
 import server.utility.Authenticator;
+import server.utility.Crypter;
 import server.utility.CurrentStudentContext;
 
 import javax.ws.rs.HeaderParam;
@@ -27,6 +28,8 @@ public class LoginEndpoint {
         CurrentStudentContext student = tokenController.getStudentFromTokens(token);
         Student currentStudent = student.getCurrentStudent();
         if (currentStudent != null) {
+
+            Log.writeLog(getClass().getName(), this, "Already logged in", 2);
             return Response
                     .status(400)
                     .type("plain/text")
@@ -37,8 +40,6 @@ public class LoginEndpoint {
             Student needAuthStudent = gson.fromJson(jsonLogin, Student.class);
             try {
                 foundStudent = studentTable.getStudentByEmail(needAuthStudent.getEmail());
-                //Mht. sikkerhed er det så dumt at kalde "foundstudent" i logfilen?
-                Log.writeLog(getClass().getName(), this, foundStudent + " logged in", 0);
 
             } catch (Exception notFound) {
                 Log.writeLog(getClass().getName(), this, "Email not found/not existing", 2);
@@ -55,11 +56,15 @@ public class LoginEndpoint {
             if (doHash.equals(foundStudent.getPassword())) {
                 //sets the token for the student
                 tokenController.setToken(foundStudent);
-                Log.writeLog(getClass().getName(), this, "Password hashed", 0);
+
+                String json = new Gson().toJson(foundStudent);
+                String crypted = Crypter.encryptDecrypt(json);
+
+                Log.writeLog(getClass().getName(), this, "Logged in", 0);
                 return Response
                         .status(200)
-                        .type("plain/text")
-                        .entity("You are now logged in! :)")
+                        .type("application/json")
+                        .entity(new Gson().toJson(crypted))
                         .build();
             } else {
                 Log.writeLog(getClass().getName(), this, "Password incorect", 2);
