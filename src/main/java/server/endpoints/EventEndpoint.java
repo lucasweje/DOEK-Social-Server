@@ -60,7 +60,7 @@ public class EventEndpoint {
             return Response
                     .status(403)
                     .type("plain/text")
-                    .entity("{You are not logged in - please log in before attempting to update an event}")
+                    .entity("You are not logged in - please log in before attempting to update an event")
                     .build();
         }
     }
@@ -92,7 +92,7 @@ public class EventEndpoint {
             return Response
                     .status(403)
                     .type("plain/text")
-                    .entity("{You are not logged in - please log in before attempting to create an event}")
+                    .entity("You are not logged in - please log in before attempting to create an event")
                     .build();
         }
     }
@@ -125,7 +125,7 @@ public class EventEndpoint {
             return Response
                     .status(403)
                     .type("plain/text")
-                    .entity("{You are not logged in - please log in before attempting to delete an event}")
+                    .entity("You are not logged in - please log in before attempting to delete an event")
                     .build();
         }
     }
@@ -179,7 +179,7 @@ public class EventEndpoint {
                 return Response
                         .status(400)
                         .type("plain/text")
-                        .entity("{\"Missing Event ID\":\"true\"}")
+                        .entity("The event with this id could not be found")
                         .build();
             } else {
                 foundAttendingStudents = eventController.getAttendingStudents(idEvent);
@@ -189,7 +189,7 @@ public class EventEndpoint {
                     return Response
                             .status(400)
                             .type("plain/text")
-                            .entity("{No attending students}")
+                            .entity("No attending students")
                             .build();
                 } else {
                     String json = new Gson().toJson(foundAttendingStudents);

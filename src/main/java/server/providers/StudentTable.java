@@ -22,7 +22,7 @@ public class StudentTable extends DBmanager {
                             "ON she.students_idStudent = s.idStudent " +
                             "INNER JOIN dsevent e " +
                             "ON she.dsevent_idEvent = e.idEvent " +
-                            "WHERE s.idStudent = ?");
+                            "WHERE s.idStudent = ? AND e.isDeleted = 0");
 
             getAttendingEvents.setInt(1, idStudent);
             resultSet = getAttendingEvents.executeQuery();
