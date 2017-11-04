@@ -6,6 +6,16 @@ public class Event {
     private String eventName, location, eventDate;
     private String description;
 
+    /**
+     *
+     * @param idEvent
+     * @param price
+     * @param owner
+     * @param eventName
+     * @param location
+     * @param description
+     * @param eventDate
+     */
     public Event(int idEvent, int price, int owner, String eventName, String location, String description, String eventDate) {
         this.idEvent = idEvent;
         this.price = price;

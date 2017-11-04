@@ -22,7 +22,14 @@ public class StudentEndpoint {
     private StudentController studentController = new StudentController();
     private TokenController tokenController = new TokenController();
 
-
+    /**
+     *
+     * @param token
+     * @param idStudent
+     * @return Responses
+     * @throws SQLException
+     * @throws IllegalAccessException
+     */
     @GET
     @Path("{idStudent}/events")
     public Response getAttendingEvents(@HeaderParam("Authorization") String token, @PathParam("idStudent") int idStudent) throws SQLException, IllegalAccessException {
@@ -67,6 +74,12 @@ public class StudentEndpoint {
         }
     }
 
+    /**
+     *
+     * @param token
+     * @return Responses
+     * @throws SQLException
+     */
     @POST
     @Path("/logout")
     public Response logout(@HeaderParam("Authorization") String token) throws SQLException {
@@ -96,6 +109,12 @@ public class StudentEndpoint {
         }
     }
 
+    /**
+     *
+     * @param token
+     * @return Responses
+     * @throws SQLException
+     */
     @GET
     @Path("/profile")
     public Response get(@HeaderParam("Authorization") String token) throws SQLException {

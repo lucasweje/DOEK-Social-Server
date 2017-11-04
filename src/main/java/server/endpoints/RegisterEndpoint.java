@@ -26,6 +26,13 @@ public class RegisterEndpoint {
 
     private Gson gson = new Gson();
 
+    /**
+     *
+     * @param token
+     * @param jsonStudent
+     * @return Responses
+     * @throws Exception
+     */
     @POST
     @Produces("Application/json")
     public Response register(@HeaderParam("Authorization") String token, String jsonStudent) throws Exception {

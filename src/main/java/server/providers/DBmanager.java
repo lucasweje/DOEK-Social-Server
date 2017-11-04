@@ -9,7 +9,11 @@ import java.sql.SQLException;
 
 public class DBmanager {
 
-    //har ikke public/private da den så er package-private
+    //Har ikke public/private da den så er package-private
+    /**
+     *
+     * @return Connection
+     */
     Connection getConnection() {
 
         Connection connection = null;
@@ -38,7 +42,7 @@ public class DBmanager {
         return connection;
     }
 
-    // lukke forbindelsen til databasen
+    // Lukker forbindelsen til databasen
     public  void close(){
         try {
             this.getConnection().close();

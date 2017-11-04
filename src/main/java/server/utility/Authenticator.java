@@ -17,13 +17,24 @@ public class Authenticator {
         }
     }
 
+    /**
+     *
+     * @param password
+     * @param salt
+     * @return Password + Salt
+     */
     public static String hashWithSalt(String password, String salt) {
         salt = performHashing(salt);
         return Authenticator.performHashing(password + salt);
 
     }
 
-    //taget fra jespers project secure-dis. TO DO MANGLER LINK.
+    //Taget fra jespers project secure-dis. Link: https://github.com/Distribuerede-Systemer-2017/secure-dis
+    /**
+     *
+     * @param str
+     * @return
+     */
     private static String performHashing(String str) {
         authenticator.update(str.getBytes());
         byte[] hash = authenticator.digest();

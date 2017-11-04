@@ -25,6 +25,14 @@ public class EventEndpoint {
     private TokenController tokenController = new TokenController();
     private Gson gson = new Gson();
 
+    /**
+     *
+     * @param token
+     * @param eventId
+     * @param data
+     * @return Responses
+     * @throws Exception
+     */
     @PUT
     @Path("{idEvent}/update-event")
     public Response updateEvent(@HeaderParam("Authorization") String token, @PathParam("idEvent") int eventId, String data) throws Exception {
@@ -52,8 +60,6 @@ public class EventEndpoint {
             } else {
                 Log.writeLog(getClass().getName(), this, "Event not found or not owner of the event", 2);
                 return Response
-                        //Bør det ikke være 404 og ikke 400? jf. https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
-                        //Ikke kun her
                         .status(404)
                         .type("plain/text")
                         .entity("Either the event wasn't found, or you aren't the owner of the event and therefore you cannot update it")
@@ -68,6 +74,13 @@ public class EventEndpoint {
         }
     }
 
+    /**
+     *
+     * @param token
+     * @param eventData
+     * @return Responses
+     * @throws SQLException
+     */
     @POST
     public Response createEvent(@HeaderParam("Authorization") String token, String eventData) throws SQLException {
 
@@ -106,6 +119,14 @@ public class EventEndpoint {
         }
     }
 
+    /**
+     *
+     * @param token
+     * @param eventId
+     * @param data
+     * @return Responses
+     * @throws Exception
+     */
     @PUT
     @Path("{idEvent}/delete-event")
     public Response deleteEvent(@HeaderParam("Authorization") String token, @PathParam("idEvent") String eventId, String data) throws Exception {
@@ -143,6 +164,12 @@ public class EventEndpoint {
         }
     }
 
+    /**
+     *
+     * @param token
+     * @return Responses
+     * @throws SQLException
+     */
     @GET
     public Response getEvents(@HeaderParam("Authorization") String token) throws SQLException {
         CurrentStudentContext student = tokenController.getStudentFromTokens(token);
@@ -178,6 +205,14 @@ public class EventEndpoint {
         }
     }
 
+    /**
+     *
+     * @param token
+     * @param idEvent
+     * @return Responses
+     * @throws SQLException
+     * @throws IllegalAccessException
+     */
     @GET
     @Path("{idEvent}/students")
     public Response getAttendingStudents(@HeaderParam("Authorization") String token, @PathParam("idEvent") String idEvent) throws SQLException, IllegalAccessException {
@@ -225,6 +260,13 @@ public class EventEndpoint {
 
     }
 
+    /**
+     *
+     * @param token
+     * @param eventJson
+     * @return Responses
+     * @throws SQLException
+     */
     @POST
     @Path("/join")
     public Response joinEvent(@HeaderParam("Authorization") String token, String eventJson) throws SQLException {

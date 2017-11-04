@@ -12,6 +12,10 @@ import javax.ws.rs.core.Response;
 @Path("/")
 public class RootEndpoint {
 
+    /**
+     *
+     * @return Response
+     */
     @GET
     public Response defaultGetMethod(){
 

@@ -22,6 +22,13 @@ public class LoginEndpoint {
     private TokenController tokenController = new TokenController();
     private Gson gson = new Gson();
 
+    /**
+     *
+     * @param token
+     * @param jsonLogin
+     * @return Responses
+     * @throws Exception
+     */
     @POST
     public Response login(@HeaderParam("Authorization") String token, String jsonLogin) throws Exception {
 

@@ -13,6 +13,10 @@ public class EventTable extends DBmanager {
 
     private ResultSet resultSet;
 
+    /**
+     *
+     * @return all Events
+     */
     public ArrayList<Event> getAllEvents() {
         ArrayList<Event> allEvents = new ArrayList<>();
 
@@ -38,6 +42,13 @@ public class EventTable extends DBmanager {
         return allEvents;
     }
 
+    /**
+     *
+     * @param idEvent
+     * @return Attending Students
+     * @throws IllegalAccessException
+     * @throws SQLException
+     */
     public ArrayList getAttendingStudents(String idEvent) throws IllegalAccessException, SQLException {
         Student student;
         ArrayList attendingStudents = new ArrayList();
@@ -79,6 +90,13 @@ public class EventTable extends DBmanager {
         return attendingStudents;
     }
 
+    /**
+     *
+     * @param eventId
+     * @param studentId
+     * @return True
+     * @throws IllegalArgumentException
+     */
     public boolean joinEvent(int eventId, int studentId) throws IllegalArgumentException {
 
         try {
@@ -135,7 +153,13 @@ public class EventTable extends DBmanager {
 
     }
 
-
+    /**
+     *
+     * @param event
+     * @param student
+     * @return True
+     * @throws SQLException
+     */
     public boolean createEvent(Event event, Student student) throws SQLException {
 
         PreparedStatement createEventStatement = getConnection().prepareStatement("INSERT INTO dsevent (" +

@@ -7,6 +7,10 @@ public class Token {
     private String token;
     private Student student;
 
+    /**
+     *
+     * @param student
+     */
     public Token(Student student){
         setToken(Authenticator.hashWithSalt(student.getEmail(), student.getSalt()));
 

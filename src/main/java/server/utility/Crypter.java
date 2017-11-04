@@ -4,10 +4,14 @@ import server.config.Config;
 
 public class Crypter {
 
-    //TO DO: Skal implementeres under hvert end point.
-
     // XOR-kypteringsmetoden: (CR)
-//husk link, set på dalbys laptop.
+    //https://github.com/KyleBanks/XOREncryption/blob/master/Java%20(Android%20compatible)/XOREncryption.java
+
+    /**
+     *
+     * @param input
+     * @return Input
+     */
         public static String encryptDecrypt(String input) {
 
         if (Config.getEncryption()) {

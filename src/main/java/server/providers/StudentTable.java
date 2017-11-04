@@ -11,6 +11,12 @@ public class StudentTable extends DBmanager {
     private ResultSet resultSet;
     private Student student;
 
+    /**
+     *
+     * @param idStudent
+     * @return Attending Events
+     * @throws IllegalAccessException
+     */
     public ArrayList getAttendingEvents(int idStudent) throws IllegalAccessException {
         ArrayList attendingEvents = new ArrayList();
         //henter alle events en studerende deltager på.
@@ -53,6 +59,12 @@ public class StudentTable extends DBmanager {
         return attendingEvents;
     }
 
+    /**
+     *
+     * @param student
+     * @return True
+     * @throws SQLException
+     */
     public boolean addStudent(Student student) throws SQLException {
         // Denne metode er taget fra henrik (Slack)
         long unixTime = System.currentTimeMillis() / 1000L;
@@ -89,6 +101,11 @@ public class StudentTable extends DBmanager {
         return true;
     }
 
+    /**
+     *
+     * @param email
+     * @return Student by Email
+     */
     public Student getStudentByEmail(String email) {
 
         try {
@@ -117,6 +134,12 @@ public class StudentTable extends DBmanager {
     }
 
     // Sletter en token i databasen til et bestemt idStudent
+    /**
+     *
+     * @param idStudent
+     * @return False
+     * @throws SQLException
+     */
     public boolean deleteToken(String idStudent) throws SQLException {
         PreparedStatement deleteTokenStatement = getConnection().prepareStatement(" DELETE FROM tokens WHERE token = ?");
 
@@ -136,6 +159,13 @@ public class StudentTable extends DBmanager {
     }
 
     // Indsætter en token i DB til et bestemt idStudent
+    /**
+     *
+     * @param token
+     * @param idStudent
+     * @return True or False
+     * @throws SQLException
+     */
     public boolean addToken(String token, int idStudent) throws SQLException {
         PreparedStatement addTokenStatement;
         int rowsAffected = 0;
@@ -155,7 +185,12 @@ public class StudentTable extends DBmanager {
         }
     }
 
-
+    /**
+     *
+     * @param token
+     * @return Student
+     * @throws SQLException
+     */
     public Student getStudentFromToken(String token) throws SQLException {
         try {
             PreparedStatement getStudentFromToken = getConnection().prepareStatement("SELECT idStudent, firstName, lastName, email, createdTime FROM students s INNER JOIN tokens t ON t.students_idStudent = s.idStudent WHERE t.token = ?");

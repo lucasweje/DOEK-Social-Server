@@ -19,6 +19,7 @@ public class TokenController {
 
 /*
     // Metode til at modtage en token og sende et student objekt retur
+
     public Student getStudentFromTokens(String token) throws SQLException {
         Student student = st.getStudentFromToken(token);
         st.close();
@@ -26,7 +27,14 @@ public class TokenController {
     }
 */
 
-    // Metode til ta slette en token (eventuelt ved log ud)
+    // Metode til at slette en token (eventuelt ved log ud)
+
+    /**
+     *
+     * @param token
+     * @return False
+     * @throws SQLException
+     */
     public boolean deleteToken(String token) throws SQLException {
         boolean deleteToken = studentTable.deleteToken(token);
         studentTable.close();
@@ -36,6 +44,11 @@ public class TokenController {
         return false;
     }
 
+    /**
+     *
+     * @param student
+     * @return Either token or null
+     */
     public String setToken(Student student) {
         String token = null;
         try {
@@ -58,6 +71,12 @@ public class TokenController {
         }
     }
 
+    /**
+     *
+     * @param token
+     * @return Context
+     * @throws SQLException
+     */
     public CurrentStudentContext getStudentFromTokens(String token) throws SQLException {
         Student student = studentTable.getStudentFromToken(token);
         CurrentStudentContext context = new CurrentStudentContext();

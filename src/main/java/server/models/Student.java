@@ -14,6 +14,15 @@ public class Student {
 
 
     //has all student info.
+    /**
+     *
+     * @param idStudent
+     * @param firstName
+     * @param lastName
+     * @param email
+     * @param password
+     * @param createdTime
+     */
     public Student(int idStudent, String firstName, String lastName, String email, String password, long createdTime) {
         this.idStudent = idStudent;
         this.firstName = firstName;
@@ -24,6 +33,14 @@ public class Student {
     }
 
     //used in verifyStudentCreation
+    /**
+     *
+     * @param firstName
+     * @param lastName
+     * @param password
+     * @param verifyPassword
+     * @param email
+     */
     public Student(String firstName, String lastName, String password, String verifyPassword, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -33,12 +50,24 @@ public class Student {
     }
 
     //used in studentEndpoint
+
+    /**
+     *
+     * @param email
+     * @param salt
+     * @param password
+     */
     public Student(String email, String salt, String password) {
         this.email = email;
         this.salt = salt;
         this.password = password;
     }
 
+    /**
+     *
+     * @param email
+     * @param password
+     */
     public Student(String email, String password) {
         this.email = email;
         this.password = password;
@@ -55,7 +84,6 @@ public class Student {
     public void setSalt(String salt) {
         this.salt = salt;
     }
-
 
     public Token getToken() {
         return token;
