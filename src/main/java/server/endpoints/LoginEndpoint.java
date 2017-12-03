@@ -22,9 +22,9 @@ public class LoginEndpoint {
     private StudentTable studentTable = new StudentTable();
     private TokenController tokenController = new TokenController();
     private Gson gson = new Gson();
+    private Crypter crypter = new Crypter();
 
     /**
-     *
      * @param token
      * @param jsonLogin
      * @return Responses
@@ -33,8 +33,12 @@ public class LoginEndpoint {
     @POST
     public Response login(@HeaderParam("Authorization") String token, String jsonLogin) throws Exception {
 
+        jsonLogin = new Gson().fromJson(jsonLogin, String.class);
+        jsonLogin = crypter.decrypt(jsonLogin);
+
         CurrentStudentContext student = tokenController.getStudentFromTokens(token);
         Student currentStudent = student.getCurrentStudent();
+
         if (currentStudent != null) {
 
             Log.writeLog(getClass().getName(), this, "Already logged in", 2);
@@ -44,12 +48,16 @@ public class LoginEndpoint {
                     .entity("You are already logged in, no need to login again.")
                     .build();
         } else {
+
             Student foundStudent;
             Student needAuthStudent = gson.fromJson(jsonLogin, Student.class);
+
+
             try {
                 foundStudent = studentTable.getStudentByEmail(needAuthStudent.getEmail());
 
             } catch (Exception notFound) {
+
                 Log.writeLog(getClass().getName(), this, "Email not found/not existing", 2);
 
                 return Response
@@ -64,12 +72,15 @@ public class LoginEndpoint {
             if (doHash.equals(foundStudent.getPassword())) {
                 //sets the token for the student
                 String newToken = tokenController.setToken(foundStudent);
+                // new token object is created
                 Token theNewToken = new Token();
+
                 theNewToken.setToken(newToken);
                 foundStudent.setToken(theNewToken);
 
+                // made to Json and encrypted before sending
                 String json = new Gson().toJson(newToken);
-                String crypted = Crypter.encryptDecrypt(json);
+                String crypted = crypter.encrypt(json);
 
                 Log.writeLog(getClass().getName(), this, "Logged in", 0);
                 return Response

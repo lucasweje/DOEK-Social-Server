@@ -20,7 +20,7 @@ public class RootEndpoint {
     public Response defaultGetMethod(){
 
         String json = new Gson().toJson("Foo - test");
-        String crypted = Crypter.encryptDecrypt(json);
+        String crypted = Crypter.encrypt(json);
 
         Log.writeLog(getClass().getName(), this, "TEST", 0);
         return Response
